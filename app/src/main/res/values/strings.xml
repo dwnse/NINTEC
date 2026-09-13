@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">NINTEC</string>
+    <string name="app_name2">Accept</string>
+    <string name="app_name3">hola a todos</string>
+    <string name="app_name4">Ir pagina 4</string>
+    <string name="next">Ir a la proxima</string>
+    <string name="principal">Pagina Principal</string>
+    <string name="tres">Ir Pagina tres</string>
+    <string name="email">Email</string>
+</resources>
