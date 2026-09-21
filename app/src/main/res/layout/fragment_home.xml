@@ -101,8 +101,9 @@
 
             <EditText
                 android:id="@+id/et_home_search"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:layout_marginStart="12dp"
                 android:background="@null"
                 android:hint="Buscar productos..."
@@ -111,6 +112,18 @@
                 android:textColor="@color/text_primary"
                 android:inputType="text"
                 android:importantForAutofill="no" />
+
+            <ImageView
+                android:id="@+id/img_home_search_clear"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="8dp"
+                android:src="@drawable/ic_close"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:contentDescription="Clear Search" />
         </LinearLayout>
 
         <!-- Promo Principal Banner Section -->

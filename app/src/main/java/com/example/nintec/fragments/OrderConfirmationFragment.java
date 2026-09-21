@@ -53,7 +53,7 @@ public class OrderConfirmationFragment extends Fragment {
 
         tvPayment.setText("Método: " + paymentMethod);
         double total = CartManager.getInstance().getTotalAmount();
-        tvTotal.setText(String.format(Locale.getDefault(), "Total a pagar: Bs %.2f", total));
+        tvTotal.setText(String.format(Locale.getDefault(), "Total a pagar: Bs %,.2f", total));
 
         rvItems.setLayoutManager(new LinearLayoutManager(getContext()));
         rvItems.setAdapter(new OrderItemAdapter(CartManager.getInstance().getItems()));
@@ -69,7 +69,7 @@ public class OrderConfirmationFragment extends Fragment {
         Order newOrder = new Order(
                 orderId,
                 CartManager.getInstance().getItems(),
-                String.format(Locale.getDefault(), "Bs %.2f", CartManager.getInstance().getTotalAmount()),
+                String.format(Locale.getDefault(), "Bs %,.2f", CartManager.getInstance().getTotalAmount()),
                 paymentMethod,
                 OrderStatus.COMPLETED,
                 "25/09/2026"

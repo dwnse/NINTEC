@@ -1,9 +1,12 @@
 package com.example.nintec.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,8 +26,9 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements ProductAdapter.OnProductClickListener, CartManager.CartChangeListener {
 
-    private ImageView imgCart;
+    private ImageView imgCart, imgSearchClear;
     private TextView tvCartBadge;
+    private EditText etSearch;
     private LinearLayout containerCategories;
     private RecyclerView rvOffers;
     private ProductAdapter productAdapter;
@@ -38,6 +42,8 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         tvCartBadge = view.findViewById(R.id.tv_cart_badge);
         containerCategories = view.findViewById(R.id.container_categories);
         rvOffers = view.findViewById(R.id.rv_offers);
+        etSearch = view.findViewById(R.id.et_home_search);
+        imgSearchClear = view.findViewById(R.id.img_home_search_clear);
 
         imgCart.setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
@@ -45,12 +51,38 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
             }
         });
 
+        setupSearchLogic();
         setupCategories();
         setupOffersRecyclerView();
 
         CartManager.getInstance().addListener(this);
 
         return view;
+    }
+
+    private void setupSearchLogic() {
+        if (etSearch == null || imgSearchClear == null) return;
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    imgSearchClear.setVisibility(View.VISIBLE);
+                } else {
+                    imgSearchClear.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        imgSearchClear.setOnClickListener(v -> {
+            etSearch.setText("");
+        });
     }
 
     @Override
@@ -76,13 +108,26 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         containerCategories.removeAllViews();
 
         String[] categories = {"Laptops", "Celulares", "Audio", "Accesorios", "Soporte"};
+        int[] icons = {
+                R.drawable.ic_laptop,
+                R.drawable.ic_phone_android,
+                R.drawable.ic_audio,
+                R.drawable.ic_accessories,
+                R.drawable.ic_support
+        };
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        for (String cat : categories) {
+        for (int i = 0; i < categories.length; i++) {
             View catView = inflater.inflate(R.layout.item_category, containerCategories, false);
             TextView tvName = catView.findViewById(R.id.tv_category_name);
-            tvName.setText(cat);
+            ImageView imgIcon = catView.findViewById(R.id.img_category_icon);
+            
+            tvName.setText(categories[i]);
+            if (imgIcon != null) {
+                imgIcon.setImageResource(icons[i]);
+            }
 
+            final String categoryName = categories[i];
             catView.setOnClickListener(v -> {
                 // Future category filter logic entry point
             });

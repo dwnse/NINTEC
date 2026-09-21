@@ -37,7 +37,7 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
         try {
             price = Double.parseDouble(item.getProduct().getPrice().replaceAll("[^0-9.]", ""));
         } catch (Exception ignored) {}
-        holder.tvSubtotal.setText(String.format(Locale.getDefault(), "Bs %.2f", price * item.getQuantity()));
+        holder.tvSubtotal.setText(String.format(Locale.getDefault(), "Bs %,.2f", price * item.getQuantity()));
 
         if (item.getProduct().getImageResource() != 0) {
             holder.imgProduct.setImageResource(item.getProduct().getImageResource());

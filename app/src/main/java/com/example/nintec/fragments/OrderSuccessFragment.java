@@ -25,34 +25,21 @@ public class OrderSuccessFragment extends Fragment {
 
         btnHome.setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
-                MainActivity activity = (MainActivity) getActivity();
-                // Clear the backstack to get rid of Checkout/Confirm/Cart screens
-                activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                // Switch to Home tab using the BottomNavigationView
-                BottomNavigationView nav = activity.findViewById(R.id.bottom_navigation);
-                if (nav != null) {
-                    nav.setSelectedItemId(R.id.nav_home);
-                }
+                ((MainActivity) getActivity()).resetToTab(R.id.nav_home);
             }
         });
 
         btnHistory.setOnClickListener(v -> {
             if (getActivity() instanceof MainActivity) {
                 MainActivity activity = (MainActivity) getActivity();
-                activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                activity.resetToTab(R.id.nav_profile);
                 
-                // First switch to Profile tab
-                BottomNavigationView nav = activity.findViewById(R.id.bottom_navigation);
-                if (nav != null) {
-                    nav.setSelectedItemId(R.id.nav_profile);
-                }
-                
-                // Then open History fragment
-                // Since we popped everything, we are now on ProfileFragment.
-                // We can use a small delay or a post call to ensure the tab transition is done
-                activity.findViewById(R.id.bottom_navigation).post(() -> {
-                    // This is a bit hacky but works for this architecture
-                    activity.findViewById(R.id.layout_option_history).performClick();
+                // Navigate to history from profile
+                v.post(() -> {
+                    View historyOption = activity.findViewById(R.id.layout_option_history);
+                    if (historyOption != null) {
+                        historyOption.performClick();
+                    }
                 });
             }
         });

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import java.util.List;
 public class BranchesFragment extends Fragment implements BranchAdapter.OnBranchClickListener {
 
     private EditText etSearch;
+    private ImageView imgSearchClear;
     private RecyclerView rvBranches;
     private TextView tvEmpty;
     private BranchAdapter branchAdapter;
@@ -37,11 +39,18 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
         View view = inflater.inflate(R.layout.fragment_branches, container, false);
 
         etSearch = view.findViewById(R.id.et_branches_search);
+        imgSearchClear = view.findViewById(R.id.img_branches_search_clear);
         rvBranches = view.findViewById(R.id.rv_branches);
         tvEmpty = view.findViewById(R.id.tv_branches_empty);
 
         setupRecyclerView();
         setupSearchFilter();
+
+        if (imgSearchClear != null) {
+            imgSearchClear.setOnClickListener(v -> {
+                if (etSearch != null) etSearch.setText("");
+            });
+        }
 
         return view;
     }
@@ -60,7 +69,11 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                performSearch(s.toString());
+                String query = s.toString();
+                if (imgSearchClear != null) {
+                    imgSearchClear.setVisibility(query.isEmpty() ? View.GONE : View.VISIBLE);
+                }
+                performSearch(query);
             }
 
             @Override

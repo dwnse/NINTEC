@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="4dp"
-            android:gravity="bottom">
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/tv_product_price"

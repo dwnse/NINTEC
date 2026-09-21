@@ -90,14 +90,23 @@ public class MainActivity extends AppCompatActivity implements CartManager.CartC
                 }
 
                 if (targetFragment != null) {
+                    // 1. Clear backstack to close any secondary screens (Product Detail, Cart, etc.)
                     fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    showBottomNavigation();
-
+                    
+                    // 2. Ensure secondary fragments added without backstack (like Success screen) are removed.
+                    // We can do this by using replace() here OR by specifically removing known tags.
+                    // To keep the show/hide strategy for root tabs, we'll use a transaction that cleans up.
+                    
                     FragmentTransaction ft = fragmentManager.beginTransaction();
                     
+                    // Hide whatever primary tab was active
                     if (activeFragment != null) {
                         ft.hide(activeFragment);
                     }
+
+                    // Remove any existing secondary fragments that might be covering the screen (Success, etc.)
+                    Fragment successFrag = fragmentManager.findFragmentByTag("SUCCESS");
+                    if (successFrag != null) ft.remove(successFrag);
 
                     if (!targetFragment.isAdded()) {
                         ft.add(R.id.fragment_container, targetFragment, tag);
@@ -107,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements CartManager.CartC
 
                     ft.commit();
                     activeFragment = targetFragment;
+                    showBottomNavigation();
                     return true;
                 }
                 return false;
@@ -156,6 +166,20 @@ public class MainActivity extends AppCompatActivity implements CartManager.CartC
                 .add(R.id.fragment_container, cartFragment, "CART")
                 .addToBackStack("CART_TRANS")
                 .commit();
+    }
+
+    public void resetToTab(int itemId) {
+        // 1. Clear backstack entries (secondary screens)
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        
+        // 2. Ensure bottom bar is visible
+        showBottomNavigation();
+        
+        // 3. Reset active fragment to force the listener to actually perform the switch/show
+        activeFragment = null; 
+        
+        // 4. Select the desired tab
+        bottomNavigationView.setSelectedItemId(itemId);
     }
 
     public void showBottomNavigation() {

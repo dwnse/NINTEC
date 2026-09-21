@@ -28,6 +28,7 @@ import java.util.List;
 public class CatalogFragment extends Fragment implements ProductAdapter.OnProductClickListener, CartManager.CartChangeListener {
 
     private EditText etSearch;
+    private ImageView imgSearchClear;
     private LinearLayout containerCategories;
     private RecyclerView rvProducts;
     private TextView tvEmptyState;
@@ -48,6 +49,7 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
         ImageView imgCart = view.findViewById(R.id.img_catalog_cart);
         tvCartBadge = view.findViewById(R.id.tv_catalog_cart_badge);
         etSearch = view.findViewById(R.id.et_catalog_search);
+        imgSearchClear = view.findViewById(R.id.img_catalog_search_clear);
         containerCategories = view.findViewById(R.id.container_catalog_categories);
         rvProducts = view.findViewById(R.id.rv_catalog_products);
         tvEmptyState = view.findViewById(R.id.tv_catalog_empty_state);
@@ -62,6 +64,12 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
         setupRecyclerView();
         setupCategoriesFilterRow();
         setupSearchInputFilter();
+
+        if (imgSearchClear != null) {
+            imgSearchClear.setOnClickListener(v -> {
+                if (etSearch != null) etSearch.setText("");
+            });
+        }
 
         CartManager.getInstance().addListener(this);
 
@@ -146,6 +154,9 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 currentSearchQuery = s.toString().trim();
+                if (imgSearchClear != null) {
+                    imgSearchClear.setVisibility(currentSearchQuery.isEmpty() ? View.GONE : View.VISIBLE);
+                }
                 applyCombinedFilters();
             }
 
