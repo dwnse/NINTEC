@@ -15,14 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nintec.MainActivity;
 import com.example.nintec.R;
 import com.example.nintec.adapters.ProductAdapter;
+import com.example.nintec.managers.CartManager;
 import com.example.nintec.models.Product;
 import com.example.nintec.repositories.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements ProductAdapter.OnProductClickListener {
+public class HomeFragment extends Fragment implements ProductAdapter.OnProductClickListener, CartManager.CartChangeListener {
 
     private ImageView imgCart;
+    private TextView tvCartBadge;
     private LinearLayout containerCategories;
     private RecyclerView rvOffers;
     private ProductAdapter productAdapter;
@@ -33,6 +35,7 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         imgCart = view.findViewById(R.id.img_cart);
+        tvCartBadge = view.findViewById(R.id.tv_cart_badge);
         containerCategories = view.findViewById(R.id.container_categories);
         rvOffers = view.findViewById(R.id.rv_offers);
 
@@ -45,7 +48,27 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         setupCategories();
         setupOffersRecyclerView();
 
+        CartManager.getInstance().addListener(this);
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        CartManager.getInstance().removeListener(this);
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onCartChanged(int totalItemCount) {
+        if (tvCartBadge != null) {
+            if (totalItemCount > 0) {
+                tvCartBadge.setText(String.valueOf(totalItemCount));
+                tvCartBadge.setVisibility(View.VISIBLE);
+            } else {
+                tvCartBadge.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void setupCategories() {

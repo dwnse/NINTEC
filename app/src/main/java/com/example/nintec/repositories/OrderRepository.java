@@ -28,15 +28,15 @@ public class OrderRepository {
     private void initDemoData() {
         // TODO: remove demo orders when backend is implemented
         List<CartItem> items1 = new ArrayList<>();
-        items1.add(new CartItem(new Product("1", "MacBook Pro M3 Max", "Laptops", "$2,499.00", "$2,999.00", R.drawable.ic_logo_ninteclp, true, 5), 1));
+        items1.add(new CartItem(new Product("1", "MacBook Pro M3 Max", "Laptops", "Bs 2.499,00", "Bs 2.999,00", R.mipmap.ic_launcher_foreground, true, 5), 1));
         
         List<CartItem> items2 = new ArrayList<>();
-        items2.add(new CartItem(new Product("2", "iPhone 15 Pro Titanium", "Celulares", "$1,099.00", "$1,199.00", R.drawable.ic_logo_ninteclp, true, 8), 1));
-        items2.add(new CartItem(new Product("3", "Audífonos Sony WH-1000XM5", "Audio", "$349.00", null, R.drawable.ic_logo_ninteclp, false, 12), 1));
+        items2.add(new CartItem(new Product("2", "iPhone 15 Pro Titanium", "Celulares", "Bs 1.099,00", "Bs 1.199,00", R.mipmap.ic_launcher_foreground, true, 8), 1));
+        items2.add(new CartItem(new Product("3", "Audífonos Sony WH-1000XM5", "Audio", "Bs 349,00", null, R.mipmap.ic_launcher_foreground, false, 12), 1));
 
-        orders.add(new Order("NIN-0001", items1, "$2,499.00", "VISA", OrderStatus.COMPLETED, "20/09/2026"));
-        orders.add(new Order("NIN-0002", items2, "$1,448.00", "MasterCard", OrderStatus.PENDING, "22/09/2026"));
-        orders.add(new Order("NIN-0003", items1, "$2,499.00", "QR", OrderStatus.REJECTED, "23/09/2026"));
+        orders.add(new Order("NIN-0001", items1, "Bs 2.499,00", "VISA", OrderStatus.COMPLETED, "20/09/2026"));
+        orders.add(new Order("NIN-0002", items2, "Bs 1.448,00", "MasterCard", OrderStatus.PENDING, "22/09/2026"));
+        orders.add(new Order("NIN-0003", items1, "Bs 2.499,00", "QR", OrderStatus.REJECTED, "23/09/2026"));
     }
 
     public void addOrder(Order order) {

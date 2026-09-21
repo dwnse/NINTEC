@@ -19,17 +19,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nintec.MainActivity;
 import com.example.nintec.R;
 import com.example.nintec.adapters.ProductAdapter;
+import com.example.nintec.managers.CartManager;
 import com.example.nintec.models.Product;
 import com.example.nintec.repositories.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CatalogFragment extends Fragment implements ProductAdapter.OnProductClickListener {
+public class CatalogFragment extends Fragment implements ProductAdapter.OnProductClickListener, CartManager.CartChangeListener {
 
     private EditText etSearch;
     private LinearLayout containerCategories;
     private RecyclerView rvProducts;
     private TextView tvEmptyState;
+    private TextView tvCartBadge;
 
     private ProductAdapter productAdapter;
     private List<Product> allProductsList;
@@ -44,6 +46,7 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
         View view = inflater.inflate(R.layout.fragment_catalog, container, false);
 
         ImageView imgCart = view.findViewById(R.id.img_catalog_cart);
+        tvCartBadge = view.findViewById(R.id.tv_catalog_cart_badge);
         etSearch = view.findViewById(R.id.et_catalog_search);
         containerCategories = view.findViewById(R.id.container_catalog_categories);
         rvProducts = view.findViewById(R.id.rv_catalog_products);
@@ -60,7 +63,27 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
         setupCategoriesFilterRow();
         setupSearchInputFilter();
 
+        CartManager.getInstance().addListener(this);
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        CartManager.getInstance().removeListener(this);
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onCartChanged(int totalItemCount) {
+        if (tvCartBadge != null) {
+            if (totalItemCount > 0) {
+                tvCartBadge.setText(String.valueOf(totalItemCount));
+                tvCartBadge.setVisibility(View.VISIBLE);
+            } else {
+                tvCartBadge.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void initDataFromRepository() {

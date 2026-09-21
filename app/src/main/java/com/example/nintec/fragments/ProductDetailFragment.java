@@ -21,12 +21,12 @@ import com.example.nintec.models.Product;
 import com.example.nintec.repositories.ProductRepository;
 import java.util.Map;
 
-public class ProductDetailFragment extends Fragment {
+public class ProductDetailFragment extends Fragment implements CartManager.CartChangeListener {
 
     private static final String ARG_PRODUCT_ID = "product_id";
 
-    private ImageView btnBack, btnShare, imgProduct;
-    private TextView tvName, tvStockStatus, tvPrice, tvOldPrice, tvDescription, tvQtyCounter, btnQtyMinus, btnQtyPlus;
+    private ImageView btnBack, btnShare, imgProduct, btnCart;
+    private TextView tvName, tvStockStatus, tvPrice, tvOldPrice, tvDescription, tvQtyCounter, btnQtyMinus, btnQtyPlus, tvCartBadge;
     private Button btnAddToCart;
     private LinearLayout layoutSpecsContainer;
 
@@ -48,6 +48,8 @@ public class ProductDetailFragment extends Fragment {
 
         btnBack = view.findViewById(R.id.btn_detail_back);
         btnShare = view.findViewById(R.id.btn_detail_share);
+        btnCart = view.findViewById(R.id.btn_detail_cart);
+        tvCartBadge = view.findViewById(R.id.tv_detail_cart_badge);
         imgProduct = view.findViewById(R.id.img_detail_product);
         tvName = view.findViewById(R.id.tv_detail_name);
         tvStockStatus = view.findViewById(R.id.tv_detail_stock_status);
@@ -68,7 +70,27 @@ public class ProductDetailFragment extends Fragment {
         hydrateProductDetails();
         setupActionListeners();
 
+        CartManager.getInstance().addListener(this);
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        CartManager.getInstance().removeListener(this);
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onCartChanged(int totalItemCount) {
+        if (tvCartBadge != null) {
+            if (totalItemCount > 0) {
+                tvCartBadge.setText(String.valueOf(totalItemCount));
+                tvCartBadge.setVisibility(View.VISIBLE);
+            } else {
+                tvCartBadge.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void hydrateProductDetails() {
@@ -129,6 +151,12 @@ public class ProductDetailFragment extends Fragment {
         btnBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
         btnShare.setOnClickListener(v -> handleShareProduct());
+
+        btnCart.setOnClickListener(v -> {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).openCart();
+            }
+        });
 
         btnQtyMinus.setOnClickListener(v -> {
             if (currentProduct.getStock() <= 0 || selectedQuantity <= 1) return;

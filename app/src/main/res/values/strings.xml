@@ -99,6 +99,7 @@
     <string name="checkout_payment_details">Detalles del pago</string>
     <string name="checkout_order_success">¡Pedido Realizado!</string>
     <string name="checkout_order_success_desc">Tu pedido ha sido procesado con éxito. Pronto recibirás un correo con los detalles.</string>
+    <string name="btn_view_history">Ver historial de pedidos</string>
     <string name="btn_go_home">Volver al inicio</string>
     <string name="btn_finalize_purchase">Finalizar Compra</string>
     <string name="btn_continue">Continuar</string>

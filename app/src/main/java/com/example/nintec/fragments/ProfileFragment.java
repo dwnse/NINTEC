@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment {
     private void openOrderHistory() {
         if (getActivity() instanceof MainActivity) {
             MainActivity activity = (MainActivity) getActivity();
-            activity.hideBottomNavigation();
+            // activity.hideBottomNavigation();
             
             OrderHistoryFragment historyFragment = new OrderHistoryFragment();
             getParentFragmentManager().beginTransaction()
@@ -82,7 +82,7 @@ public class ProfileFragment extends Fragment {
     private void openSettings() {
         if (getActivity() instanceof MainActivity) {
             MainActivity activity = (MainActivity) getActivity();
-            activity.hideBottomNavigation();
+            // activity.hideBottomNavigation();
             
             SettingsFragment settingsFragment = new SettingsFragment();
             getParentFragmentManager().beginTransaction()
@@ -93,7 +93,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showLogoutConfirmation() {
-        new MaterialAlertDialogBuilder(requireContext(), R.style.NintecCard)
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.logout_dialog_title)
                 .setMessage(R.string.logout_dialog_message)
                 .setNegativeButton(R.string.btn_cancel, null)

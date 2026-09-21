@@ -9,7 +9,7 @@ public class SessionManager {
 
     private SessionManager() {
         // Initial mock user for Stage 11
-        currentUser = new User("1", "Usuario NINTECLP", "usuario_nintec", "usuario@ninteclp.com", R.drawable.ic_logo_ninteclp);
+        currentUser = new User("1", "Usuario NINTECLP", "usuario_nintec", "usuario@ninteclp.com", R.mipmap.ic_launcher_foreground);
     }
 
     public static synchronized SessionManager getInstance() {

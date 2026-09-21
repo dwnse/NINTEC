@@ -118,10 +118,7 @@ public class MainActivity extends AppCompatActivity implements CartManager.CartC
             public void handleOnBackPressed() {
                 if (fragmentManager.getBackStackEntryCount() > 0) {
                     fragmentManager.popBackStack();
-                    if (fragmentManager.getBackStackEntryCount() == 1 || fragmentManager.getBackStackEntryCount() == 0) {
-                        // Logic check for depth could be improved, but this handles common secondary navigation exits
-                        showBottomNavigation();
-                    }
+                    // showBottomNavigation();
                 } else if (activeFragment != homeFragment) {
                     bottomNavigationView.setSelectedItemId(R.id.nav_home);
                 } else {
@@ -142,7 +139,8 @@ public class MainActivity extends AppCompatActivity implements CartManager.CartC
 
     public void openProductDetail(String productId) {
         ProductDetailFragment detailFragment = ProductDetailFragment.newInstance(productId);
-        hideBottomNavigation();
+        // Ensure bottom navigation stays visible if desired
+        // hideBottomNavigation(); 
         
         fragmentManager.beginTransaction()
                 .add(R.id.fragment_container, detailFragment, "DETAIL")
@@ -152,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements CartManager.CartC
 
     public void openCart() {
         CartFragment cartFragment = new CartFragment();
-        hideBottomNavigation();
+        // hideBottomNavigation();
 
         fragmentManager.beginTransaction()
                 .add(R.id.fragment_container, cartFragment, "CART")

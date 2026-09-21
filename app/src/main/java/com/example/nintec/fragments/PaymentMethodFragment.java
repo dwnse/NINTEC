@@ -48,6 +48,7 @@ public class PaymentMethodFragment extends Fragment {
 
     private void openConfirmation(String method) {
         OrderConfirmationFragment confirmationFragment = OrderConfirmationFragment.newInstance(method);
+        // hideBottomNavigation(); // Ensure it stays visible if expected
         getParentFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, confirmationFragment, "CONFIRM")
                 .addToBackStack("CONFIRM_TRANS")

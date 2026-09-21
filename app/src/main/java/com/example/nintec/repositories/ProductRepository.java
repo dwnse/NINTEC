@@ -30,14 +30,14 @@ public class ProductRepository {
 
     private void initData() {
         // Hydrate uniform master dataset catalog
-        products.add(new Product("1", "MacBook Pro M3 Max", "Laptops", "$2,499.00", "$2,999.00", R.drawable.ic_logo_ninteclp, true, 5));
-        products.add(new Product("2", "iPhone 15 Pro Titanium", "Celulares", "$1,099.00", "$1,199.00", R.drawable.ic_logo_ninteclp, true, 8));
-        products.add(new Product("3", "Audífonos Sony WH-1000XM5", "Audio", "$349.00", null, R.drawable.ic_logo_ninteclp, false, 12));
-        products.add(new Product("4", "Teclado Mecánico Nintec RGB", "Accesorios", "$89.00", "$120.00", R.drawable.ic_logo_ninteclp, false, 20));
-        products.add(new Product("5", "Laptop ASUS ROG Strix", "Laptops", "$1,899.00", null, R.drawable.ic_logo_ninteclp, false, 0)); // Agotado
-        products.add(new Product("6", "Samsung Galaxy S24 Ultra", "Celulares", "$1,299.00", "$1,399.00", R.drawable.ic_logo_ninteclp, true, 4));
-        products.add(new Product("7", "Mouse Gamer Inalámbrico", "Accesorios", "$59.00", "$75.00", R.drawable.ic_logo_ninteclp, false, 15));
-        products.add(new Product("8", "Parlante JBL Flip 6", "Audio", "$119.00", null, R.drawable.ic_logo_ninteclp, false, 10));
+        products.add(new Product("1", "MacBook Pro M3 Max", "Laptops", "Bs 2.499,00", "Bs 2.999,00", R.mipmap.ic_launcher_foreground, true, 5));
+        products.add(new Product("2", "iPhone 15 Pro Titanium", "Celulares", "Bs 1.099,00", "Bs 1.199,00", R.mipmap.ic_launcher_foreground, true, 8));
+        products.add(new Product("3", "Audífonos Sony WH-1000XM5", "Audio", "Bs 349,00", null, R.mipmap.ic_launcher_foreground, false, 12));
+        products.add(new Product("4", "Teclado Mecánico Nintec RGB", "Accesorios", "Bs 89,00", "Bs 120,00", R.mipmap.ic_launcher_foreground, false, 20));
+        products.add(new Product("5", "Laptop ASUS ROG Strix", "Laptops", "Bs 1.899,00", null, R.mipmap.ic_launcher_foreground, false, 0)); // Agotado
+        products.add(new Product("6", "Samsung Galaxy S24 Ultra", "Celulares", "Bs 1.299,00", "Bs 1.399,00", R.mipmap.ic_launcher_foreground, true, 4));
+        products.add(new Product("7", "Mouse Gamer Inalámbrico", "Accesorios", "Bs 59,00", "Bs 75,00", R.mipmap.ic_launcher_foreground, false, 15));
+        products.add(new Product("8", "Parlante JBL Flip 6", "Audio", "Bs 119,00", null, R.mipmap.ic_launcher_foreground, false, 10));
 
         // Descriptions setup
         descriptionsMap.put("1", "La MacBook Pro de 14 pulgadas con chip M3 Max vuela en flujos de trabajo extremos para programadores y diseñadores.");

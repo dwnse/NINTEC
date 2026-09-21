@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_primary"
+    android:background="@color/white"
     tools:context=".activities.LoginActivity">
 
     <!-- Decorative Top Background Shape -->
@@ -50,7 +50,7 @@
                 android:contentDescription="NINTECLP Logo"
                 android:adjustViewBounds="true"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_logo_ninteclp"
+                android:src="@mipmap/ic_launcher_foreground"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />

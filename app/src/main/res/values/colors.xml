@@ -37,4 +37,7 @@
     <!-- Estados Deshabilitados -->
     <color name="disabled_background">#E9ECEF</color>
     <color name="disabled_text">#868E96</color>
+
+    <!-- Transparencias y Variantes -->
+    <color name="black_80">#CC000000</color>
 </resources>

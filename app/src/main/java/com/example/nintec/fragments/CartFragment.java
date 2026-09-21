@@ -107,7 +107,7 @@ public class CartFragment extends Fragment implements CartAdapter.OnCartItemActi
 
     private void refreshTotals() {
         double totalNum = CartManager.getInstance().getTotalAmount();
-        String formatted = String.format(Locale.getDefault(), "$%.2f", totalNum);
+        String formatted = String.format(Locale.getDefault(), "Bs %.2f", totalNum);
         tvSubtotal.setText(formatted);
         tvTotal.setText(formatted);
     }

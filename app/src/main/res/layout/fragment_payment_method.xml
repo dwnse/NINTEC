@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_primary"
+    android:background="@color/white"
     tools:context=".fragments.PaymentMethodFragment">
 
     <RelativeLayout
@@ -60,33 +60,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:text="Visa / Mastercard"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold"
                 android:background="@drawable/bg_card"
                 android:layout_marginBottom="12dp"
                 android:paddingHorizontal="16dp"
                 android:button="@null"
-                android:drawableEnd="@android:drawable/btn_radio" />
+                android:drawableEnd="@android:drawable/btn_radio"
+                app:buttonTint="@color/nintec_blue" />
 
             <RadioButton
                 android:id="@+id/rb_paypal"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:text="PayPal"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold"
                 android:background="@drawable/bg_card"
                 android:layout_marginBottom="12dp"
                 android:paddingHorizontal="16dp"
                 android:button="@null"
-                android:drawableEnd="@android:drawable/btn_radio" />
+                android:drawableEnd="@android:drawable/btn_radio"
+                app:buttonTint="@color/nintec_blue" />
 
             <RadioButton
                 android:id="@+id/rb_qr"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:text="Pago por QR"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold"
                 android:background="@drawable/bg_card"
                 android:layout_marginBottom="12dp"
                 android:paddingHorizontal="16dp"
                 android:button="@null"
-                android:drawableEnd="@android:drawable/btn_radio" />
+                android:drawableEnd="@android:drawable/btn_radio"
+                app:buttonTint="@color/nintec_blue" />
 
         </RadioGroup>
     </LinearLayout>

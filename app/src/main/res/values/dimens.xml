@@ -15,7 +15,7 @@
     <!-- Dimensiones de componentes interactivos -->
     <dimen name="button_height">48dp</dimen>
     <dimen name="input_height">48dp</dimen>
-    <dimen name="bottom_navigation_height">56dp</dimen>
+    <dimen name="bottom_navigation_height">80dp</dimen>
 
     <!-- Padding interno de tarjetas y contenedores -->
     <dimen name="card_padding">16dp</dimen>
