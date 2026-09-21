@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colores base e históricos para compatibilidad -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red">#1846D7</color>
+    <color name="red">#1846D7</color> <!-- Mantener por compatibilidad con código existente -->
+
+    <!-- Paleta Oficial NINTECLP -->
+    <color name="nintec_blue">#1846D7</color>
+    <color name="nintec_blue_dark">#1032A2</color>
+    <color name="nintec_blue_light">#E8EEFF</color>
+
+    <!-- Fondos globales -->
+    <color name="background_primary">#F8F9FA</color>
+    <color name="background_secondary">#FFFFFF</color>
+
+    <!-- Superficies / Tarjetas -->
+    <color name="surface_primary">#FFFFFF</color>
+    <color name="surface_secondary">#F1F3F5</color>
+
+    <!-- Tipografía -->
+    <color name="text_primary">#212529</color>
+    <color name="text_secondary">#6C757D</color>
+    <color name="text_hint">#ADB5BD</color>
+
+    <!-- Bordes y Divisores -->
+    <color name="border_default">#CED4DA</color>
+
+    <!-- Estados y Acciones Positivas -->
+    <color name="success">#2B8A3E</color>
+    <color name="success_dark">#206A2E</color>
+    <color name="success_light">#E6F4EA</color>
+
+    <color name="warning">#E67E22</color>
+    <color name="error">#C0392B</color>
+
+    <!-- Estados Deshabilitados -->
+    <color name="disabled_background">#E9ECEF</color>
+    <color name="disabled_text">#868E96</color>
 </resources>

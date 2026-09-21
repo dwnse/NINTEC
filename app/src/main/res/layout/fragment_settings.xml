@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_primary"
+    tools:context=".fragments.SettingsFragment">
+
+    <!-- Top Header bar section component -->
+    <RelativeLayout
+        android:id="@+id/layout_settings_header"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:paddingHorizontal="@dimen/screen_horizontal_margin"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_settings_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Back" />
+
+        <TextView
+            style="@style/NintecSubtitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_title"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <!-- Scrollable configuration form viewport container -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/layout_settings_header"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/screen_horizontal_margin">
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_section_account"
+                android:textStyle="bold"
+                android:textColor="@color/nintec_blue"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Account Fields Matrix Section -->
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_label_name"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/et_settings_name"
+                style="@style/NintecInput"
+                android:layout_marginBottom="16dp"
+                android:inputType="textPersonName"
+                android:importantForAutofill="no" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_label_username"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/et_settings_username"
+                style="@style/NintecInput"
+                android:layout_marginBottom="16dp"
+                android:inputType="text"
+                android:importantForAutofill="no" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_label_email"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/et_settings_email"
+                style="@style/NintecInput"
+                android:layout_marginBottom="24dp"
+                android:inputType="textEmailAddress"
+                android:importantForAutofill="no" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_section_password"
+                android:textStyle="bold"
+                android:textColor="@color/nintec_blue"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Password Change Interface components row nodes -->
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_label_current_password"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/et_settings_current_password"
+                style="@style/NintecInput"
+                android:layout_marginBottom="16dp"
+                android:inputType="textPassword"
+                android:importantForAutofill="no" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_label_new_password"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/et_settings_new_password"
+                style="@style/NintecInput"
+                android:layout_marginBottom="16dp"
+                android:inputType="textPassword"
+                android:importantForAutofill="no" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_label_confirm_password"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/et_settings_confirm_password"
+                style="@style/NintecInput"
+                android:layout_marginBottom="32dp"
+                android:inputType="textPassword"
+                android:importantForAutofill="no" />
+
+            <Button
+                android:id="@+id/btn_settings_save"
+                style="@style/NintecPrimaryButton"
+                android:text="@string/settings_btn_save"
+                android:layout_marginBottom="40dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

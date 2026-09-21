@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="8dp"
+    android:layout_marginEnd="12dp"
+    android:background="?attr/selectableItemBackgroundBorderless">
+
+    <View
+        android:id="@+id/view_category_bg"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/bg_badge_new"
+        android:backgroundTint="@color/nintec_blue_light"/>
+
+    <TextView
+        android:id="@+id/tv_category_name"
+        style="@style/NintecSmallText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Laptop"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary" />
+</LinearLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_primary"
+    tools:context=".fragments.OrderSuccessFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/bg_badge_success"
+            android:background="@drawable/bg_badge_success"
+            android:backgroundTint="@color/success_light"
+            android:padding="24dp"
+            app:srcCompat="@drawable/ic_logo_ninteclp"
+            app:tint="@color/success" />
+
+        <TextView
+            style="@style/NintecTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkout_order_success"
+            android:layout_marginTop="32dp" />
+
+        <TextView
+            style="@style/NintecBodyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkout_order_success_desc"
+            android:gravity="center"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btn_success_home"
+            style="@style/NintecPrimaryButton"
+            android:layout_width="200dp"
+            android:layout_marginTop="48dp"
+            android:text="@string/btn_go_home" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

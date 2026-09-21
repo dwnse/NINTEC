@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Left vertical bar of N (Black/Dark) -->
+    <path
+        android:fillColor="#212529"
+        android:pathData="M20,15 L35,15 L35,85 L20,85 Z" />
+    <!-- Diagonal bar of N (Nintec Blue #1846D7) -->
+    <path
+        android:fillColor="#1846D7"
+        android:pathData="M35,15 L45,15 L65,85 L50,85 Z" />
+    <!-- Right vertical bar of N (Black/Dark) -->
+    <path
+        android:fillColor="#212529"
+        android:pathData="M65,15 L80,15 L80,85 L65,85 Z" />
+</vector>
