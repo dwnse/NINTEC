@@ -60,6 +60,22 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
         branchAdapter = new BranchAdapter(displayedBranches, this);
         rvBranches.setLayoutManager(new LinearLayoutManager(getContext()));
         rvBranches.setAdapter(branchAdapter);
+
+        BranchRepository.getInstance().fetchBranches(new BranchRepository.BranchListCallback() {
+            @Override
+            public void onSuccess(List<Branch> branches) {
+                if (isAdded() && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        displayedBranches.clear();
+                        displayedBranches.addAll(branches);
+                        branchAdapter.updateList(displayedBranches);
+                    });
+                }
+            }
+
+            @Override
+            public void onError(String error) {}
+        });
     }
 
     private void setupSearchFilter() {

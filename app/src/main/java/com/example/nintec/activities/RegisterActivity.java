@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.nintec.MainActivity;
 import com.example.nintec.R;
+import com.example.nintec.managers.SessionManager;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -24,6 +25,8 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        com.example.nintec.network.SupabaseClient.init(this);
+        SessionManager.init(this);
         setContentView(R.layout.activity_register);
 
         // Initialize views
@@ -35,29 +38,14 @@ public class RegisterActivity extends AppCompatActivity {
         btnIcloud = findViewById(R.id.btn_icloud);
 
         // Main Register submit button listener
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleRegister();
-            }
-        });
+        btnRegister.setOnClickListener(v -> handleRegister());
 
         // Navigation back to LoginActivity
-        tvGoToLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // finish() returns cleanly to the existing LoginActivity without accumulating stack instances
-                finish();
-            }
-        });
+        tvGoToLogin.setOnClickListener(v -> finish());
 
         // Social login buttons placeholders
-        View.OnClickListener socialClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        View.OnClickListener socialClickListener = v ->
                 Toast.makeText(RegisterActivity.this, "Registro social disponible próximamente", Toast.LENGTH_SHORT).show();
-            }
-        };
         btnGoogle.setOnClickListener(socialClickListener);
         btnIcloud.setOnClickListener(socialClickListener);
     }
@@ -66,7 +54,6 @@ public class RegisterActivity extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        // Simple validation checks
         boolean hasError = false;
 
         if (TextUtils.isEmpty(email)) {
@@ -77,21 +64,42 @@ public class RegisterActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(password)) {
             etPassword.setError(getString(R.string.error_password_empty));
             hasError = true;
+        } else if (password.length() < 6) {
+            etPassword.setError("La contraseña debe tener al menos 6 caracteres");
+            hasError = true;
         }
 
         if (hasError) {
             return;
         }
 
-        // TODO: reemplazar por persistencia/registro real (Firebase, API o Base de Datos)
-        Toast.makeText(this, "¡Registro completado con éxito!", Toast.LENGTH_LONG).show();
+        btnRegister.setEnabled(false);
+        btnRegister.setText("Creando cuenta...");
 
-        // Tras registrarse con éxito, entra a la app principal temporalmente
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("Usuario", email);
-        startActivity(intent);
-        
-        // Finaliza tanto RegisterActivity como la pila anterior para iniciar sesión limpia
-        finish();
+        // Generate default display name and username from email prefix
+        String username = email.contains("@") ? email.substring(0, email.indexOf('@')) : email;
+        String fullName = username;
+
+        SessionManager.getInstance().register(email, password, fullName, username, new SessionManager.AuthCallback() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(() -> {
+                    Toast.makeText(RegisterActivity.this, "¡Cuenta creada exitosamente!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> {
+                    btnRegister.setEnabled(true);
+                    btnRegister.setText(R.string.register_button);
+                    Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
+                });
+            }
+        });
     }
 }

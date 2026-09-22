@@ -85,17 +85,9 @@ public class CartManager {
     public double getTotalAmount() {
         double total = 0;
         for (CartItem item : cartItems) {
-            // Robust parsing: remove all non-digits except the decimal separator
-            // We assume ',' is decimal and '.' is thousands based on the "Bs 2.499,00" format
-            String priceStr = item.getProduct().getPrice()
-                    .replace("Bs", "")
-                    .replace(".", "")
-                    .replace(",", ".")
-                    .trim();
-            try {
-                double price = Double.parseDouble(priceStr);
-                total += price * item.getQuantity();
-            } catch (Exception ignored) {}
+            if (item != null && item.getProduct() != null) {
+                total += item.getProduct().getPriceValue() * item.getQuantity();
+            }
         }
         return total;
     }

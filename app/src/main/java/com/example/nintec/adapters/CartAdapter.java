@@ -47,8 +47,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.tvPrice.setText(item.getProduct().getPrice());
         holder.tvQty.setText(String.valueOf(item.getQuantity()));
 
-        if (item.getProduct().getImageResource() != 0) {
-            holder.imgProduct.setImageResource(item.getProduct().getImageResource());
+        try {
+            if (item.getProduct().getImageUrl() != null && !item.getProduct().getImageUrl().isEmpty()) {
+                com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                        .load(item.getProduct().getImageUrl())
+                        .placeholder(R.mipmap.ic_launcher_foreground)
+                        .error(R.mipmap.ic_launcher_foreground)
+                        .into(holder.imgProduct);
+            } else if (item.getProduct().getImageResource() != 0) {
+                holder.imgProduct.setImageResource(item.getProduct().getImageResource());
+            } else {
+                holder.imgProduct.setImageResource(R.mipmap.ic_launcher_foreground);
+            }
+        } catch (Exception e) {
+            holder.imgProduct.setImageResource(R.mipmap.ic_launcher_foreground);
         }
 
         holder.btnPlus.setOnClickListener(v -> {

@@ -47,9 +47,25 @@ public class ProfileFragment extends Fragment {
 
     private void updateUI() {
         User user = SessionManager.getInstance().getCurrentUser();
-        if (user != null) {
+        if (user != null && user.getName() != null && !user.getName().isEmpty()) {
             tvName.setText(user.getName());
         }
+
+        SessionManager.getInstance().loadUserProfile(new SessionManager.ProfileCallback() {
+            @Override
+            public void onLoaded(User loadedUser) {
+                if (isAdded() && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        if (loadedUser != null && loadedUser.getName() != null && !loadedUser.getName().isEmpty()) {
+                            tvName.setText(loadedUser.getName());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(String message) {}
+        });
     }
 
     private void setupListeners() {

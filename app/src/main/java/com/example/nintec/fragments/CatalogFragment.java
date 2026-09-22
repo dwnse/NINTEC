@@ -97,6 +97,21 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
     private void initDataFromRepository() {
         allProductsList = new ArrayList<>(ProductRepository.getInstance().getProducts());
         filteredProductsList = new ArrayList<>(allProductsList);
+
+        ProductRepository.getInstance().fetchProducts(new ProductRepository.ProductListCallback() {
+            @Override
+            public void onSuccess(List<Product> products) {
+                if (isAdded() && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        allProductsList = new ArrayList<>(products);
+                        applyCombinedFilters();
+                    });
+                }
+            }
+
+            @Override
+            public void onError(String error) {}
+        });
     }
 
     private void setupRecyclerView() {

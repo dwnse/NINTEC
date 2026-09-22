@@ -63,6 +63,33 @@ public class OrderHistoryFragment extends Fragment implements OrderAdapter.OnOrd
             rvHistory.setLayoutManager(new LinearLayoutManager(getContext()));
             rvHistory.setAdapter(adapter);
         }
+
+        OrderRepository.getInstance().fetchOrders(new OrderRepository.OrderListCallback() {
+            @Override
+            public void onSuccess(List<Order> freshOrders) {
+                if (isAdded() && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        if (freshOrders.isEmpty()) {
+                            layoutEmpty.setVisibility(View.VISIBLE);
+                            rvHistory.setVisibility(View.GONE);
+                        } else {
+                            layoutEmpty.setVisibility(View.GONE);
+                            rvHistory.setVisibility(View.VISIBLE);
+                            if (adapter == null) {
+                                adapter = new OrderAdapter(freshOrders, OrderHistoryFragment.this);
+                                rvHistory.setLayoutManager(new LinearLayoutManager(getContext()));
+                                rvHistory.setAdapter(adapter);
+                            } else {
+                                adapter.updateList(freshOrders);
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(String error) {}
+        });
     }
 
     @Override

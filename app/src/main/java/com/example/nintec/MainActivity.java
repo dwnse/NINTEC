@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements CartManager.CartC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        com.example.nintec.network.SupabaseClient.init(this);
+        com.example.nintec.managers.SessionManager.init(this);
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();

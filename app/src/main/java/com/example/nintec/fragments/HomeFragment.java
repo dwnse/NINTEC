@@ -147,6 +147,29 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
         productAdapter = new ProductAdapter(homeOffers, this);
         rvOffers.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvOffers.setAdapter(productAdapter);
+
+        // Fetch fresh products from Supabase REST API
+        ProductRepository.getInstance().fetchFeaturedProducts(new ProductRepository.ProductListCallback() {
+            @Override
+            public void onSuccess(List<Product> products) {
+                if (isAdded() && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        List<Product> fresh = new ArrayList<>();
+                        for (int i = 0; i < Math.min(4, products.size()); i++) {
+                            fresh.add(products.get(i));
+                        }
+                        if (!fresh.isEmpty()) {
+                            productAdapter.updateList(fresh);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                // Keep initial/cached data
+            }
+        });
     }
 
     @Override

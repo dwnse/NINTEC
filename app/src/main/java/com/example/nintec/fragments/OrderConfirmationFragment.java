@@ -17,6 +17,7 @@ import com.example.nintec.R;
 import com.example.nintec.adapters.OrderItemAdapter;
 import com.example.nintec.managers.CartManager;
 import com.example.nintec.models.Order;
+import com.example.nintec.managers.SessionManager;
 import com.example.nintec.models.OrderStatus;
 import com.example.nintec.repositories.OrderRepository;
 import java.util.Locale;
@@ -25,6 +26,7 @@ public class OrderConfirmationFragment extends Fragment {
 
     private static final String ARG_PAYMENT_METHOD = "payment_method";
     private String paymentMethod;
+    private Button btnConfirm;
 
     public static OrderConfirmationFragment newInstance(String method) {
         OrderConfirmationFragment fragment = new OrderConfirmationFragment();
@@ -47,7 +49,7 @@ public class OrderConfirmationFragment extends Fragment {
         RecyclerView rvItems = view.findViewById(R.id.rv_confirm_items);
         TextView tvPayment = view.findViewById(R.id.tv_confirm_payment_method);
         TextView tvTotal = view.findViewById(R.id.tv_confirm_total);
-        Button btnConfirm = view.findViewById(R.id.btn_confirm_order);
+        btnConfirm = view.findViewById(R.id.btn_confirm_order);
 
         btnBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
@@ -64,18 +66,38 @@ public class OrderConfirmationFragment extends Fragment {
     }
 
     private void finalizeOrder() {
-        // Create order
+        if (btnConfirm != null) {
+            btnConfirm.setEnabled(false);
+            btnConfirm.setText("Procesando...");
+        }
+
+        String today = new java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new java.util.Date());
         String orderId = "NIN-" + (1000 + OrderRepository.getInstance().getOrders().size());
         Order newOrder = new Order(
                 orderId,
                 CartManager.getInstance().getItems(),
-                String.format(Locale.getDefault(), "Bs %,.2f", CartManager.getInstance().getTotalAmount()),
+                CartManager.getInstance().getTotalAmount(),
                 paymentMethod,
                 OrderStatus.COMPLETED,
-                "25/09/2026"
+                today
         );
 
         OrderRepository.getInstance().addOrder(newOrder);
+
+        // Sync with Supabase if logged in
+        if (SessionManager.getInstance().isLoggedIn()) {
+            java.util.Map<String, Object> params = new java.util.HashMap<>();
+            params.put("p_payment_method", paymentMethod);
+            com.example.nintec.network.SupabaseClient.getInstance().getDataService()
+                    .createOrder(params)
+                    .enqueue(new retrofit2.Callback<String>() {
+                        @Override
+                        public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {}
+                        @Override
+                        public void onFailure(retrofit2.Call<String> call, Throwable t) {}
+                    });
+        }
+
         CartManager.getInstance().clear();
 
         // Navigate to success

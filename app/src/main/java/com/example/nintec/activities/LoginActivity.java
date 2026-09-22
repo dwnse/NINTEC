@@ -11,6 +11,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.nintec.MainActivity;
 import com.example.nintec.R;
+import com.example.nintec.managers.SessionManager;
+
+import com.example.nintec.network.SupabaseClient;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,6 +27,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SupabaseClient.init(this);
+        SessionManager.init(this);
+
+        // Check if user is already authenticated
+        if (SessionManager.getInstance().isLoggedIn()) {
+            goToMainActivity();
+            return;
+        }
+
         setContentView(R.layout.activity_login);
 
         // Initialize views
@@ -35,30 +47,17 @@ public class LoginActivity extends AppCompatActivity {
         btnIcloud = findViewById(R.id.btn_icloud);
 
         // Main Login button listener
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleLogin();
-            }
-        });
+        btnLogin.setOnClickListener(v -> handleLogin());
 
         // Navigation to RegisterActivity
-        tvGoToRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-                // Do not finish LoginActivity so the user can easily return via back button or link
-            }
+        tvGoToRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
 
-        // Social login buttons visual feedback / click placeholder
-        View.OnClickListener socialClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        // Social login buttons feedback
+        View.OnClickListener socialClickListener = v ->
                 Toast.makeText(LoginActivity.this, "Inicio de sesión social disponible próximamente", Toast.LENGTH_SHORT).show();
-            }
-        };
         btnGoogle.setOnClickListener(socialClickListener);
         btnIcloud.setOnClickListener(socialClickListener);
     }
@@ -67,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        // Simple validation checks
         boolean hasError = false;
 
         if (TextUtils.isEmpty(email)) {
@@ -84,11 +82,32 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: reemplazar por autenticación real (Firebase, API o Base de Datos)
-        // Navegación temporal para probar la aplicación y sus fragmentos
+        btnLogin.setEnabled(false);
+        btnLogin.setText("Iniciando sesión...");
+
+        SessionManager.getInstance().login(email, password, new SessionManager.AuthCallback() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(() -> {
+                    Toast.makeText(LoginActivity.this, "¡Bienvenido a NINTEC!", Toast.LENGTH_SHORT).show();
+                    goToMainActivity();
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> {
+                    btnLogin.setEnabled(true);
+                    btnLogin.setText(R.string.login_button);
+                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+                });
+            }
+        });
+    }
+
+    private void goToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("Usuario", email);
         startActivity(intent);
-        finish(); // Finaliza LoginActivity para que no quede en la pila tras ingresar a la app principal
+        finish();
     }
 }

@@ -33,14 +33,23 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
         holder.tvName.setText(item.getProduct().getName());
         holder.tvQty.setText(holder.itemView.getContext().getString(R.string.quantity_label, item.getQuantity()));
         
-        double price = 0;
-        try {
-            price = Double.parseDouble(item.getProduct().getPrice().replaceAll("[^0-9.]", ""));
-        } catch (Exception ignored) {}
-        holder.tvSubtotal.setText(String.format(Locale.getDefault(), "Bs %,.2f", price * item.getQuantity()));
+        double price = item.getProduct().getPriceValue();
+        holder.tvSubtotal.setText(com.example.nintec.models.Product.formatPrice(price * item.getQuantity()));
 
-        if (item.getProduct().getImageResource() != 0) {
-            holder.imgProduct.setImageResource(item.getProduct().getImageResource());
+        try {
+            if (item.getProduct().getImageUrl() != null && !item.getProduct().getImageUrl().isEmpty()) {
+                com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                        .load(item.getProduct().getImageUrl())
+                        .placeholder(R.mipmap.ic_launcher_foreground)
+                        .error(R.mipmap.ic_launcher_foreground)
+                        .into(holder.imgProduct);
+            } else if (item.getProduct().getImageResource() != 0) {
+                holder.imgProduct.setImageResource(item.getProduct().getImageResource());
+            } else {
+                holder.imgProduct.setImageResource(R.mipmap.ic_launcher_foreground);
+            }
+        } catch (Exception e) {
+            holder.imgProduct.setImageResource(R.mipmap.ic_launcher_foreground);
         }
     }
 

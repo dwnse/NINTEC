@@ -107,8 +107,20 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
             tvOldPrice.setVisibility(View.GONE);
         }
 
-        if (currentProduct.getImageResource() != 0) {
-            imgProduct.setImageResource(currentProduct.getImageResource());
+        try {
+            if (currentProduct.getImageUrl() != null && !currentProduct.getImageUrl().isEmpty()) {
+                com.bumptech.glide.Glide.with(this)
+                        .load(currentProduct.getImageUrl())
+                        .placeholder(R.mipmap.ic_launcher_foreground)
+                        .error(R.mipmap.ic_launcher_foreground)
+                        .into(imgProduct);
+            } else if (currentProduct.getImageResource() != 0) {
+                imgProduct.setImageResource(currentProduct.getImageResource());
+            } else {
+                imgProduct.setImageResource(R.mipmap.ic_launcher_foreground);
+            }
+        } catch (Exception e) {
+            imgProduct.setImageResource(R.mipmap.ic_launcher_foreground);
         }
 
         tvDescription.setText(ProductRepository.getInstance().getDescriptionById(currentProduct.getId()));

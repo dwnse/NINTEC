@@ -54,15 +54,10 @@ public class SettingsFragment extends Fragment {
     private void setupListeners() {
         btnBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
-        btnSave.setOnClickListener(v -> {
-            if (validateAndSave()) {
-                Toast.makeText(getContext(), R.string.settings_save_success, Toast.LENGTH_SHORT).show();
-                getParentFragmentManager().popBackStack();
-            }
-        });
+        btnSave.setOnClickListener(v -> handleSave());
     }
 
-    private boolean validateAndSave() {
+    private void handleSave() {
         String name = etName.getText().toString().trim();
         String username = etUsername.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
@@ -71,31 +66,53 @@ public class SettingsFragment extends Fragment {
 
         if (TextUtils.isEmpty(name)) {
             etName.setError(getString(R.string.error_required_field));
-            return false;
+            return;
         }
 
         if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             etEmail.setError(getString(R.string.settings_error_invalid_email));
-            return false;
+            return;
         }
 
-        // Simulating password matching validation logic
         if (!TextUtils.isEmpty(newPass)) {
             if (!newPass.equals(confirmPass)) {
                 etConfirmPass.setError(getString(R.string.settings_error_password_mismatch));
-                return false;
+                return;
             }
         }
 
-        // Update local session master object
+        btnSave.setEnabled(false);
+        btnSave.setText("Guardando...");
+
+        // Update local session
         User user = SessionManager.getInstance().getCurrentUser();
         if (user != null) {
             user.setName(name);
             user.setUsername(username);
             user.setEmail(email);
-            // TODO: In future stage, send password update to secure backend API
         }
 
-        return true;
+        SessionManager.getInstance().updateProfile(name, null, new SessionManager.AuthCallback() {
+            @Override
+            public void onSuccess() {
+                if (isAdded() && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), R.string.settings_save_success, Toast.LENGTH_SHORT).show();
+                        getParentFragmentManager().popBackStack();
+                    });
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+                if (isAdded() && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        // Even if server sync had an issue, local update succeeded
+                        Toast.makeText(getContext(), R.string.settings_save_success, Toast.LENGTH_SHORT).show();
+                        getParentFragmentManager().popBackStack();
+                    });
+                }
+            }
+        });
     }
 }

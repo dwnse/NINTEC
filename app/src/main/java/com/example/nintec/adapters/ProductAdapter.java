@@ -60,8 +60,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             holder.tvBadgeNew.setVisibility(View.GONE);
         }
 
-        if (product.getImageResource() != 0) {
-            holder.imgProduct.setImageResource(product.getImageResource());
+        try {
+            if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
+                com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                        .load(product.getImageUrl())
+                        .placeholder(R.mipmap.ic_launcher_foreground)
+                        .error(R.mipmap.ic_launcher_foreground)
+                        .into(holder.imgProduct);
+            } else if (product.getImageResource() != 0) {
+                holder.imgProduct.setImageResource(product.getImageResource());
+            } else {
+                holder.imgProduct.setImageResource(R.mipmap.ic_launcher_foreground);
+            }
+        } catch (Exception e) {
+            holder.imgProduct.setImageResource(R.mipmap.ic_launcher_foreground);
         }
 
         holder.itemView.setOnClickListener(v -> {

@@ -2,10 +2,17 @@ package com.example.nintec.repositories;
 
 import com.example.nintec.R;
 import com.example.nintec.models.Product;
+import com.example.nintec.network.SupabaseClient;
+import com.example.nintec.network.dto.ProductDto;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductRepository {
 
@@ -14,11 +21,21 @@ public class ProductRepository {
     private Map<String, Map<String, String>> specificationsMap;
     private Map<String, String> descriptionsMap;
 
+    public interface ProductListCallback {
+        void onSuccess(List<Product> products);
+        void onError(String error);
+    }
+
+    public interface ProductCallback {
+        void onSuccess(Product product);
+        void onError(String error);
+    }
+
     private ProductRepository() {
         products = new ArrayList<>();
         specificationsMap = new LinkedHashMap<>();
         descriptionsMap = new LinkedHashMap<>();
-        initData();
+        initFallbackData();
     }
 
     public static synchronized ProductRepository getInstance() {
@@ -28,16 +45,16 @@ public class ProductRepository {
         return instance;
     }
 
-    private void initData() {
-        // Hydrate uniform master dataset catalog
-        products.add(new Product("1", "MacBook Pro M3 Max", "Laptops", "Bs 2.499,00", "Bs 2.999,00", R.mipmap.ic_launcher_foreground, true, 5));
-        products.add(new Product("2", "iPhone 15 Pro Titanium", "Celulares", "Bs 1.099,00", "Bs 1.199,00", R.mipmap.ic_launcher_foreground, true, 8));
-        products.add(new Product("3", "Audífonos Sony WH-1000XM5", "Audio", "Bs 349,00", null, R.mipmap.ic_launcher_foreground, false, 12));
-        products.add(new Product("4", "Teclado Mecánico Nintec RGB", "Accesorios", "Bs 89,00", "Bs 120,00", R.mipmap.ic_launcher_foreground, false, 20));
-        products.add(new Product("5", "Laptop ASUS ROG Strix", "Laptops", "Bs 1.899,00", null, R.mipmap.ic_launcher_foreground, false, 0)); // Agotado
-        products.add(new Product("6", "Samsung Galaxy S24 Ultra", "Celulares", "Bs 1.299,00", "Bs 1.399,00", R.mipmap.ic_launcher_foreground, true, 4));
-        products.add(new Product("7", "Mouse Gamer Inalámbrico", "Accesorios", "Bs 59,00", "Bs 75,00", R.mipmap.ic_launcher_foreground, false, 15));
-        products.add(new Product("8", "Parlante JBL Flip 6", "Audio", "Bs 119,00", null, R.mipmap.ic_launcher_foreground, false, 10));
+    private void initFallbackData() {
+        // Hydrate uniform master dataset catalog with proper types
+        products.add(new Product("1", "MacBook Pro M3 Max", "Laptops", 2499.00, 2999.00, R.mipmap.ic_launcher_foreground, true, 5));
+        products.add(new Product("2", "iPhone 15 Pro Titanium", "Celulares", 1099.00, 1199.00, R.mipmap.ic_launcher_foreground, true, 8));
+        products.add(new Product("3", "Audífonos Sony WH-1000XM5", "Audio", 349.00, null, R.mipmap.ic_launcher_foreground, false, 12));
+        products.add(new Product("4", "Teclado Mecánico Nintec RGB", "Accesorios", 89.00, 120.00, R.mipmap.ic_launcher_foreground, false, 20));
+        products.add(new Product("5", "Laptop ASUS ROG Strix", "Laptops", 1899.00, null, R.mipmap.ic_launcher_foreground, false, 0));
+        products.add(new Product("6", "Samsung Galaxy S24 Ultra", "Celulares", 1299.00, 1399.00, R.mipmap.ic_launcher_foreground, true, 4));
+        products.add(new Product("7", "Mouse Gamer Inalámbrico", "Accesorios", 59.00, 75.00, R.mipmap.ic_launcher_foreground, false, 15));
+        products.add(new Product("8", "Parlante JBL Flip 6", "Audio", 119.00, null, R.mipmap.ic_launcher_foreground, false, 10));
 
         // Descriptions setup
         descriptionsMap.put("1", "La MacBook Pro de 14 pulgadas con chip M3 Max vuela en flujos de trabajo extremos para programadores y diseñadores.");
@@ -77,6 +94,67 @@ public class ProductRepository {
         specificationsMap.put("4", spec4);
     }
 
+    /**
+     * Fetch products from Supabase REST API.
+     */
+    public void fetchProducts(ProductListCallback callback) {
+        SupabaseClient.getInstance().getDataService()
+                .getProducts("*,categories(*),product_images(*)", "eq.true", "sort_order.asc,name.asc", 100)
+                .enqueue(new Callback<List<ProductDto>>() {
+                    @Override
+                    public void onResponse(Call<List<ProductDto>> call, Response<List<ProductDto>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<Product> fetched = new ArrayList<>();
+                            for (ProductDto dto : response.body()) {
+                                Product p = dto.toProduct();
+                                fetched.add(p);
+                                if (dto.description != null) {
+                                    descriptionsMap.put(p.getId(), dto.description);
+                                }
+                            }
+                            if (!fetched.isEmpty()) {
+                                products = fetched;
+                            }
+                            if (callback != null) callback.onSuccess(products);
+                        } else {
+                            if (callback != null) callback.onSuccess(products); // fallback to cached
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<ProductDto>> call, Throwable t) {
+                        if (callback != null) callback.onSuccess(products); // fallback to cached
+                    }
+                });
+    }
+
+    /**
+     * Fetch featured products from Supabase REST API.
+     */
+    public void fetchFeaturedProducts(ProductListCallback callback) {
+        SupabaseClient.getInstance().getDataService()
+                .getFeaturedProducts("*,categories(*),product_images(*)", "eq.true", "eq.true", "sort_order.asc", 20)
+                .enqueue(new Callback<List<ProductDto>>() {
+                    @Override
+                    public void onResponse(Call<List<ProductDto>> call, Response<List<ProductDto>> response) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                            List<Product> featured = new ArrayList<>();
+                            for (ProductDto dto : response.body()) {
+                                featured.add(dto.toProduct());
+                            }
+                            if (callback != null) callback.onSuccess(featured);
+                        } else {
+                            if (callback != null) callback.onSuccess(products);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<ProductDto>> call, Throwable t) {
+                        if (callback != null) callback.onSuccess(products);
+                    }
+                });
+    }
+
     public List<Product> getProducts() {
         return products;
     }
@@ -89,6 +167,10 @@ public class ProductRepository {
     }
 
     public String getDescriptionById(String id) {
+        Product p = getProductById(id);
+        if (p != null && p.getDescription() != null && !p.getDescription().isEmpty()) {
+            return p.getDescription();
+        }
         return descriptionsMap.containsKey(id) ? descriptionsMap.get(id) : "Sin descripción disponible.";
     }
 
