@@ -72,6 +72,38 @@
                 style="@style/NintecSubtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Sucursal y Entrega"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                style="@style/NintecCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/tv_confirm_branch_name"
+                    style="@style/NintecBodyText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📍 Sucursal Central"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_confirm_branch_address"
+                    style="@style/NintecSmallText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Av. San Martín #123, Centro - La Paz"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/NintecSubtitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/checkout_payment_details"
                 android:layout_marginBottom="12dp" />
 
@@ -86,6 +118,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Método: Visa" />
+                <TextView
+                    android:id="@+id/tv_confirm_notes"
+                    style="@style/NintecSmallText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="6dp"
+                    android:visibility="gone" />
                 <TextView
                     android:id="@+id/tv_confirm_total"
                     style="@style/NintecPriceText"

@@ -110,9 +110,8 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
             }
             @Override
             public void onError(String error) {
-                if (isAdded()) {
-                    Toast.makeText(getContext(), "Error: " + error, Toast.LENGTH_SHORT).show();
-                }
+                // Graceful fallback: maintain products without intrusive 401 popups
+                android.util.Log.w("CatalogFragment", "Product fetch notice: " + error);
             }
         });
     }
@@ -223,6 +222,12 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
             if (totalItemCount > 0) {
                 tvCartBadge.setText(String.valueOf(totalItemCount));
                 tvCartBadge.setVisibility(View.VISIBLE);
+                tvCartBadge.setScaleX(0.5f);
+                tvCartBadge.setScaleY(0.5f);
+                tvCartBadge.animate().scaleX(1.25f).scaleY(1.25f).setDuration(140)
+                        .setInterpolator(new android.view.animation.OvershootInterpolator(2.5f))
+                        .withEndAction(() -> tvCartBadge.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100).start())
+                        .start();
             } else {
                 tvCartBadge.setVisibility(View.GONE);
             }
@@ -233,6 +238,24 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
     public void onProductClick(Product product) {
         if (getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).openProductDetail(product.getId());
+        }
+    }
+
+    public void filterByCategory(String categoryId) {
+        if (categoryId == null || categoryId.isEmpty()) return;
+        this.currentSelectedCategoryId = categoryId;
+        if (isAdded() && containerCategories != null) {
+            setupCategoriesFilterRow();
+            applyCombinedFilters();
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && isAdded()) {
+            setupCategoriesFilterRow();
+            applyCombinedFilters();
         }
     }
 

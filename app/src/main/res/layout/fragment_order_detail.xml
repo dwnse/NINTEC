@@ -7,6 +7,7 @@
     android:background="@color/background_primary"
     tools:context=".fragments.OrderDetailFragment">
 
+    <!-- Header -->
     <RelativeLayout
         android:id="@+id/layout_detail_header"
         android:layout_width="match_parent"
@@ -48,63 +49,267 @@
             android:orientation="vertical"
             android:padding="@dimen/screen_horizontal_margin">
 
+            <!-- Order Header Card -->
             <androidx.cardview.widget.CardView
-                style="@style/NintecCard"
-                app:cardElevation="2dp"
-                android:layout_marginBottom="24dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/radius_medium"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/nintec_blue"
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/tv_detail_order_id"
-                            style="@style/NintecBodyText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="#NIN-0001"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
+
                         <TextView
                             android:id="@+id/tv_detail_status"
-                            style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/order_status_completed"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="2dp"
+                            android:text="Pendiente"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:background="@drawable/bg_badge_new"
                             android:textColor="@color/white"
+                            android:textSize="11sp"
                             android:textStyle="bold"
-                            android:layout_alignParentEnd="true" />
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
                     </RelativeLayout>
 
                     <TextView
                         android:id="@+id/tv_detail_date"
-                        style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/order_date_detail" />
-
-                    <TextView
-                        android:id="@+id/tv_detail_payment"
-                        style="@style/NintecSmallText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="@string/order_payment_method" />
+                        android:text="23/09/2026"
+                        android:textColor="@color/white"
+                        android:alpha="0.85"
+                        android:textSize="13sp"
+                        android:layout_marginTop="4dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Status Timeline -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_timeline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/radius_medium"
+                app:cardElevation="1dp"
+                app:cardBackgroundColor="@color/surface_primary"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/NintecBodyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Estado del pedido"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Step 1: Pedido Recibido -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+                        <View
+                            android:id="@+id/dot_step_0"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:background="@drawable/bg_badge_success" />
+                        <TextView
+                            android:id="@+id/tv_step_0"
+                            style="@style/NintecSmallText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pedido recibido"
+                            android:layout_marginStart="12dp"
+                            android:textColor="@color/text_primary" />
+                    </LinearLayout>
+
+                    <!-- Step 2: Confirmado -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+                        <View
+                            android:id="@+id/dot_step_1"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:background="@drawable/bg_button_secondary" />
+                        <TextView
+                            android:id="@+id/tv_step_1"
+                            style="@style/NintecSmallText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Confirmado"
+                            android:layout_marginStart="12dp"
+                            android:textColor="@color/text_hint" />
+                    </LinearLayout>
+
+                    <!-- Step 3: En Preparación -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+                        <View
+                            android:id="@+id/dot_step_2"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:background="@drawable/bg_button_secondary" />
+                        <TextView
+                            android:id="@+id/tv_step_2"
+                            style="@style/NintecSmallText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="En preparación"
+                            android:layout_marginStart="12dp"
+                            android:textColor="@color/text_hint" />
+                    </LinearLayout>
+
+                    <!-- Step 4: Finalizado -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <View
+                            android:id="@+id/dot_step_3"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:background="@drawable/bg_button_secondary" />
+                        <TextView
+                            android:id="@+id/tv_step_3"
+                            style="@style/NintecSmallText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Finalizado"
+                            android:layout_marginStart="12dp"
+                            android:textColor="@color/text_hint" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Branch Info Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_branch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/radius_medium"
+                app:cardElevation="1dp"
+                app:cardBackgroundColor="@color/surface_primary"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/NintecBodyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sucursal"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tv_detail_branch_name"
+                        style="@style/NintecBodyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/nintec_blue"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_detail_branch_address"
+                        style="@style/NintecSmallText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Payment Info Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/radius_medium"
+                app:cardElevation="1dp"
+                app:cardBackgroundColor="@color/surface_primary"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/NintecBodyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pago"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tv_detail_payment"
+                        style="@style/NintecBodyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:id="@+id/tv_detail_payment_details"
+                        style="@style/NintecSmallText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="2dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Products Card -->
             <TextView
-                style="@style/NintecSubtitleText"
+                style="@style/NintecBodyText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/order_detail_products"
-                android:layout_marginBottom="12dp" />
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_order_detail_items"
@@ -112,36 +317,125 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false" />
 
+            <!-- Price Breakdown -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/border_default"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="40dp">
+                android:orientation="vertical">
 
-                <TextView
-                    style="@style/NintecSubtitleText"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/order_detail_total_paid"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true" />
+                    android:layout_marginBottom="6dp">
+                    <TextView
+                        style="@style/NintecSmallText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Subtotal"
+                        android:textColor="@color/text_secondary"
+                        android:layout_alignParentStart="true" />
+                    <TextView
+                        android:id="@+id/tv_detail_subtotal"
+                        style="@style/NintecSmallText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_primary"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tv_detail_total"
-                    style="@style/NintecPriceText"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/layout_discount_row"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:text="Bs 2.499,00"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true" />
-            </RelativeLayout>
+                    android:layout_marginBottom="6dp"
+                    android:visibility="gone">
+                    <TextView
+                        style="@style/NintecSmallText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descuento"
+                        android:textColor="@color/success"
+                        android:layout_alignParentStart="true" />
+                    <TextView
+                        android:id="@+id/tv_detail_discount"
+                        style="@style/NintecSmallText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/success"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/border_default"
+                    android:layout_marginBottom="10dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp">
+                    <TextView
+                        style="@style/NintecSubtitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/order_detail_total_paid"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true" />
+                    <TextView
+                        android:id="@+id/tv_detail_total"
+                        style="@style/NintecPriceText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:text="Bs 2.499,00"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <!-- Notes (if any) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/radius_medium"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#FFF8E1"
+                android:layout_marginBottom="32dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        style="@style/NintecSmallText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📝 Notas"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:id="@+id/tv_detail_notes"
+                        style="@style/NintecSmallText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

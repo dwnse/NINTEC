@@ -48,12 +48,19 @@ public class SettingsFragment extends Fragment {
             etName.setText(user.getName());
             etUsername.setText(user.getUsername());
             etEmail.setText(user.getEmail());
+        } else {
+            String email = SessionManager.getInstance().getUserEmail();
+            if (email != null && !email.isEmpty()) {
+                etEmail.setText(email);
+                String prefix = email.contains("@") ? email.substring(0, email.indexOf('@')) : email;
+                etName.setText(prefix);
+                etUsername.setText(prefix);
+            }
         }
     }
 
     private void setupListeners() {
         btnBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
-
         btnSave.setOnClickListener(v -> handleSave());
     }
 
@@ -75,6 +82,10 @@ public class SettingsFragment extends Fragment {
         }
 
         if (!TextUtils.isEmpty(newPass)) {
+            if (newPass.length() < 6) {
+                etNewPass.setError("La contraseña debe tener al menos 6 caracteres");
+                return;
+            }
             if (!newPass.equals(confirmPass)) {
                 etConfirmPass.setError(getString(R.string.settings_error_password_mismatch));
                 return;
@@ -84,35 +95,52 @@ public class SettingsFragment extends Fragment {
         btnSave.setEnabled(false);
         btnSave.setText("Guardando...");
 
-        // Update local session
+        // Update local session immediately
         User user = SessionManager.getInstance().getCurrentUser();
-        if (user != null) {
+        if (user == null) {
+            user = new User(SessionManager.getInstance().getUserId(), name, username, email, null);
+        } else {
             user.setName(name);
             user.setUsername(username);
             user.setEmail(email);
         }
+        SessionManager.getInstance().saveUserLocal(user);
 
+        // Update password if requested
+        if (!TextUtils.isEmpty(newPass)) {
+            SessionManager.getInstance().updatePassword(newPass, new SessionManager.AuthCallback() {
+                @Override
+                public void onSuccess() {}
+                @Override
+                public void onError(String message) {}
+            });
+        }
+
+        // Sync profile to Supabase
         SessionManager.getInstance().updateProfile(name, username, null, new SessionManager.AuthCallback() {
             @Override
             public void onSuccess() {
-                if (isAdded() && getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        Toast.makeText(getContext(), R.string.settings_save_success, Toast.LENGTH_SHORT).show();
-                        getParentFragmentManager().popBackStack();
-                    });
-                }
+                finishAndPop();
             }
 
             @Override
             public void onError(String message) {
-                if (isAdded() && getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        // Even if server sync had an issue, local update succeeded
-                        Toast.makeText(getContext(), R.string.settings_save_success, Toast.LENGTH_SHORT).show();
-                        getParentFragmentManager().popBackStack();
-                    });
-                }
+                // Local save already succeeded, don't trap the user
+                finishAndPop();
             }
         });
+    }
+
+    private void finishAndPop() {
+        if (isAdded() && getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                Bundle result = new Bundle();
+                result.putBoolean("updated", true);
+                getParentFragmentManager().setFragmentResult("profile_updated", result);
+
+                Toast.makeText(getContext(), R.string.settings_save_success, Toast.LENGTH_SHORT).show();
+                getParentFragmentManager().popBackStack();
+            });
+        }
     }
 }

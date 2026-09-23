@@ -221,84 +221,45 @@
             android:nestedScrollingEnabled="false"
             android:layout_marginBottom="24dp" />
 
-        <!-- Informative Support Security Block Cards -->
+        <!-- Informative Security Block Card -->
         <LinearLayout
+            style="@style/NintecCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_marginBottom="16dp">
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp">
 
-            <!-- Secure Card -->
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_secure_purchase"
+                android:contentDescription="Secure Purchase Icon" />
+
             <LinearLayout
-                style="@style/NintecCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginEnd="6dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="12dp">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_secure_purchase"
-                    android:contentDescription="Secure Purchase Icon" />
+                android:layout_marginStart="14dp"
+                android:orientation="vertical">
 
                 <TextView
-                    style="@style/NintecSmallText"
+                    style="@style/NintecBodyText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/home_secure_purchase"
                     android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:layout_marginTop="6dp" />
+                    android:textColor="@color/text_primary" />
 
                 <TextView
                     style="@style/NintecSmallText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/home_secure_desc"
-                    android:gravity="center"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginTop="2dp" />
             </LinearLayout>
-
-            <!-- Support Card -->
-            <LinearLayout
-                style="@style/NintecCard"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="12dp">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_tech_support"
-                    android:contentDescription="Technical Support Icon" />
-
-                <TextView
-                    style="@style/NintecSmallText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/home_support"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:layout_marginTop="6dp" />
-
-                <TextView
-                    style="@style/NintecSmallText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/home_support_desc"
-                    android:gravity="center"
-                    android:layout_marginTop="2dp" />
-            </LinearLayout>
-
         </LinearLayout>
 
     </LinearLayout>

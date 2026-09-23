@@ -110,9 +110,8 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
             }
             @Override
             public void onError(String error) {
-                if (isAdded()) {
-                    Toast.makeText(getContext(), "Error: " + error, Toast.LENGTH_SHORT).show();
-                }
+                // Graceful fallback: maintain existing items without intrusive 401 popups
+                android.util.Log.w("HomeFragment", "Featured products notice: " + error);
             }
         });
     }
@@ -149,7 +148,7 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
 
             catView.setOnClickListener(v -> {
                 if (getActivity() instanceof MainActivity) {
-                    // TODO: Filter Catalog by category ID
+                    ((MainActivity) getActivity()).openCatalogWithCategory(cat.getId());
                 }
             });
 
@@ -194,6 +193,12 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
             if (totalItemCount > 0) {
                 tvCartBadge.setText(String.valueOf(totalItemCount));
                 tvCartBadge.setVisibility(View.VISIBLE);
+                tvCartBadge.setScaleX(0.5f);
+                tvCartBadge.setScaleY(0.5f);
+                tvCartBadge.animate().scaleX(1.25f).scaleY(1.25f).setDuration(140)
+                        .setInterpolator(new android.view.animation.OvershootInterpolator(2.5f))
+                        .withEndAction(() -> tvCartBadge.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100).start())
+                        .start();
             } else {
                 tvCartBadge.setVisibility(View.GONE);
             }

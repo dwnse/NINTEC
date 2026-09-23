@@ -14,6 +14,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Top row: Order # + Status Badge -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -25,37 +26,84 @@
                 android:layout_height="wrap_content"
                 android:text="Pedido #NIN-0001"
                 android:textStyle="bold"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
 
             <TextView
                 android:id="@+id/tv_order_status"
                 style="@style/NintecSmallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/order_status_completed"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="2dp"
+                android:text="Finalizado"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="3dp"
                 android:background="@drawable/bg_badge_success"
                 android:textColor="@color/white"
+                android:textSize="11sp"
                 android:textStyle="bold"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true" />
         </RelativeLayout>
 
+        <!-- Items summary -->
         <TextView
-            android:id="@+id/tv_order_date"
+            android:id="@+id/tv_order_items_summary"
             style="@style/NintecSmallText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/order_date_format" />
+            android:layout_marginTop="4dp"
+            android:text="MacBook Pro + 2 más"
+            android:textColor="@color/text_secondary"
+            android:ellipsize="end"
+            android:maxLines="1" />
+
+        <!-- Date + Branch row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:id="@+id/tv_order_date"
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="23/09/2026"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/tv_order_branch"
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="• Central"
+                android:textColor="@color/nintec_blue"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_order_payment"
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="• QR"
+                android:textColor="@color/text_hint"
+                android:textSize="11sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/border_default"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="10dp" />
 
+        <!-- Total row -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

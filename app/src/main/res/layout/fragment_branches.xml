@@ -69,33 +69,57 @@
             android:contentDescription="Clear Search" />
     </LinearLayout>
 
-    <!-- Map Placeholder / Container Frame -->
-    <FrameLayout
+    <!-- Interactive Dynamic Map Container Card -->
+    <androidx.cardview.widget.CardView
         android:id="@+id/layout_map_container"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="230dp"
+        android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_badge_new"
-        android:backgroundTint="@color/nintec_blue_light"
+        app:cardCornerRadius="@dimen/radius_medium"
+        app:cardElevation="2dp"
         app:layout_constraintTop_toBottomOf="@id/layout_branches_search">
 
-        <ImageView
-            android:id="@+id/img_branches_map_static"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:contentDescription="Map Preview" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_map_placeholder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Cargando mapa..."
-            android:gravity="center"
-            android:textColor="@color/nintec_blue"
-            android:textStyle="bold" />
-    </FrameLayout>
+            <WebView
+                android:id="@+id/webview_branches_map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ProgressBar
+                android:id="@+id/pb_map_loading"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/nintec_blue" />
+
+            <!-- Floating My Location Button -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_map_my_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="12dp"
+                app:fabCustomSize="40dp"
+                app:maxImageSize="20dp"
+                app:backgroundTint="@color/white"
+                app:tint="@color/nintec_blue"
+                android:src="@drawable/ic_search"
+                android:contentDescription="Mi ubicación" />
+
+            <!-- Static Fallback (initially GONE) -->
+            <ImageView
+                android:id="@+id/img_branches_map_static"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:contentDescription="Map Preview" />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
     <!-- Branch List Recycler Area -->
     <androidx.recyclerview.widget.RecyclerView

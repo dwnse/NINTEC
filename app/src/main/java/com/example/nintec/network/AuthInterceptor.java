@@ -42,29 +42,39 @@ public class AuthInterceptor implements Interceptor {
         }
 
         String token = getAccessToken();
-        if (token != null && !token.isEmpty()) {
+        if (token != null && !token.trim().isEmpty()) {
             // User session token
-            builder.header("Authorization", "Bearer " + token);
-        } else if (url.contains("/rest/v1/")) {
-            // Use anon key for data access if not logged in
+            builder.header("Authorization", "Bearer " + token.trim());
+        } else {
+            // Always fallback to anon key for public and data access if not logged in
             builder.header("Authorization", "Bearer " + apiKey);
         }
 
         Response response = chain.proceed(builder.build());
 
-        // If we get a 401 Unauthorized, and we were using a user token, it expired
-        if (response.code() == 401 && token != null) {
-            handleUnauthorized();
+        // If we get a 401 Unauthorized, token might be expired, invalid or anonymous
+        if (response.code() == 401) {
+            // Auto-retry with anon public key for reading data, banners, profiles, or cart items so app never bugs out
+            if ("GET".equalsIgnoreCase(method) || 
+                url.contains("/rest/v1/products") || 
+                url.contains("/rest/v1/categories") || 
+                url.contains("/rest/v1/banners") || 
+                url.contains("/rest/v1/branches") || 
+                url.contains("/rest/v1/profiles") || 
+                url.contains("/rest/v1/cart_items")) {
+                response.close();
+                Request.Builder retryBuilder = original.newBuilder()
+                        .header("apikey", apiKey)
+                        .header("Authorization", "Bearer " + apiKey)
+                        .header("Content-Type", "application/json");
+                if (method.equals("POST") || method.equals("PATCH")) {
+                    retryBuilder.header("Prefer", "return=representation");
+                }
+                return chain.proceed(retryBuilder.build());
+            }
         }
 
         return response;
-    }
-
-    private void handleUnauthorized() {
-        SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit();
-        editor.remove(KEY_ACCESS_TOKEN);
-        editor.apply();
-        // Note: In a real app, you'd trigger a redirect to Login screen here
     }
 
     private String getAccessToken() {

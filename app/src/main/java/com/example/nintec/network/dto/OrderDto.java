@@ -34,12 +34,30 @@ public class OrderDto {
     @SerializedName("notes")
     public String notes;
 
+    @SerializedName("branch_id")
+    public String branchId;
+
     @SerializedName("created_at")
     public String createdAt;
 
     // Embedded via PostgREST select
     @SerializedName("order_items")
     public List<OrderItemDto> items;
+
+    // Embedded branch info
+    @SerializedName("branches")
+    public BranchEmbedded branches;
+
+    public static class BranchEmbedded {
+        @SerializedName("id")
+        public String id;
+        @SerializedName("name")
+        public String name;
+        @SerializedName("city")
+        public String city;
+        @SerializedName("address")
+        public String address;
+    }
 
     public static class OrderItemDto {
         @SerializedName("id")
@@ -65,14 +83,8 @@ public class OrderDto {
     }
 
     public com.example.nintec.models.Order toOrder() {
-        com.example.nintec.models.OrderStatus orderStatus = com.example.nintec.models.OrderStatus.PENDING;
-        if ("completed".equalsIgnoreCase(status) || "delivered".equalsIgnoreCase(status)) {
-            orderStatus = com.example.nintec.models.OrderStatus.COMPLETED;
-        } else if ("cancelled".equalsIgnoreCase(status)) {
-            orderStatus = com.example.nintec.models.OrderStatus.REJECTED;
-        } else {
-            orderStatus = com.example.nintec.models.OrderStatus.PENDING;
-        }
+        com.example.nintec.models.OrderStatus orderStatus =
+                com.example.nintec.models.OrderStatus.fromApiString(status);
 
         java.util.List<com.example.nintec.models.CartItem> cartItems = new java.util.ArrayList<>();
         if (items != null) {
@@ -101,6 +113,17 @@ public class OrderDto {
         );
         order.setSubtotal(subtotal);
         order.setDiscount(discount);
+        order.setNotes(notes);
+
+        // Branch info
+        if (branchId != null) order.setBranchId(branchId);
+        if (branches != null) {
+            order.setBranchId(branches.id);
+            order.setBranchName(branches.name);
+            order.setBranchCity(branches.city);
+            order.setBranchAddress(branches.address);
+        }
+
         return order;
     }
 }

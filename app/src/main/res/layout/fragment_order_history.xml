@@ -7,6 +7,7 @@
     android:background="@color/background_primary"
     tools:context=".fragments.OrderHistoryFragment">
 
+    <!-- Header -->
     <RelativeLayout
         android:id="@+id/layout_history_header"
         android:layout_width="match_parent"
@@ -35,6 +36,145 @@
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/et_search_orders"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_search_bar"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="8dp"
+        android:hint="Buscar por # pedido o producto..."
+        android:inputType="text"
+        android:paddingHorizontal="12dp"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/layout_history_header" />
+
+    <!-- Filter Chips ScrollView -->
+    <HorizontalScrollView
+        android:id="@+id/scroll_filters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingHorizontal="@dimen/screen_horizontal_margin"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/et_search_orders">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/chip_all"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_button_primary"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Todos"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/chip_pending"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_button_secondary"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Pendientes"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/chip_completed"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_button_secondary"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Finalizados"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/chip_cancelled"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_button_secondary"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Cancelados"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Branch filters -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/divider"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/chip_central"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_button_secondary"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Central"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/chip_calacoto"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_button_secondary"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Calacoto"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/chip_el_alto"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_button_secondary"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="El Alto"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Order Count -->
+    <TextView
+        android:id="@+id/tv_order_count"
+        style="@style/NintecSmallText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_horizontal_margin"
+        android:layout_marginTop="10dp"
+        android:text="0 pedidos"
+        android:textColor="@color/text_secondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scroll_filters" />
+
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_order_history"
         android:layout_width="match_parent"
@@ -42,9 +182,11 @@
         android:paddingHorizontal="@dimen/screen_horizontal_margin"
         android:clipToPadding="false"
         android:paddingBottom="24dp"
-        app:layout_constraintTop_toBottomOf="@id/layout_history_header"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_order_count"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+    <!-- Empty State -->
     <LinearLayout
         android:id="@+id/layout_history_empty"
         android:layout_width="match_parent"
@@ -52,12 +194,12 @@
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/layout_history_header"
+        app:layout_constraintTop_toBottomOf="@id/scroll_filters"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/ic_order_history"
             app:tint="@color/nintec_blue_light"
             android:contentDescription="Empty History" />
@@ -67,13 +209,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/order_history_empty"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            style="@style/NintecSmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tus pedidos aparecerán aquí"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="6dp" />
 
         <Button
             android:id="@+id/btn_history_explore"
             style="@style/NintecPrimaryButton"
             android:layout_width="200dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="@string/order_history_explore" />
     </LinearLayout>
 

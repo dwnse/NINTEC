@@ -108,8 +108,13 @@ public class CartFragment extends Fragment implements CartAdapter.OnCartItemActi
     private void refreshTotals() {
         double totalNum = CartManager.getInstance().getTotalAmount();
         String formatted = String.format(Locale.getDefault(), "Bs %,.2f", totalNum);
-        tvSubtotal.setText(formatted);
-        tvTotal.setText(formatted);
+        if (tvSubtotal != null) tvSubtotal.setText(formatted);
+        if (tvTotal != null) {
+            tvTotal.setText(formatted);
+            tvTotal.animate().scaleX(1.08f).scaleY(1.08f).setDuration(100)
+                    .withEndAction(() -> tvTotal.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100).start())
+                    .start();
+        }
     }
 
     @Override

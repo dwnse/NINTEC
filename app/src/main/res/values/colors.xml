@@ -25,6 +25,7 @@
 
     <!-- Bordes y Divisores -->
     <color name="border_default">#CED4DA</color>
+    <color name="divider">#CED4DA</color>
 
     <!-- Estados y Acciones Positivas -->
     <color name="success">#2B8A3E</color>

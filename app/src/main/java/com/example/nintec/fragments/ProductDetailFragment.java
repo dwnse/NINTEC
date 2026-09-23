@@ -89,6 +89,12 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
             if (totalItemCount > 0) {
                 tvCartBadge.setText(String.valueOf(totalItemCount));
                 tvCartBadge.setVisibility(View.VISIBLE);
+                tvCartBadge.setScaleX(0.5f);
+                tvCartBadge.setScaleY(0.5f);
+                tvCartBadge.animate().scaleX(1.25f).scaleY(1.25f).setDuration(140)
+                        .setInterpolator(new android.view.animation.OvershootInterpolator(2.5f))
+                        .withEndAction(() -> tvCartBadge.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100).start())
+                        .start();
             } else {
                 tvCartBadge.setVisibility(View.GONE);
             }
@@ -203,12 +209,24 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
 
         btnAddToCart.setOnClickListener(v -> {
             if (currentProduct != null && selectedQuantity > 0) {
+                // Interactive micro-animation feedback on button
+                btnAddToCart.animate()
+                        .scaleX(0.92f).scaleY(0.92f)
+                        .setDuration(90)
+                        .withEndAction(() -> {
+                            btnAddToCart.animate().scaleX(1.0f).scaleY(1.0f).setDuration(110).start();
+                        }).start();
+
+                // Bounce animation on top cart icon
+                if (btnCart != null) {
+                    btnCart.animate().scaleX(1.3f).scaleY(1.3f).setDuration(140)
+                            .setInterpolator(new android.view.animation.OvershootInterpolator(2.5f))
+                            .withEndAction(() -> btnCart.animate().scaleX(1.0f).scaleY(1.0f).setDuration(110).start())
+                            .start();
+                }
+
                 CartManager.getInstance().addProduct(currentProduct, selectedQuantity);
                 Toast.makeText(getContext(), "¡" + currentProduct.getName() + " (" + selectedQuantity + ") agregado al carrito!", Toast.LENGTH_SHORT).show();
-                
-                if (getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).openCart();
-                }
             }
         });
     }

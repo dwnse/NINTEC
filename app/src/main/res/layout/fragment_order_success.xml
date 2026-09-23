@@ -16,43 +16,59 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/bg_badge_success"
-            android:background="@drawable/bg_badge_success"
-            android:backgroundTint="@color/success_light"
-            android:padding="24dp"
-            app:srcCompat="@mipmap/ic_launcher_foreground"
-            app:tint="@color/success" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!-- Glowing circle background -->
+            <View
+                android:id="@+id/view_pulse_bg"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_badge_success"
+                android:backgroundTint="@color/success_light" />
+
+            <ImageView
+                android:id="@+id/img_success_icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_check_circle"
+                android:contentDescription="Pedido Confirmado" />
+        </FrameLayout>
 
         <TextView
+            android:id="@+id/tv_success_title"
             style="@style/NintecTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/checkout_order_success"
-            android:layout_marginTop="32dp" />
+            android:textSize="22sp"
+            android:textColor="@color/nintec_blue"
+            android:layout_marginTop="28dp" />
 
         <TextView
+            android:id="@+id/tv_success_desc"
             style="@style/NintecBodyText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/checkout_order_success_desc"
             android:gravity="center"
             android:textColor="@color/text_secondary"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="12dp" />
 
         <Button
             android:id="@+id/btn_success_home"
             style="@style/NintecPrimaryButton"
-            android:layout_width="200dp"
-            android:layout_marginTop="48dp"
+            android:layout_width="220dp"
+            android:layout_marginTop="40dp"
             android:text="@string/btn_go_home" />
 
         <Button
             android:id="@+id/btn_success_history"
             style="@style/NintecSecondaryButton"
-            android:layout_width="200dp"
+            android:layout_width="220dp"
             android:layout_marginTop="12dp"
             android:text="@string/btn_view_history" />
 

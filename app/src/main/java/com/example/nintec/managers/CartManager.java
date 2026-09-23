@@ -71,7 +71,7 @@ public class CartManager {
     }
 
     public List<CartItem> getItems() {
-        return cartItems;
+        return new ArrayList<>(cartItems);
     }
 
     public int getItemCount() {

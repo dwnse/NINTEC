@@ -66,13 +66,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Nombre de Usuario" />
+                android:text="Nombre Completo" />
+
+            <TextView
+                android:id="@+id/tv_profile_username"
+                style="@style/NintecBodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:text="@usuario" />
+
+            <TextView
+                android:id="@+id/tv_profile_email"
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/text_secondary"
+                android:text="correo@ejemplo.com" />
 
             <TextView
                 android:id="@+id/tv_profile_role"
                 style="@style/NintecSmallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:text="@string/profile_role_client"
                 android:textColor="@color/nintec_blue"
                 android:textStyle="bold" />

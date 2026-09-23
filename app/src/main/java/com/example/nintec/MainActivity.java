@@ -39,6 +39,12 @@ public class MainActivity extends AppCompatActivity implements CartManager.CartC
         com.example.nintec.managers.SessionManager.init(this);
         setContentView(R.layout.activity_main);
 
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, windowInsets) -> {
+            androidx.core.graphics.Insets insets = windowInsets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars());
+            v.setPadding(0, insets.top, 0, 0);
+            return windowInsets;
+        });
+
         fragmentManager = getSupportFragmentManager();
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -151,13 +157,19 @@ public class MainActivity extends AppCompatActivity implements CartManager.CartC
 
     public void openProductDetail(String productId) {
         ProductDetailFragment detailFragment = ProductDetailFragment.newInstance(productId);
-        // Ensure bottom navigation stays visible if desired
-        // hideBottomNavigation(); 
-        
         fragmentManager.beginTransaction()
                 .add(R.id.fragment_container, detailFragment, "DETAIL")
                 .addToBackStack("DETAIL_TRANS")
                 .commit();
+    }
+
+    public void openCatalogWithCategory(String categoryId) {
+        if (catalogFragment instanceof CatalogFragment) {
+            ((CatalogFragment) catalogFragment).filterByCategory(categoryId);
+        }
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setSelectedItemId(R.id.nav_catalog);
+        }
     }
 
     public void openCart() {

@@ -236,9 +236,36 @@ public interface SupabaseDataService {
             @Query("select") String select
     );
 
+    @GET("rest/v1/profiles")
+    Call<List<ProfileDto>> getProfileByEmail(
+            @Query("email") String emailFilter,
+            @Query("select") String select
+    );
+
     @PATCH("rest/v1/profiles")
     Call<List<ProfileDto>> updateProfile(
             @Query("id") String idFilter,
             @Body Map<String, Object> update
     );
+
+    @PATCH("rest/v1/profiles")
+    Call<List<ProfileDto>> updateProfileByEmail(
+            @Query("email") String emailFilter,
+            @Body Map<String, Object> update
+    );
+
+    // ─── Direct Order Insert (REST) ───
+
+    @POST("rest/v1/orders")
+    Call<List<OrderDto>> insertOrder(
+            @Body Map<String, Object> body,
+            @Header("Prefer") String prefer
+    );
+
+    @POST("rest/v1/order_items")
+    Call<Void> insertOrderItem(
+            @Body Map<String, Object> body,
+            @Header("Prefer") String prefer
+    );
 }
+
