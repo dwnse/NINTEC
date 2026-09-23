@@ -80,8 +80,7 @@ ALTER TABLE public.categories ENABLE ROW LEVEL SECURITY;
 -- Todos pueden leer categorías activas
 CREATE POLICY "categories_select_public"
     ON public.categories FOR SELECT
-    TO authenticated
-    USING (is_active = TRUE OR public.is_admin());
+    USING (is_active = TRUE);
 
 -- Solo admins pueden crear/editar/eliminar categorías
 CREATE POLICY "categories_insert_admin"
@@ -108,25 +107,7 @@ ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 -- Todos pueden leer productos activos
 CREATE POLICY "products_select_public"
     ON public.products FOR SELECT
-    TO authenticated
-    USING (is_active = TRUE OR public.is_admin());
-
--- Solo admins CRUD
-CREATE POLICY "products_insert_admin"
-    ON public.products FOR INSERT
-    TO authenticated
-    WITH CHECK (public.is_admin());
-
-CREATE POLICY "products_update_admin"
-    ON public.products FOR UPDATE
-    TO authenticated
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
-
-CREATE POLICY "products_delete_admin"
-    ON public.products FOR DELETE
-    TO authenticated
-    USING (public.is_admin());
+    USING (is_active = TRUE);
 
 -- ============================================================================
 -- PRODUCT_IMAGES
@@ -136,7 +117,6 @@ ALTER TABLE public.product_images ENABLE ROW LEVEL SECURITY;
 -- Todos pueden ver imágenes de productos
 CREATE POLICY "product_images_select_public"
     ON public.product_images FOR SELECT
-    TO authenticated
     USING (TRUE);
 
 -- Solo admins pueden gestionar imágenes
@@ -163,7 +143,6 @@ ALTER TABLE public.product_specifications ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "product_specs_select_public"
     ON public.product_specifications FOR SELECT
-    TO authenticated
     USING (TRUE);
 
 CREATE POLICY "product_specs_insert_admin"
@@ -189,8 +168,7 @@ ALTER TABLE public.branches ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "branches_select_public"
     ON public.branches FOR SELECT
-    TO authenticated
-    USING (is_active = TRUE OR public.is_admin());
+    USING (is_active = TRUE);
 
 CREATE POLICY "branches_insert_admin"
     ON public.branches FOR INSERT
@@ -215,7 +193,6 @@ ALTER TABLE public.branch_schedules ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "branch_schedules_select_public"
     ON public.branch_schedules FOR SELECT
-    TO authenticated
     USING (TRUE);
 
 CREATE POLICY "branch_schedules_insert_admin"
@@ -242,7 +219,6 @@ ALTER TABLE public.branch_inventory ENABLE ROW LEVEL SECURITY;
 -- Todos pueden ver inventario (para saber disponibilidad)
 CREATE POLICY "branch_inventory_select_public"
     ON public.branch_inventory FOR SELECT
-    TO authenticated
     USING (TRUE);
 
 -- Solo admins gestionan inventario

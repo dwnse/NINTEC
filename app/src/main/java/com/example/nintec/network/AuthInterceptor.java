@@ -29,22 +29,42 @@ public class AuthInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
+        String url = original.url().toString();
 
         Request.Builder builder = original.newBuilder()
                 .header("apikey", apiKey)
-                .header("Content-Type", "application/json")
-                .header("Prefer", "return=representation");
+                .header("Content-Type", "application/json");
 
-        // Add Bearer token if user is logged in
+        // Prefer header should only be used for mutations (POST, PATCH)
+        String method = original.method();
+        if (method.equals("POST") || method.equals("PATCH")) {
+            builder.header("Prefer", "return=representation");
+        }
+
         String token = getAccessToken();
         if (token != null && !token.isEmpty()) {
+            // User session token
             builder.header("Authorization", "Bearer " + token);
-        } else {
-            // Use anon key as fallback authorization
+        } else if (url.contains("/rest/v1/")) {
+            // Use anon key for data access if not logged in
             builder.header("Authorization", "Bearer " + apiKey);
         }
 
-        return chain.proceed(builder.build());
+        Response response = chain.proceed(builder.build());
+
+        // If we get a 401 Unauthorized, and we were using a user token, it expired
+        if (response.code() == 401 && token != null) {
+            handleUnauthorized();
+        }
+
+        return response;
+    }
+
+    private void handleUnauthorized() {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit();
+        editor.remove(KEY_ACCESS_TOKEN);
+        editor.apply();
+        // Note: In a real app, you'd trigger a redirect to Login screen here
     }
 
     private String getAccessToken() {

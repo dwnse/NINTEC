@@ -46,6 +46,20 @@ public class SessionManager {
     private SessionManager(Context context) {
         this.context = context.getApplicationContext();
         SupabaseClient.init(this.context);
+        
+        // Auto-load profile if token exists
+        if (isLoggedIn()) {
+            loadUserProfile(new ProfileCallback() {
+                @Override
+                public void onLoaded(User user) {}
+                @Override
+                public void onError(String message) {
+                    if (message.contains("401")) {
+                        logout();
+                    }
+                }
+            });
+        }
     }
 
     public static synchronized void init(Context context) {
@@ -209,7 +223,7 @@ public class SessionManager {
                             currentUser.setRole(profile.role);
                             callback.onLoaded(currentUser);
                         } else {
-                            callback.onError("Perfil no encontrado");
+                            callback.onError("Error: " + response.code());
                         }
                     }
 
