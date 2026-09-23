@@ -20,8 +20,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ProfileFragment extends Fragment {
 
-    private TextView tvName;
-    private LinearLayout layoutHistory, layoutSettings, layoutLogout;
+    private TextView tvName, tvRole;
+    private LinearLayout layoutHistory, layoutSettings, layoutLogout, layoutAdmin;
 
     @Nullable
     @Override
@@ -29,9 +29,13 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         tvName = view.findViewById(R.id.tv_profile_name);
+        tvRole = view.findViewById(R.id.tv_profile_role);
         layoutHistory = view.findViewById(R.id.layout_option_history);
         layoutSettings = view.findViewById(R.id.layout_option_settings);
         layoutLogout = view.findViewById(R.id.layout_option_logout);
+        
+        // Admin layout (needs to be added to fragment_profile.xml)
+        layoutAdmin = view.findViewById(R.id.layout_option_admin);
 
         setupListeners();
         updateUI();
@@ -47,65 +51,55 @@ public class ProfileFragment extends Fragment {
 
     private void updateUI() {
         User user = SessionManager.getInstance().getCurrentUser();
-        if (user != null && user.getName() != null && !user.getName().isEmpty()) {
-            tvName.setText(user.getName());
-        }
-
-        SessionManager.getInstance().loadUserProfile(new SessionManager.ProfileCallback() {
-            @Override
-            public void onLoaded(User loadedUser) {
-                if (isAdded() && getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        if (loadedUser != null && loadedUser.getName() != null && !loadedUser.getName().isEmpty()) {
-                            tvName.setText(loadedUser.getName());
-                        }
-                    });
+        if (user != null) {
+            // Prioritize username display as requested
+            tvName.setText(user.getUsername() != null && !user.getUsername().isEmpty() ? 
+                    user.getUsername() : user.getName());
+            if (tvRole != null) {
+                String role = user.getRole() != null ? user.getRole() : "Cliente";
+                if (role.equalsIgnoreCase("admin") || role.equalsIgnoreCase("super_admin")) {
+                    tvRole.setText("Administrador");
+                    if (layoutAdmin != null) layoutAdmin.setVisibility(View.VISIBLE);
+                } else {
+                    tvRole.setText("Cliente");
+                    if (layoutAdmin != null) layoutAdmin.setVisibility(View.GONE);
                 }
             }
-
-            @Override
-            public void onError(String message) {}
-        });
+        }
     }
 
     private void setupListeners() {
-        layoutHistory.setOnClickListener(v -> {
-            openOrderHistory();
-        });
+        layoutHistory.setOnClickListener(v -> openOrderHistory());
+        layoutSettings.setOnClickListener(v -> openSettings());
+        layoutLogout.setOnClickListener(v -> showLogoutConfirmation());
+        
+        if (layoutAdmin != null) {
+            layoutAdmin.setOnClickListener(v -> openAdminPanel());
+        }
+    }
 
-        layoutSettings.setOnClickListener(v -> {
-            openSettings();
-        });
-
-        layoutLogout.setOnClickListener(v -> {
-            showLogoutConfirmation();
-        });
+    private void openAdminPanel() {
+        AdminFragment adminFragment = new AdminFragment();
+        getParentFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, adminFragment, "ADMIN")
+                .addToBackStack("ADMIN_TRANS")
+                .commit();
     }
 
     private void openOrderHistory() {
-        if (getActivity() instanceof MainActivity) {
-            MainActivity activity = (MainActivity) getActivity();
-            // activity.hideBottomNavigation();
-            
-            OrderHistoryFragment historyFragment = new OrderHistoryFragment();
-            getParentFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, historyFragment, "HISTORY")
-                    .addToBackStack("HISTORY_TRANS")
-                    .commit();
-        }
+        OrderHistoryFragment historyFragment = new OrderHistoryFragment();
+        getParentFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, historyFragment, "HISTORY")
+                .addToBackStack("HISTORY_TRANS")
+                .commit();
     }
 
     private void openSettings() {
-        if (getActivity() instanceof MainActivity) {
-            MainActivity activity = (MainActivity) getActivity();
-            // activity.hideBottomNavigation();
-            
-            SettingsFragment settingsFragment = new SettingsFragment();
-            getParentFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, settingsFragment, "SETTINGS")
-                    .addToBackStack("SETTINGS_TRANS")
-                    .commit();
-        }
+        SettingsFragment settingsFragment = new SettingsFragment();
+        getParentFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, settingsFragment, "SETTINGS")
+                .addToBackStack("SETTINGS_TRANS")
+                .commit();
     }
 
     private void showLogoutConfirmation() {
@@ -113,9 +107,7 @@ public class ProfileFragment extends Fragment {
                 .setTitle(R.string.logout_dialog_title)
                 .setMessage(R.string.logout_dialog_message)
                 .setNegativeButton(R.string.btn_cancel, null)
-                .setPositiveButton(R.string.btn_logout, (dialog, which) -> {
-                    performLogout();
-                })
+                .setPositiveButton(R.string.btn_logout, (dialog, which) -> performLogout())
                 .show();
     }
 

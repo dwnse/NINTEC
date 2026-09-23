@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_primary">
+
+    <RelativeLayout
+        android:id="@+id/layout_edit_product_header"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/white"
+        android:paddingHorizontal="@dimen/screen_horizontal_margin"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_edit_product_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:id="@+id/txt_edit_product_title"
+            style="@style/NintecSubtitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Editar Producto"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/layout_edit_product_header"
+        app:layout_constraintBottom_toTopOf="@id/btn_save_product">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/screen_horizontal_margin">
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre del Producto" />
+
+            <EditText
+                android:id="@+id/edt_product_name"
+                style="@style/NintecInput"
+                android:layout_marginTop="4dp"
+                android:hint="Ej. Laptop ASUS"
+                android:inputType="textPersonName" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Slug" />
+
+            <EditText
+                android:id="@+id/edt_product_slug"
+                style="@style/NintecInput"
+                android:layout_marginTop="4dp"
+                android:hint="Ej. laptop-asus"
+                android:inputType="text" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Descripción" />
+
+            <EditText
+                android:id="@+id/edt_product_description"
+                style="@style/NintecInput"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/input_height"
+                android:layout_marginTop="4dp"
+                android:hint="Detalles del producto..."
+                android:inputType="textMultiLine"
+                android:paddingVertical="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        style="@style/NintecSmallText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Precio" />
+
+                    <EditText
+                        android:id="@+id/edt_product_price"
+                        style="@style/NintecInput"
+                        android:layout_marginTop="4dp"
+                        android:hint="0.00"
+                        android:inputType="numberDecimal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        style="@style/NintecSmallText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Precio Anterior" />
+
+                    <EditText
+                        android:id="@+id/edt_product_old_price"
+                        style="@style/NintecInput"
+                        android:layout_marginTop="4dp"
+                        android:hint="0.00"
+                        android:inputType="numberDecimal" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        style="@style/NintecSmallText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="SKU" />
+
+                    <EditText
+                        android:id="@+id/edt_product_sku"
+                        style="@style/NintecInput"
+                        android:layout_marginTop="4dp"
+                        android:hint="SKU-123"
+                        android:inputType="text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        style="@style/NintecSmallText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Marca" />
+
+                    <EditText
+                        android:id="@+id/edt_product_brand"
+                        style="@style/NintecInput"
+                        android:layout_marginTop="4dp"
+                        android:hint="ASUS"
+                        android:inputType="text" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="ID de Categoría" />
+
+            <EditText
+                android:id="@+id/edt_product_category_id"
+                style="@style/NintecInput"
+                android:layout_marginTop="4dp"
+                android:hint="UUID de la categoría"
+                android:inputType="text" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="URL de Imagen" />
+
+            <EditText
+                android:id="@+id/edt_product_image_url"
+                style="@style/NintecInput"
+                android:layout_marginTop="4dp"
+                android:hint="https://..."
+                android:inputType="textUri" />
+
+            <Button
+                android:id="@+id/btn_pick_product_image"
+                style="@style/NintecSecondaryButton"
+                android:layout_marginTop="8dp"
+                android:text="Seleccionar Imagen de Galería" />
+
+            <ImageView
+                android:id="@+id/img_product_preview"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="centerInside"
+                android:background="@color/surface_secondary"
+                android:visibility="gone" />
+
+            <CheckBox
+                android:id="@+id/cb_product_is_new"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Es Nuevo" />
+
+            <CheckBox
+                android:id="@+id/cb_product_is_featured"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Es Destacado" />
+
+            <CheckBox
+                android:id="@+id/cb_product_is_active"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Está Activo"
+                android:checked="true" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_save_product"
+        style="@style/NintecPrimaryButton"
+        android:layout_width="0dp"
+        android:layout_margin="@dimen/screen_horizontal_margin"
+        android:text="Guardar Cambios"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

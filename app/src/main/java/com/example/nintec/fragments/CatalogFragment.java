@@ -10,18 +10,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.nintec.MainActivity;
 import com.example.nintec.R;
 import com.example.nintec.adapters.ProductAdapter;
 import com.example.nintec.managers.CartManager;
+import com.example.nintec.models.Category;
 import com.example.nintec.models.Product;
 import com.example.nintec.repositories.ProductRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +40,11 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
     private TextView tvCartBadge;
 
     private ProductAdapter productAdapter;
-    private List<Product> allProductsList;
-    private List<Product> filteredProductsList;
+    private List<Product> allProductsList = new ArrayList<>();
+    private List<Product> filteredProductsList = new ArrayList<>();
+    private List<Category> categoriesList = new ArrayList<>();
 
-    private String currentSelectedCategory = "Todos";
+    private String currentSelectedCategoryId = "all"; // Use ID instead of name
     private String currentSearchQuery = "";
 
     @Nullable
@@ -60,58 +66,17 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
             }
         });
 
-        initDataFromRepository();
-        setupRecyclerView();
-        setupCategoriesFilterRow();
-        setupSearchInputFilter();
-
         if (imgSearchClear != null) {
-            imgSearchClear.setOnClickListener(v -> {
-                if (etSearch != null) etSearch.setText("");
-            });
+            imgSearchClear.setOnClickListener(v -> etSearch.setText(""));
         }
+
+        setupRecyclerView();
+        setupSearchInputFilter();
+        loadCatalogData();
 
         CartManager.getInstance().addListener(this);
 
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        CartManager.getInstance().removeListener(this);
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onCartChanged(int totalItemCount) {
-        if (tvCartBadge != null) {
-            if (totalItemCount > 0) {
-                tvCartBadge.setText(String.valueOf(totalItemCount));
-                tvCartBadge.setVisibility(View.VISIBLE);
-            } else {
-                tvCartBadge.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private void initDataFromRepository() {
-        allProductsList = new ArrayList<>(ProductRepository.getInstance().getProducts());
-        filteredProductsList = new ArrayList<>(allProductsList);
-
-        ProductRepository.getInstance().fetchProducts(new ProductRepository.ProductListCallback() {
-            @Override
-            public void onSuccess(List<Product> products) {
-                if (isAdded() && getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        allProductsList = new ArrayList<>(products);
-                        applyCombinedFilters();
-                    });
-                }
-            }
-
-            @Override
-            public void onError(String error) {}
-        });
     }
 
     private void setupRecyclerView() {
@@ -120,34 +85,73 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
         rvProducts.setAdapter(productAdapter);
     }
 
+    private void loadCatalogData() {
+        // 1. Fetch Categories
+        ProductRepository.getInstance().fetchCategories(new ProductRepository.CategoryListCallback() {
+            @Override
+            public void onSuccess(List<Category> categories) {
+                if (isAdded()) {
+                    categoriesList = categories;
+                    setupCategoriesFilterRow();
+                }
+            }
+            @Override
+            public void onError(String error) {}
+        });
+
+        // 2. Fetch Products
+        ProductRepository.getInstance().fetchProducts(new ProductRepository.ProductListCallback() {
+            @Override
+            public void onSuccess(List<Product> products) {
+                if (isAdded()) {
+                    allProductsList = products;
+                    applyCombinedFilters();
+                }
+            }
+            @Override
+            public void onError(String error) {
+                if (isAdded()) {
+                    Toast.makeText(getContext(), "Error: " + error, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private void setupCategoriesFilterRow() {
         if (containerCategories == null) return;
         containerCategories.removeAllViews();
         
-        String[] categories = {"Todos", "Laptops", "Celulares", "Audio", "Accesorios"};
+        // Add "All" option
+        addCategoryView("all", "Todos");
 
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        for (String category : categories) {
-            View itemView = inflater.inflate(R.layout.item_catalog_category, containerCategories, false);
-            TextView tvCat = itemView.findViewById(R.id.tv_catalog_category_item);
-            tvCat.setText(category);
-
-            updateCategoryItemStyle(tvCat, category.equals(currentSelectedCategory));
-
-            itemView.setOnClickListener(v -> {
-                currentSelectedCategory = category;
-                
-                for (int i = 0; i < containerCategories.getChildCount(); i++) {
-                    View child = containerCategories.getChildAt(i);
-                    TextView childTv = child.findViewById(R.id.tv_catalog_category_item);
-                    updateCategoryItemStyle(childTv, categories[i].equals(currentSelectedCategory));
-                }
-                
-                applyCombinedFilters();
-            });
-
-            containerCategories.addView(itemView);
+        for (Category cat : categoriesList) {
+            addCategoryView(cat.getId(), cat.getName());
         }
+    }
+
+    private void addCategoryView(String id, String name) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View itemView = inflater.inflate(R.layout.item_catalog_category, containerCategories, false);
+        TextView tvCat = itemView.findViewById(R.id.tv_catalog_category_item);
+        tvCat.setText(name);
+
+        updateCategoryItemStyle(tvCat, id.equals(currentSelectedCategoryId));
+
+        itemView.setOnClickListener(v -> {
+            currentSelectedCategoryId = id;
+            
+            for (int i = 0; i < containerCategories.getChildCount(); i++) {
+                View child = containerCategories.getChildAt(i);
+                TextView childTv = child.findViewById(R.id.tv_catalog_category_item);
+                // Tag or position? I'll use text match or better, a custom state
+                // Since I don't want to overcomplicate, I'll just refresh the whole row or find by ID
+            }
+            // Simple approach: redraw row for styles
+            setupCategoriesFilterRow();
+            applyCombinedFilters();
+        });
+
+        containerCategories.addView(itemView);
     }
 
     private void updateCategoryItemStyle(TextView tv, boolean isSelected) {
@@ -184,8 +188,10 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
         List<Product> matches = new ArrayList<>();
 
         for (Product product : allProductsList) {
-            boolean categoryMatch = currentSelectedCategory.equals("Todos") || product.getCategory().equalsIgnoreCase(currentSelectedCategory);
-            boolean searchMatch = currentSearchQuery.isEmpty() || product.getName().toLowerCase().contains(currentSearchQuery.toLowerCase());
+            boolean categoryMatch = currentSelectedCategoryId.equals("all") || 
+                                   (product.getCategoryId() != null && product.getCategoryId().equals(currentSelectedCategoryId));
+            boolean searchMatch = currentSearchQuery.isEmpty() || 
+                                 product.getName().toLowerCase().contains(currentSearchQuery.toLowerCase());
 
             if (categoryMatch && searchMatch) {
                 matches.add(product);
@@ -202,6 +208,24 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnProduc
         } else {
             tvEmptyState.setVisibility(View.GONE);
             rvProducts.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        CartManager.getInstance().removeListener(this);
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onCartChanged(int totalItemCount) {
+        if (tvCartBadge != null) {
+            if (totalItemCount > 0) {
+                tvCartBadge.setText(String.valueOf(totalItemCount));
+                tvCartBadge.setVisibility(View.VISIBLE);
+            } else {
+                tvCartBadge.setVisibility(View.GONE);
+            }
         }
     }
 

@@ -140,9 +140,10 @@
                 android:orientation="vertical"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/img_banner_illus">
+                android:layout_toStartOf="@id/img_home_banner">
 
                 <TextView
+                    android:id="@+id/tv_home_banner_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/home_promo_title"
@@ -151,6 +152,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_home_banner_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/home_promo_desc"
@@ -160,6 +162,7 @@
                     android:layout_marginTop="4dp" />
 
                 <TextView
+                    android:id="@+id/tv_home_banner_sub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/home_promo_sub"
@@ -170,7 +173,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/img_banner_illus"
+                android:id="@+id/img_home_banner"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"

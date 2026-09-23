@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_primary">
+
+    <RelativeLayout
+        android:id="@+id/layout_edit_category_header"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/white"
+        android:paddingHorizontal="@dimen/screen_horizontal_margin"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_edit_category_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:id="@+id/txt_edit_category_title"
+            style="@style/NintecSubtitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Editar Categoría"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/layout_edit_category_header"
+        app:layout_constraintBottom_toTopOf="@id/btn_save_category">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/screen_horizontal_margin">
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre de la Categoría" />
+
+            <EditText
+                android:id="@+id/edt_category_name"
+                style="@style/NintecInput"
+                android:layout_marginTop="4dp"
+                android:hint="Ej. Laptops"
+                android:inputType="textPersonName" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Slug" />
+
+            <EditText
+                android:id="@+id/edt_category_slug"
+                style="@style/NintecInput"
+                android:layout_marginTop="4dp"
+                android:hint="Ej. laptops"
+                android:inputType="text" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Nombre del Icono" />
+
+            <EditText
+                android:id="@+id/edt_category_icon_name"
+                style="@style/NintecInput"
+                android:layout_marginTop="4dp"
+                android:hint="Ej. ic_laptop"
+                android:inputType="text" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Orden de clasificación" />
+
+            <EditText
+                android:id="@+id/edt_category_sort_order"
+                style="@style/NintecInput"
+                android:layout_marginTop="4dp"
+                android:hint="0"
+                android:inputType="number" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="URL de Imagen" />
+
+            <EditText
+                android:id="@+id/edt_category_image_url"
+                style="@style/NintecInput"
+                android:layout_marginTop="4dp"
+                android:hint="https://..."
+                android:inputType="textUri" />
+
+            <Button
+                android:id="@+id/btn_pick_category_image"
+                style="@style/NintecSecondaryButton"
+                android:layout_marginTop="8dp"
+                android:text="Seleccionar Imagen de Galería" />
+
+            <ImageView
+                android:id="@+id/img_category_preview"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="centerInside"
+                android:background="@color/surface_secondary"
+                android:visibility="gone" />
+
+            <CheckBox
+                android:id="@+id/cb_category_is_active"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Está Activa"
+                android:checked="true" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_save_category"
+        style="@style/NintecPrimaryButton"
+        android:layout_width="0dp"
+        android:layout_margin="@dimen/screen_horizontal_margin"
+        android:text="Guardar Cambios"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -122,6 +122,44 @@
                 app:tint="@color/text_hint" />
         </LinearLayout>
 
+        <!-- Admin Panel Option (Visible only for admins) -->
+        <LinearLayout
+            android:id="@+id/layout_option_admin"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_card"
+            android:paddingHorizontal="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/nintec_blue" />
+
+            <TextView
+                style="@style/NintecBodyText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="Panel Administrativo"
+                android:textStyle="bold"
+                android:textColor="@color/nintec_blue" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_back"
+                android:rotation="180"
+                app:tint="@color/nintec_blue" />
+        </LinearLayout>
+
         <!-- Settings Option -->
         <LinearLayout
             android:id="@+id/layout_option_settings"

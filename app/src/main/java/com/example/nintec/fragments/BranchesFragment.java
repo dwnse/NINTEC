@@ -12,26 +12,31 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.example.nintec.R;
 import com.example.nintec.adapters.BranchAdapter;
 import com.example.nintec.models.Branch;
 import com.example.nintec.repositories.BranchRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BranchesFragment extends Fragment implements BranchAdapter.OnBranchClickListener {
 
     private EditText etSearch;
-    private ImageView imgSearchClear;
+    private ImageView imgSearchClear, imgMapHeader;
+    private TextView tvEmpty, tvMapPlaceholder;
     private RecyclerView rvBranches;
-    private TextView tvEmpty;
     private BranchAdapter branchAdapter;
-    private List<Branch> displayedBranches;
+    private List<Branch> masterBranchesList = new ArrayList<>();
+    private List<Branch> displayedBranches = new ArrayList<>();
 
     @Nullable
     @Override
@@ -40,41 +45,76 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
 
         etSearch = view.findViewById(R.id.et_branches_search);
         imgSearchClear = view.findViewById(R.id.img_branches_search_clear);
+        imgMapHeader = view.findViewById(R.id.img_branches_map_static);
+        tvMapPlaceholder = view.findViewById(R.id.tv_map_placeholder);
         rvBranches = view.findViewById(R.id.rv_branches);
         tvEmpty = view.findViewById(R.id.tv_branches_empty);
 
+        if (imgSearchClear != null) {
+            imgSearchClear.setOnClickListener(v -> etSearch.setText(""));
+        }
+
         setupRecyclerView();
         setupSearchFilter();
-
-        if (imgSearchClear != null) {
-            imgSearchClear.setOnClickListener(v -> {
-                if (etSearch != null) etSearch.setText("");
-            });
-        }
+        loadBranchesData();
+        setupMapHeader();
 
         return view;
     }
 
+    private void setupMapHeader() {
+        // Use Geoapify Static Map to show a professional map of La Paz
+        String lat = "-16.5000";
+        String lon = "-68.1500";
+        String apiKey = "e31d7c747bc3488ca678d605b4e32b56";
+        String staticMapUrl = "https://maps.geoapify.com/v1/staticmap?style=osm-bright-smooth&width=600&height=400&center=lonlat:" + lon + "," + lat + "&zoom=13&apiKey=" + apiKey;
+
+        if (imgMapHeader != null) {
+            Glide.with(this)
+                    .load(staticMapUrl)
+                    .into(imgMapHeader);
+            if (tvMapPlaceholder != null) tvMapPlaceholder.setVisibility(View.GONE);
+        }
+    }
+
     private void setupRecyclerView() {
-        displayedBranches = new ArrayList<>(BranchRepository.getInstance().getBranches());
         branchAdapter = new BranchAdapter(displayedBranches, this);
         rvBranches.setLayoutManager(new LinearLayoutManager(getContext()));
         rvBranches.setAdapter(branchAdapter);
+    }
 
+    private void loadBranchesData() {
         BranchRepository.getInstance().fetchBranches(new BranchRepository.BranchListCallback() {
             @Override
             public void onSuccess(List<Branch> branches) {
-                if (isAdded() && getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        displayedBranches.clear();
-                        displayedBranches.addAll(branches);
-                        branchAdapter.updateList(displayedBranches);
-                    });
+                if (isAdded()) {
+                    masterBranchesList = new ArrayList<>(branches);
+                    fetchExternalGeoapify();
                 }
             }
 
             @Override
-            public void onError(String error) {}
+            public void onError(String error) {
+                if (isAdded()) {
+                    fetchExternalGeoapify(); // Try external anyway
+                }
+            }
+        });
+    }
+
+    private void fetchExternalGeoapify() {
+        BranchRepository.getInstance().fetchExternalBranches(new BranchRepository.BranchCallback() {
+            @Override
+            public void onSuccess(List<Branch> branches) {
+                if (isAdded()) {
+                    masterBranchesList.addAll(branches);
+                    performSearch(etSearch.getText().toString());
+                }
+            }
+            @Override
+            public void onError(String message) {
+                if (isAdded()) performSearch(etSearch.getText().toString());
+            }
         });
     }
 
@@ -98,12 +138,27 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
     }
 
     private void performSearch(String query) {
-        List<Branch> results = BranchRepository.getInstance().searchBranches(query);
+        if (query == null || query.isEmpty()) {
+            updateDisplayList(masterBranchesList);
+            return;
+        }
+
+        List<Branch> results = new ArrayList<>();
+        String lowerQuery = query.toLowerCase();
+        for (Branch b : masterBranchesList) {
+            if (b.getName().toLowerCase().contains(lowerQuery) || b.getAddress().toLowerCase().contains(lowerQuery)) {
+                results.add(b);
+            }
+        }
+        updateDisplayList(results);
+    }
+
+    private void updateDisplayList(List<Branch> list) {
         displayedBranches.clear();
-        displayedBranches.addAll(results);
+        displayedBranches.addAll(list);
         branchAdapter.updateList(displayedBranches);
 
-        if (results.isEmpty()) {
+        if (displayedBranches.isEmpty()) {
             tvEmpty.setVisibility(View.VISIBLE);
             rvBranches.setVisibility(View.GONE);
         } else {
@@ -123,16 +178,20 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
     }
 
     private void openExternalMap(Branch branch) {
+        String label = Uri.encode(branch.getName());
         Uri uri = Uri.parse("geo:" + branch.getLatitude() + "," + branch.getLongitude() +
                 "?q=" + branch.getLatitude() + "," + branch.getLongitude() +
-                "(" + Uri.encode(branch.getName()) + ")");
+                "(" + label + ")");
         
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         
-        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+        try {
             startActivity(intent);
-        } else {
-            Toast.makeText(getContext(), R.string.map_app_not_found, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            // Fallback: Open in Browser (Google Maps Web)
+            String webUrl = "https://www.google.com/maps/search/?api=1&query=" + branch.getLatitude() + "," + branch.getLongitude();
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webUrl));
+            startActivity(webIntent);
         }
     }
 }

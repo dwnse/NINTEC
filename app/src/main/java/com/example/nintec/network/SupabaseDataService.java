@@ -37,6 +37,15 @@ public interface SupabaseDataService {
             @Query("select") String select
     );
 
+    @POST("rest/v1/categories")
+    Call<List<CategoryDto>> createCategory(@Body Map<String, Object> body, @Header("Prefer") String prefer);
+
+    @PATCH("rest/v1/categories")
+    Call<List<CategoryDto>> updateCategory(@Query("id") String idFilter, @Body Map<String, Object> update);
+
+    @DELETE("rest/v1/categories")
+    Call<Void> deleteCategory(@Query("id") String idFilter);
+
     // ─── Products ───
 
     @GET("rest/v1/products")
@@ -46,6 +55,15 @@ public interface SupabaseDataService {
             @Query("order") String order,
             @Query("limit") int limit
     );
+
+    @POST("rest/v1/products")
+    Call<List<ProductDto>> createProduct(@Body Map<String, Object> body, @Header("Prefer") String prefer);
+
+    @PATCH("rest/v1/products")
+    Call<List<ProductDto>> updateProduct(@Query("id") String idFilter, @Body Map<String, Object> update);
+
+    @DELETE("rest/v1/products")
+    Call<Void> deleteProduct(@Query("id") String idFilter);
 
     @GET("rest/v1/products")
     Call<List<ProductDto>> getProductsByCategory(

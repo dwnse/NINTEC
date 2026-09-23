@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 import com.example.nintec.MainActivity;
 import com.example.nintec.R;
 import com.example.nintec.managers.CartManager;
@@ -109,13 +111,11 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
 
         try {
             if (currentProduct.getImageUrl() != null && !currentProduct.getImageUrl().isEmpty()) {
-                com.bumptech.glide.Glide.with(this)
+                Glide.with(this)
                         .load(currentProduct.getImageUrl())
                         .placeholder(R.mipmap.ic_launcher_foreground)
                         .error(R.mipmap.ic_launcher_foreground)
                         .into(imgProduct);
-            } else if (currentProduct.getImageResource() != 0) {
-                imgProduct.setImageResource(currentProduct.getImageResource());
             } else {
                 imgProduct.setImageResource(R.mipmap.ic_launcher_foreground);
             }
@@ -145,7 +145,23 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
             tvStockStatus.setTextColor(getResources().getColor(R.color.success));
         }
 
-        Map<String, String> specs = ProductRepository.getInstance().getSpecificationsById(currentProduct.getId());
+        // Fetch dynamic specifications
+        ProductRepository.getInstance().fetchProductSpecifications(currentProduct.getId(), new ProductRepository.SpecificationCallback() {
+            @Override
+            public void onSuccess(Map<String, String> specs) {
+                if (isAdded()) {
+                    populateSpecifications(specs);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                // Fallback to default if any
+            }
+        });
+    }
+
+    private void populateSpecifications(Map<String, String> specs) {
         layoutSpecsContainer.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(getContext());
 

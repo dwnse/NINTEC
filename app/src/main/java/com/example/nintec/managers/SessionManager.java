@@ -3,6 +3,7 @@ package com.example.nintec.managers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.nintec.NintecApp;
 import com.example.nintec.models.User;
 import com.example.nintec.network.SupabaseClient;
 import com.example.nintec.network.dto.AuthResponse;
@@ -55,7 +56,7 @@ public class SessionManager {
 
     public static synchronized SessionManager getInstance() {
         if (instance == null) {
-            Context ctx = com.example.nintec.NintecApp.getAppContext();
+            Context ctx = NintecApp.getAppContext();
             if (ctx != null) {
                 instance = new SessionManager(ctx);
             }
@@ -219,7 +220,7 @@ public class SessionManager {
                 });
     }
 
-    public void updateProfile(String fullName, String phone, AuthCallback callback) {
+    public void updateProfile(String fullName, String username, String phone, AuthCallback callback) {
         String userId = getUserId();
         if (userId == null) {
             if (callback != null) callback.onError("No hay sesión activa");
@@ -228,6 +229,7 @@ public class SessionManager {
 
         Map<String, Object> update = new HashMap<>();
         if (fullName != null) update.put("full_name", fullName);
+        if (username != null) update.put("username", username);
         if (phone != null) update.put("phone", phone);
 
         SupabaseClient.getInstance().getDataService()
@@ -239,6 +241,7 @@ public class SessionManager {
                             ProfileDto profile = response.body().get(0);
                             if (currentUser != null) {
                                 currentUser.setName(profile.fullName);
+                                currentUser.setUsername(profile.username);
                                 currentUser.setPhone(profile.phone);
                             }
                             if (callback != null) callback.onSuccess();

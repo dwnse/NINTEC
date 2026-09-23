@@ -79,11 +79,19 @@
         android:backgroundTint="@color/nintec_blue_light"
         app:layout_constraintTop_toBottomOf="@id/layout_branches_search">
 
+        <ImageView
+            android:id="@+id/img_branches_map_static"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="Map Preview" />
+
         <TextView
+            android:id="@+id/tv_map_placeholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/map_preview_placeholder"
+            android:text="Cargando mapa..."
             android:gravity="center"
             android:textColor="@color/nintec_blue"
             android:textStyle="bold" />

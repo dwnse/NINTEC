@@ -1,5 +1,6 @@
 package com.example.nintec.network.dto;
 
+import com.example.nintec.models.Banner;
 import com.google.gson.annotations.SerializedName;
 
 public class BannerDto {
@@ -32,4 +33,8 @@ public class BannerDto {
 
     @SerializedName("is_active")
     public boolean isActive;
+
+    public Banner toBanner() {
+        return new Banner(id, title, subtitle, imageUrl, null, actionType, actionValue, sortOrder);
+    }
 }

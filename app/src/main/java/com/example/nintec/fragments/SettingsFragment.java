@@ -92,7 +92,7 @@ public class SettingsFragment extends Fragment {
             user.setEmail(email);
         }
 
-        SessionManager.getInstance().updateProfile(name, null, new SessionManager.AuthCallback() {
+        SessionManager.getInstance().updateProfile(name, username, null, new SessionManager.AuthCallback() {
             @Override
             public void onSuccess() {
                 if (isAdded() && getActivity() != null) {

@@ -27,7 +27,6 @@ public class OrderRepository {
 
     private OrderRepository() {
         orders = new ArrayList<>();
-        initFallbackData();
     }
 
     public static synchronized OrderRepository getInstance() {
@@ -37,18 +36,7 @@ public class OrderRepository {
         return instance;
     }
 
-    private void initFallbackData() {
-        List<CartItem> items1 = new ArrayList<>();
-        items1.add(new CartItem(new Product("1", "MacBook Pro M3 Max", "Laptops", 2499.00, 2999.00, R.mipmap.ic_launcher_foreground, true, 5), 1));
-        
-        List<CartItem> items2 = new ArrayList<>();
-        items2.add(new CartItem(new Product("2", "iPhone 15 Pro Titanium", "Celulares", 1099.00, 1199.00, R.mipmap.ic_launcher_foreground, true, 8), 1));
-        items2.add(new CartItem(new Product("3", "Audífonos Sony WH-1000XM5", "Audio", 349.00, null, R.mipmap.ic_launcher_foreground, false, 12), 1));
-
-        orders.add(new Order("NIN-0001", items1, 2499.00, "VISA", OrderStatus.COMPLETED, "20/09/2026"));
-        orders.add(new Order("NIN-0002", items2, 1448.00, "MasterCard", OrderStatus.PENDING, "22/09/2026"));
-        orders.add(new Order("NIN-0003", items1, 2499.00, "QR", OrderStatus.REJECTED, "23/09/2026"));
-    }
+    // --- Deleted initFallbackData ---
 
     /**
      * Fetch user orders from Supabase REST API.
@@ -56,7 +44,7 @@ public class OrderRepository {
     public void fetchOrders(OrderListCallback callback) {
         String userId = SessionManager.getInstance().getUserId();
         if (userId == null || userId.isEmpty()) {
-            if (callback != null) callback.onSuccess(orders);
+            if (callback != null) callback.onError("No hay sesión activa");
             return;
         }
 
@@ -65,7 +53,7 @@ public class OrderRepository {
                 .enqueue(new Callback<List<OrderDto>>() {
                     @Override
                     public void onResponse(Call<List<OrderDto>> call, Response<List<OrderDto>> response) {
-                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                        if (response.isSuccessful() && response.body() != null) {
                             List<Order> list = new ArrayList<>();
                             for (OrderDto dto : response.body()) {
                                 list.add(dto.toOrder());
@@ -73,13 +61,13 @@ public class OrderRepository {
                             orders = list;
                             if (callback != null) callback.onSuccess(orders);
                         } else {
-                            if (callback != null) callback.onSuccess(orders);
+                            if (callback != null) callback.onError("Error: " + response.code());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<List<OrderDto>> call, Throwable t) {
-                        if (callback != null) callback.onSuccess(orders);
+                        if (callback != null) callback.onError("Error de red");
                     }
                 });
     }
