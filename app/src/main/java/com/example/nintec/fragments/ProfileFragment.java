@@ -85,66 +85,61 @@ public class ProfileFragment extends Fragment implements SessionManager.UserChan
 
     private void updateUI() {
         User user = SessionManager.getInstance().getCurrentUser();
-        String fullName = null;
         String username = null;
-        String email = null;
         String role = "customer";
 
         if (user != null) {
-            fullName = user.getName();
             username = user.getUsername();
-            email = user.getEmail();
+            if (username == null || username.trim().isEmpty()) {
+                username = user.getName();
+            }
+            if (username == null || username.trim().isEmpty()) {
+                username = user.getEmail();
+            }
             role = user.getRole() != null ? user.getRole() : "customer";
         } else {
-            email = SessionManager.getInstance().getUserEmail();
+            String email = SessionManager.getInstance().getUserEmail();
             if (email != null && !email.isEmpty()) {
-                String prefix = email.contains("@") ? email.substring(0, email.indexOf('@')) : email;
-                fullName = prefix;
-                username = prefix;
+                username = email.contains("@") ? email.substring(0, email.indexOf('@')) : email;
             }
         }
 
-        // 1. Display Full Name
-        if (tvName != null) {
-            if (fullName != null && !fullName.trim().isEmpty()) {
-                tvName.setText(fullName);
-            } else if (username != null && !username.trim().isEmpty()) {
-                tvName.setText(username);
-            } else {
-                tvName.setText("Usuario NINTEC");
-            }
+        if (username == null || username.trim().isEmpty()) {
+            username = "usuario";
         }
 
-        // 2. Display @username
+        String cleanUsername = username.replace("@", "").trim();
+
+        // 1. Display Username as main title
         if (tvUsername != null) {
-            if (username != null && !username.trim().isEmpty()) {
-                tvUsername.setText("@" + username.replace("@", ""));
-                tvUsername.setVisibility(View.VISIBLE);
-            } else {
-                tvUsername.setVisibility(View.GONE);
-            }
+            tvUsername.setText("@" + cleanUsername);
+            tvUsername.setVisibility(View.VISIBLE);
         }
 
-        // 3. Display Email
+        // 2. Hide redundant fields so ONLY username and role are visible
+        if (tvName != null) {
+            tvName.setVisibility(View.GONE);
+        }
         if (tvEmail != null) {
-            if (email != null && !email.trim().isEmpty()) {
-                tvEmail.setText(email);
-                tvEmail.setVisibility(View.VISIBLE);
-            } else {
-                tvEmail.setVisibility(View.GONE);
-            }
+            tvEmail.setVisibility(View.GONE);
         }
 
-        // 4. Display Role and Admin Navigation
+        // 3. Display Role Badge and Admin Navigation
         if (tvRole != null) {
             if (role.equalsIgnoreCase("super_admin")) {
                 tvRole.setText("Super Administrador");
+                tvRole.setBackgroundResource(R.drawable.bg_badge_success);
+                tvRole.setTextColor(getResources().getColor(R.color.success, null));
                 if (layoutAdmin != null) layoutAdmin.setVisibility(View.VISIBLE);
             } else if (role.equalsIgnoreCase("admin")) {
                 tvRole.setText("Administrador");
+                tvRole.setBackgroundResource(R.drawable.bg_badge_success);
+                tvRole.setTextColor(getResources().getColor(R.color.success, null));
                 if (layoutAdmin != null) layoutAdmin.setVisibility(View.VISIBLE);
             } else {
                 tvRole.setText("Cliente");
+                tvRole.setBackgroundResource(R.drawable.bg_badge_new);
+                tvRole.setTextColor(getResources().getColor(R.color.nintec_blue, null));
                 if (layoutAdmin != null) layoutAdmin.setVisibility(View.GONE);
             }
         }

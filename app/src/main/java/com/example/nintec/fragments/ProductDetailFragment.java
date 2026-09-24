@@ -28,8 +28,8 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
     private static final String ARG_PRODUCT_ID = "product_id";
 
     private ImageView btnBack, btnShare, imgProduct, btnCart;
-    private TextView tvName, tvStockStatus, tvPrice, tvOldPrice, tvDescription, tvQtyCounter, btnQtyMinus, btnQtyPlus, tvCartBadge;
-    private Button btnAddToCart;
+    private TextView tvName, tvStockStatus, tvPrice, tvOldPrice, tvDescription, tvQtyCounter, btnQtyMinus, btnQtyPlus, tvCartBadge, tvBottomTotalPrice;
+    private Button btnAddToCart, btnBuyNow;
     private LinearLayout layoutSpecsContainer;
 
     private Product currentProduct;
@@ -62,6 +62,8 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
         btnQtyMinus = view.findViewById(R.id.btn_qty_minus);
         btnQtyPlus = view.findViewById(R.id.btn_qty_plus);
         btnAddToCart = view.findViewById(R.id.btn_detail_add_to_cart);
+        btnBuyNow = view.findViewById(R.id.btn_detail_buy_now);
+        tvBottomTotalPrice = view.findViewById(R.id.tv_bottom_total_price);
         layoutSpecsContainer = view.findViewById(R.id.layout_detail_specs_container);
 
         if (getArguments() != null) {
@@ -137,6 +139,10 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
             tvStockStatus.setTextColor(getResources().getColor(R.color.error));
             btnAddToCart.setEnabled(false);
             btnAddToCart.setText("Agotado");
+            if (btnBuyNow != null) {
+                btnBuyNow.setEnabled(false);
+                btnBuyNow.setText("Agotado");
+            }
             btnQtyPlus.setEnabled(false);
             btnQtyMinus.setEnabled(false);
             selectedQuantity = 0;
@@ -150,6 +156,8 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
             tvStockStatus.setBackgroundResource(R.drawable.bg_badge_success);
             tvStockStatus.setTextColor(getResources().getColor(R.color.success));
         }
+
+        updateBottomTotal();
 
         // Fetch dynamic specifications
         ProductRepository.getInstance().fetchProductSpecifications(currentProduct.getId(), new ProductRepository.SpecificationCallback() {
@@ -165,6 +173,12 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
                 // Fallback to default if any
             }
         });
+    }
+
+    private void updateBottomTotal() {
+        if (currentProduct != null && tvBottomTotalPrice != null) {
+            tvBottomTotalPrice.setText(Product.formatPrice(currentProduct.getPriceValue() * selectedQuantity));
+        }
     }
 
     private void populateSpecifications(Map<String, String> specs) {
@@ -196,6 +210,7 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
             if (currentProduct.getStock() <= 0 || selectedQuantity <= 1) return;
             selectedQuantity--;
             tvQtyCounter.setText(String.valueOf(selectedQuantity));
+            updateBottomTotal();
         });
 
         btnQtyPlus.setOnClickListener(v -> {
@@ -205,6 +220,7 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
             }
             selectedQuantity++;
             tvQtyCounter.setText(String.valueOf(selectedQuantity));
+            updateBottomTotal();
         });
 
         btnAddToCart.setOnClickListener(v -> {
@@ -229,6 +245,26 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
                 Toast.makeText(getContext(), "¡" + currentProduct.getName() + " (" + selectedQuantity + ") agregado al carrito!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        if (btnBuyNow != null) {
+            btnBuyNow.setOnClickListener(v -> {
+                if (currentProduct != null && selectedQuantity > 0) {
+                    btnBuyNow.animate()
+                            .scaleX(0.92f).scaleY(0.92f)
+                            .setDuration(90)
+                            .withEndAction(() -> btnBuyNow.animate().scaleX(1.0f).scaleY(1.0f).setDuration(110).start())
+                            .start();
+
+                    // Direct purchase: Add to cart and immediately open payment / checkout screen
+                    CartManager.getInstance().addProduct(currentProduct, selectedQuantity);
+                    PaymentMethodFragment paymentFragment = new PaymentMethodFragment();
+                    getParentFragmentManager().beginTransaction()
+                            .add(R.id.fragment_container, paymentFragment, "PAYMENT")
+                            .addToBackStack("PAYMENT_TRANS")
+                            .commit();
+                }
+            });
+        }
     }
 
     private void handleShareProduct() {

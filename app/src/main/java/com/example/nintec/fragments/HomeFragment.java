@@ -218,4 +218,14 @@ public class HomeFragment extends Fragment implements ProductAdapter.OnProductCl
             ((MainActivity) getActivity()).openProductDetail(product.getId());
         }
     }
+
+    @Override
+    public void onAddToCartClick(Product product) {
+        if (product != null && product.getStock() > 0) {
+            CartManager.getInstance().addProduct(product, 1);
+            Toast.makeText(getContext(), "¡" + product.getName() + " agregado al carrito!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Producto agotado", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

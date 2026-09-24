@@ -75,13 +75,33 @@
                 android:textColor="@color/text_hint" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_buy"
-            style="@style/NintecPrimaryButton"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:layout_marginTop="10dp"
-            android:textSize="12sp"
-            android:text="@string/label_buy" />
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/btn_card_add_cart"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_button_secondary"
+                android:src="@drawable/ic_cart"
+                android:padding="8dp"
+                app:tint="@color/nintec_blue"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginEnd="6dp"
+                android:contentDescription="Add to cart" />
+
+            <Button
+                android:id="@+id/btn_buy"
+                style="@style/NintecPrimaryButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:text="@string/label_buy" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

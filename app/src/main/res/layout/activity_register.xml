@@ -9,176 +9,168 @@
     android:background="@color/white"
     tools:context=".activities.RegisterActivity">
 
-    <!-- Decorative Top Background Shape -->
-    <View
-        android:id="@+id/decor_top"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="-150dp"
-        android:layout_marginEnd="-100dp"
-        android:background="@drawable/bg_decor_top"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Decorative Bottom Background Shape -->
-    <View
-        android:id="@+id/decor_bottom"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginBottom="-150dp"
-        android:layout_marginStart="-100dp"
-        android:background="@drawable/bg_decor_bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- Fully Responsive Scroll Container -->
+    <!-- Non-bouncy Full Screen Container -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/screen_horizontal_margin">
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="36dp"
+            android:paddingBottom="24dp">
 
-            <!-- Logo Section -->
-            <ImageView
-                android:id="@+id/img_logo"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginTop="40dp"
-                android:contentDescription="NINTECLP Logo"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:src="@mipmap/ic_launcher_foreground"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_brand_name"
-                style="@style/NintecTitleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_sm"
-                android:text="@string/brand_name"
-                android:letterSpacing="0.1"
-                app:layout_constraintTop_toBottomOf="@id/img_logo"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-
-            <!-- Main Register Card -->
+            <!-- Brand Logo and Header -->
             <LinearLayout
-                android:id="@+id/card_register"
-                style="@style/NintecCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/tv_brand_name"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
+                android:gravity="center"
+                android:layout_marginBottom="28dp">
+
+                <ImageView
+                    android:id="@+id/img_logo"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:contentDescription="NINTECLP Logo"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/ic_launcher_foreground" />
 
                 <TextView
-                    style="@style/NintecTitleText"
+                    android:id="@+id/tv_brand_name"
+                    style="@style/NintecTitleText.Large"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:text="@string/register_title" />
-
-                <!-- Email Input Field -->
-                <TextView
-                    style="@style/NintecSmallText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="@string/email_label"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/et_email"
-                    style="@style/NintecInput"
-                    android:hint="ejemplo@nintec.com"
-                    android:inputType="textEmailAddress"
-                    android:importantForAutofill="no" />
-
-                <!-- Password Input Field -->
-                <TextView
-                    style="@style/NintecSmallText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="6dp"
-                    android:text="@string/password_label"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/et_password"
-                    style="@style/NintecInput"
-                    android:hint="••••••••"
-                    android:inputType="textPassword"
-                    android:importantForAutofill="no" />
-
-                <!-- Main Register Button -->
-                <Button
-                    android:id="@+id/btn_register"
-                    style="@style/NintecPrimaryButton"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/register_button" />
-
-                <!-- Login Navigation Link -->
-                <TextView
-                    android:id="@+id/tv_go_to_login"
-                    style="@style/NintecBodyText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:padding="8dp"
-                    android:text="@string/already_have_account"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/brand_name"
                     android:textColor="@color/nintec_blue"
-                    android:textSize="@dimen/text_size_small"
-                    android:textStyle="bold" />
+                    android:letterSpacing="0.08" />
 
+                <TextView
+                    style="@style/NintecSmallText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Crea tu cuenta para comenzar"
+                    android:textColor="@color/text_secondary" />
             </LinearLayout>
 
-            <!-- Social Divider Label -->
+            <!-- Form Section -->
             <TextView
-                android:id="@+id/tv_divider"
                 style="@style/NintecSmallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:text="@string/continue_with"
-                app:layout_constraintTop_toBottomOf="@id/card_register"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:layout_marginBottom="6dp"
+                android:text="@string/email_label"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_email"
+                style="@style/NintecInput"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="ejemplo@nintec.com"
+                android:inputType="textEmailAddress"
+                android:importantForAutofill="no"
+                android:paddingHorizontal="14dp"
+                android:background="@drawable/bg_input"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                style="@style/NintecSmallText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:text="@string/password_label"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_password"
+                style="@style/NintecInput"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Mínimo 6 caracteres"
+                android:inputType="textPassword"
+                android:importantForAutofill="no"
+                android:paddingHorizontal="14dp"
+                android:background="@drawable/bg_input"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Main Register Button -->
+            <Button
+                android:id="@+id/btn_register"
+                style="@style/NintecPrimaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="@string/register_button"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <!-- Login Navigation Link -->
+            <TextView
+                android:id="@+id/tv_go_to_login"
+                style="@style/NintecBodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="18dp"
+                android:padding="8dp"
+                android:text="@string/already_have_account"
+                android:textColor="@color/nintec_blue"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- Divider -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="16dp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/border_default"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/tv_divider"
+                    style="@style/NintecSmallText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@color/white"
+                    android:paddingHorizontal="12dp"
+                    android:text="@string/continue_with"
+                    android:textColor="@color/text_hint" />
+            </RelativeLayout>
 
             <!-- Social Login Buttons Section -->
             <LinearLayout
                 android:id="@+id/layout_social"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="40dp"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/tv_divider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
+                android:orientation="vertical">
 
                 <!-- Google Authentication Button -->
                 <LinearLayout
                     android:id="@+id/btn_google"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height"
+                    android:layout_height="46dp"
                     android:background="@drawable/bg_button_secondary"
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:clickable="true"
                     android:focusable="true"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="10dp"
                     android:paddingHorizontal="16dp">
 
                     <ImageView
@@ -190,10 +182,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="10dp"
                         android:text="@string/login_google"
                         android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_size_body"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -201,7 +193,7 @@
                 <LinearLayout
                     android:id="@+id/btn_icloud"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_height"
+                    android:layout_height="46dp"
                     android:background="@drawable/bg_button_secondary"
                     android:orientation="horizontal"
                     android:gravity="center"
@@ -218,16 +210,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="10dp"
                         android:text="@string/login_icloud"
                         android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_size_body"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
                 </LinearLayout>
-
             </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

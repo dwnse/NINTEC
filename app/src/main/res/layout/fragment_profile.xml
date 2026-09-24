@@ -61,40 +61,39 @@
             </FrameLayout>
 
             <TextView
-                android:id="@+id/tv_profile_name"
-                style="@style/NintecTitleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Nombre Completo" />
-
-            <TextView
                 android:id="@+id/tv_profile_username"
-                style="@style/NintecBodyText"
+                style="@style/NintecTitleText.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_secondary"
-                android:textSize="14sp"
-                android:text="@usuario" />
-
-            <TextView
-                android:id="@+id/tv_profile_email"
-                style="@style/NintecSmallText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:textColor="@color/text_secondary"
-                android:text="correo@ejemplo.com" />
+                android:layout_marginTop="14dp"
+                android:textColor="@color/text_primary"
+                android:text="usuario" />
 
             <TextView
                 android:id="@+id/tv_profile_role"
                 style="@style/NintecSmallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_badge_new"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="4dp"
                 android:text="@string/profile_role_client"
                 android:textColor="@color/nintec_blue"
                 android:textStyle="bold" />
+
+            <!-- Hidden fields preserved for compatibility -->
+            <TextView
+                android:id="@+id/tv_profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_profile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
