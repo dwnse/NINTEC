@@ -114,11 +114,63 @@ public class ProductRepository {
                         if (response.isSuccessful() && response.body() != null) {
                             List<Product> featured = new ArrayList<>();
                             for (ProductDto dto : response.body()) {
-                                featured.add(dto.toProduct());
+                                Product p = dto.toProduct();
+                                featured.add(p);
+                                cacheProduct(p);
+                                if (dto.description != null) {
+                                    descriptionsMap.put(p.getId(), dto.description);
+                                }
                             }
                             if (callback != null) callback.onSuccess(featured);
                         } else {
                             if (callback != null) callback.onError("Error " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<ProductDto>> call, Throwable t) {
+                        if (callback != null) callback.onError("Error de red");
+                    }
+                });
+    }
+
+    private synchronized void cacheProduct(Product p) {
+        if (p == null || p.getId() == null) return;
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getId().equals(p.getId())) {
+                products.set(i, p);
+                return;
+            }
+        }
+        products.add(p);
+    }
+
+    public void fetchProductById(String productId, ProductCallback callback) {
+        if (productId == null) {
+            if (callback != null) callback.onError("ID de producto inválido");
+            return;
+        }
+        Product cached = getProductById(productId);
+        if (cached != null) {
+            if (callback != null) callback.onSuccess(cached);
+            return;
+        }
+
+        SupabaseClient.getInstance().getDataService()
+                .getProducts("*,categories(*),product_images(*)", "id=eq." + productId, "name.asc", 1)
+                .enqueue(new Callback<List<ProductDto>>() {
+                    @Override
+                    public void onResponse(Call<List<ProductDto>> call, Response<List<ProductDto>> response) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                            ProductDto dto = response.body().get(0);
+                            Product p = dto.toProduct();
+                            if (dto.description != null) {
+                                descriptionsMap.put(p.getId(), dto.description);
+                            }
+                            cacheProduct(p);
+                            if (callback != null) callback.onSuccess(p);
+                        } else {
+                            if (callback != null) callback.onError("Producto no encontrado");
                         }
                     }
 

@@ -21,7 +21,7 @@
     <!-- Tipografía -->
     <color name="text_primary">#212529</color>
     <color name="text_secondary">#6C757D</color>
-    <color name="text_hint">#ADB5BD</color>
+    <color name="text_hint">#687280</color>
 
     <!-- Bordes y Divisores -->
     <color name="border_default">#CED4DA</color>

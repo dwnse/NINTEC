@@ -100,7 +100,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:paddingHorizontal="4dp"
+                android:paddingVertical="0dp"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:ellipsize="none"
                 android:textSize="12sp"
+                android:textAllCaps="false"
                 android:text="@string/label_buy" />
         </LinearLayout>
     </LinearLayout>

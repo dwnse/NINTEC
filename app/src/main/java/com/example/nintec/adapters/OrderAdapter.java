@@ -55,19 +55,20 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             case COMPLETED:
             case DELIVERED:
                 holder.tvStatus.setBackgroundResource(R.drawable.bg_badge_success);
+                holder.tvStatus.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.success, null));
                 break;
             case CANCELLED:
             case REJECTED:
                 holder.tvStatus.setBackgroundResource(R.drawable.bg_badge_error);
+                holder.tvStatus.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.error, null));
                 break;
             case PROCESSING:
             case CONFIRMED:
             case SHIPPED:
-                holder.tvStatus.setBackgroundResource(R.drawable.bg_badge_new);
-                break;
             case PENDING:
             default:
                 holder.tvStatus.setBackgroundResource(R.drawable.bg_badge_new);
+                holder.tvStatus.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.nintec_blue, null));
                 break;
         }
 

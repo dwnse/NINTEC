@@ -125,13 +125,16 @@ public class OrderDetailFragment extends Fragment {
             case COMPLETED:
             case DELIVERED:
                 tvStatus.setBackgroundResource(R.drawable.bg_badge_success);
+                tvStatus.setTextColor(getResources().getColor(R.color.success, null));
                 break;
             case CANCELLED:
             case REJECTED:
                 tvStatus.setBackgroundResource(R.drawable.bg_badge_error);
+                tvStatus.setTextColor(getResources().getColor(R.color.error, null));
                 break;
             default:
                 tvStatus.setBackgroundResource(R.drawable.bg_badge_new);
+                tvStatus.setTextColor(getResources().getColor(R.color.nintec_blue, null));
                 break;
         }
 

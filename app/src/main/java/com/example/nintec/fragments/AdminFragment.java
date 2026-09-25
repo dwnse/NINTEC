@@ -51,7 +51,10 @@ public class AdminFragment extends Fragment {
         }
 
         if (btnBranches != null) {
-            btnBranches.setOnClickListener(v -> openManageBranches());
+            btnBranches.setOnClickListener(v -> showFeatureWebRedirectDialog(
+                    "Gestión de Sucursales",
+                    "La creación, edición de nombres, coordenadas GPS, ciudades y horarios de atención de las sucursales se gestiona en tiempo real desde la consola Web NINTEC."
+            ));
         }
 
         if (btnBanners != null) {
@@ -88,13 +91,7 @@ public class AdminFragment extends Fragment {
                 .commit();
     }
 
-    private void openManageBranches() {
-        if (!isAdded()) return;
-        getParentFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new BranchesFragment())
-                .addToBackStack(null)
-                .commit();
-    }
+
 
     private void openManageOffers() {
         if (!isAdded()) return;

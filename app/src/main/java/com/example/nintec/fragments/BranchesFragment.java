@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,13 +57,17 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
     private ProgressBar pbMapLoading;
     private FloatingActionButton btnMyLocation;
     private boolean isMapLoaded = false;
+    private boolean shouldLocateUserOnLoad = false;
 
     private final ActivityResultLauncher<String[]> locationPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
                 Boolean fine = result.get(Manifest.permission.ACCESS_FINE_LOCATION);
                 Boolean coarse = result.get(Manifest.permission.ACCESS_COARSE_LOCATION);
                 if ((fine != null && fine) || (coarse != null && coarse)) {
-                    locateUserOnMap();
+                    shouldLocateUserOnLoad = true;
+                    if (isMapLoaded) {
+                        locateUserOnMap();
+                    }
                 } else {
                     if (isAdded() && getContext() != null) {
                         Toast.makeText(getContext(), "Permiso de ubicación denegado. Se muestran las sucursales.", Toast.LENGTH_SHORT).show();
@@ -94,9 +99,6 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
 
         btnMyLocation.setOnClickListener(v -> requestLocationAndLocate());
 
-        // Ask for location permission when entering the screen
-        requestLocationAndLocate();
-
         return view;
     }
 
@@ -119,6 +121,10 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
                 isMapLoaded = true;
                 if (pbMapLoading != null) pbMapLoading.setVisibility(View.GONE);
                 populateMarkersOnMap();
+                if (shouldLocateUserOnLoad) {
+                    shouldLocateUserOnLoad = false;
+                    locateUserOnMap();
+                }
             }
         });
 
@@ -129,9 +135,10 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
                 "<script src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'></script>" +
                 "<style>" +
                 "body, html, #map { margin:0; padding:0; height:100%; width:100%; font-family:sans-serif; background:#e8f0fe; }" +
-                ".nintec-pin { background:#1846D7; border:2px solid #ffffff; width:16px; height:16px; border-radius:50%; box-shadow:0 2px 6px rgba(0,0,0,0.35); }" +
-                ".user-pin { background:#00C853; border:2px solid #ffffff; width:16px; height:16px; border-radius:50%; box-shadow:0 0 10px #00C853; animation:pulse 1.5s infinite; }" +
-                "@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,200,83,0.7); } 70% { box-shadow: 0 0 0 12px rgba(0,200,83,0); } 100% { box-shadow: 0 0 0 0 rgba(0,200,83,0); } }" +
+                ".nintec-pin { width:26px; height:26px; background:#D32F2F; border-radius:50% 50% 50% 0; transform:rotate(-45deg); border:2px solid #ffffff; box-shadow:-2px 2px 6px rgba(0,0,0,0.35); box-sizing:border-box; }" +
+                ".nintec-pin::after { content:''; width:8px; height:8px; margin:7px 0 0 7px; background:#ffffff; position:absolute; border-radius:50%; }" +
+                ".user-pin { width:20px; height:20px; background:#1846D7; border:3px solid #ffffff; border-radius:50%; box-shadow:0 0 12px rgba(24,70,215,0.8); animation:pulse 1.5s infinite; box-sizing:border-box; }" +
+                "@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(24,70,215,0.7); } 70% { box-shadow: 0 0 0 12px rgba(24,70,215,0); } 100% { box-shadow: 0 0 0 0 rgba(24,70,215,0); } }" +
                 "</style>" +
                 "</head><body>" +
                 "<div id='map'></div>" +
@@ -141,7 +148,7 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
                 "var branchMarkers = {};" +
                 "var userMarker = null;" +
                 "function addBranch(id, lat, lon, name, address) {" +
-                "  var icon = L.divIcon({ className: 'nintec-pin', iconSize: [16, 16], iconAnchor: [8, 8] });" +
+                "  var icon = L.divIcon({ className: 'nintec-pin', iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -26] });" +
                 "  var m = L.marker([lat, lon], { icon: icon }).addTo(map);" +
                 "  m.bindPopup('<b>' + name + '</b><br><small>' + address + '</small>');" +
                 "  branchMarkers[id] = m;" +
@@ -152,7 +159,7 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
                 "}" +
                 "function setUserLoc(lat, lon) {" +
                 "  if (userMarker) { map.removeLayer(userMarker); }" +
-                "  var icon = L.divIcon({ className: 'user-pin', iconSize: [16, 16], iconAnchor: [8, 8] });" +
+                "  var icon = L.divIcon({ className: 'user-pin', iconSize: [20, 20], iconAnchor: [10, 10], popupAnchor: [0, -10] });" +
                 "  userMarker = L.marker([lat, lon], { icon: icon }).addTo(map).bindPopup('<b>Tu ubicación</b>').openPopup();" +
                 "  map.flyTo([lat, lon], 15, { animate: true, duration: 1.0 });" +
                 "}" +
@@ -189,9 +196,14 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void locateUserOnMap() {
         Context context = getContext();
         if (context == null || webViewMap == null) return;
+        if (!isMapLoaded) {
+            shouldLocateUserOnLoad = true;
+            return;
+        }
 
         try {
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -213,8 +225,42 @@ public class BranchesFragment extends Fragment implements BranchAdapter.OnBranch
                     webViewMap.evaluateJavascript(js, null);
                     Toast.makeText(context, "Ubicación detectada", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Fallback to central La Paz view if GPS hardware has not yet locked
-                    webViewMap.evaluateJavascript("setUserLoc(-16.5000, -68.1500);", null);
+                    @SuppressLint("MissingPermission")
+                    LocationListener singleListener = new LocationListener() {
+                        @Override
+                        public void onLocationChanged(@NonNull Location location) {
+                            if (isAdded() && webViewMap != null && isMapLoaded) {
+                                double lat = location.getLatitude();
+                                double lon = location.getLongitude();
+                                String js = "setUserLoc(" + lat + ", " + lon + ");";
+                                webViewMap.evaluateJavascript(js, null);
+                                Toast.makeText(getContext(), "Ubicación detectada", Toast.LENGTH_SHORT).show();
+                            }
+                            try {
+                                locationManager.removeUpdates(this);
+                            } catch (Exception ignored) {}
+                        }
+                        @Override public void onStatusChanged(String provider, int status, Bundle extras) {}
+                        @Override public void onProviderEnabled(@NonNull String provider) {}
+                        @Override public void onProviderDisabled(@NonNull String provider) {}
+                    };
+
+                    @SuppressLint("MissingPermission")
+                    boolean updateRequested = false;
+                    if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, singleListener);
+                        updateRequested = true;
+                    }
+                    if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, singleListener);
+                        updateRequested = true;
+                    }
+
+                    if (!updateRequested) {
+                        Toast.makeText(context, "Por favor activa el GPS de tu dispositivo", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Obteniendo ubicación...", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         } catch (Exception e) {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,13 +67,32 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
         tvBottomTotalPrice = view.findViewById(R.id.tv_bottom_total_price);
         layoutSpecsContainer = view.findViewById(R.id.layout_detail_specs_container);
 
+        setupActionListeners();
+
         if (getArguments() != null) {
             String productId = getArguments().getString(ARG_PRODUCT_ID);
             currentProduct = ProductRepository.getInstance().getProductById(productId);
-        }
+            if (currentProduct != null) {
+                hydrateProductDetails();
+            } else if (productId != null) {
+                ProductRepository.getInstance().fetchProductById(productId, new ProductRepository.ProductCallback() {
+                    @Override
+                    public void onSuccess(Product product) {
+                        if (isAdded()) {
+                            currentProduct = product;
+                            hydrateProductDetails();
+                        }
+                    }
 
-        hydrateProductDetails();
-        setupActionListeners();
+                    @Override
+                    public void onError(String error) {
+                        if (isAdded()) {
+                            Toast.makeText(getContext(), "Error al cargar información del producto", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }
 
         CartManager.getInstance().addListener(this);
 
@@ -147,14 +167,27 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
             btnQtyMinus.setEnabled(false);
             selectedQuantity = 0;
             tvQtyCounter.setText("0");
-        } else if (currentProduct.getStock() <= 3) {
-            tvStockStatus.setText("Pocas Unidades (" + currentProduct.getStock() + ")");
-            tvStockStatus.setBackgroundResource(R.drawable.bg_badge_error);
-            tvStockStatus.setTextColor(getResources().getColor(R.color.error));
         } else {
-            tvStockStatus.setText("En Stock");
-            tvStockStatus.setBackgroundResource(R.drawable.bg_badge_success);
-            tvStockStatus.setTextColor(getResources().getColor(R.color.success));
+            if (selectedQuantity <= 0) selectedQuantity = 1;
+            tvQtyCounter.setText(String.valueOf(selectedQuantity));
+            btnAddToCart.setEnabled(true);
+            btnAddToCart.setText("Añadir al Carrito");
+            if (btnBuyNow != null) {
+                btnBuyNow.setEnabled(true);
+                btnBuyNow.setText("Compra Directa");
+            }
+            btnQtyPlus.setEnabled(true);
+            btnQtyMinus.setEnabled(true);
+
+            if (currentProduct.getStock() <= 3) {
+                tvStockStatus.setText("Pocas Unidades (" + currentProduct.getStock() + ")");
+                tvStockStatus.setBackgroundResource(R.drawable.bg_badge_error);
+                tvStockStatus.setTextColor(getResources().getColor(R.color.error));
+            } else {
+                tvStockStatus.setText("En Stock");
+                tvStockStatus.setBackgroundResource(R.drawable.bg_badge_success);
+                tvStockStatus.setTextColor(getResources().getColor(R.color.success));
+            }
         }
 
         updateBottomTotal();
@@ -207,6 +240,7 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
         });
 
         btnQtyMinus.setOnClickListener(v -> {
+            if (currentProduct == null) return;
             if (currentProduct.getStock() <= 0 || selectedQuantity <= 1) return;
             selectedQuantity--;
             tvQtyCounter.setText(String.valueOf(selectedQuantity));
@@ -214,6 +248,7 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
         });
 
         btnQtyPlus.setOnClickListener(v -> {
+            if (currentProduct == null) return;
             if (currentProduct.getStock() <= 0 || selectedQuantity >= currentProduct.getStock()) {
                 Toast.makeText(getContext(), "Máximo stock disponible alcanzado", Toast.LENGTH_SHORT).show();
                 return;
@@ -224,7 +259,11 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
         });
 
         btnAddToCart.setOnClickListener(v -> {
-            if (currentProduct != null && selectedQuantity > 0) {
+            if (currentProduct == null) {
+                Toast.makeText(getContext(), "Cargando producto, por favor espera...", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (selectedQuantity > 0 && currentProduct.getStock() > 0) {
                 // Interactive micro-animation feedback on button
                 btnAddToCart.animate()
                         .scaleX(0.92f).scaleY(0.92f)
@@ -236,19 +275,25 @@ public class ProductDetailFragment extends Fragment implements CartManager.CartC
                 // Bounce animation on top cart icon
                 if (btnCart != null) {
                     btnCart.animate().scaleX(1.3f).scaleY(1.3f).setDuration(140)
-                            .setInterpolator(new android.view.animation.OvershootInterpolator(2.5f))
+                            .setInterpolator(new OvershootInterpolator(2.5f))
                             .withEndAction(() -> btnCart.animate().scaleX(1.0f).scaleY(1.0f).setDuration(110).start())
                             .start();
                 }
 
                 CartManager.getInstance().addProduct(currentProduct, selectedQuantity);
                 Toast.makeText(getContext(), "¡" + currentProduct.getName() + " (" + selectedQuantity + ") agregado al carrito!", Toast.LENGTH_SHORT).show();
+            } else if (currentProduct.getStock() <= 0) {
+                Toast.makeText(getContext(), "Producto agotado", Toast.LENGTH_SHORT).show();
             }
         });
 
         if (btnBuyNow != null) {
             btnBuyNow.setOnClickListener(v -> {
-                if (currentProduct != null && selectedQuantity > 0) {
+                if (currentProduct == null) {
+                    Toast.makeText(getContext(), "Cargando producto, por favor espera...", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (selectedQuantity > 0 && currentProduct.getStock() > 0) {
                     btnBuyNow.animate()
                             .scaleX(0.92f).scaleY(0.92f)
                             .setDuration(90)
