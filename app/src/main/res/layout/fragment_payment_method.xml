@@ -29,7 +29,7 @@
             style="@style/NintecSubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Método de Pago"
+            android:text="@string/checkout_payment_title"
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
@@ -65,7 +65,7 @@
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total a pagar"
+                        android:text="@string/payment_total_to_pay"
                         android:textColor="@color/white"
                         android:alpha="0.85" />
 
@@ -74,7 +74,7 @@
                         style="@style/NintecTitleText.Large"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bs 0,00"
+                        android:text="@string/default_price_zero"
                         android:textColor="@color/white"
                         android:layout_marginTop="4dp" />
                 </LinearLayout>
@@ -85,7 +85,7 @@
                 style="@style/NintecBodyText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Selecciona tu método de pago"
+                android:text="@string/payment_select_method"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
 
@@ -101,7 +101,7 @@
                     android:layout_width="0dp"
                     android:layout_height="44dp"
                     android:layout_weight="1"
-                    android:text="💳 Tarjeta"
+                    android:text="@string/payment_tab_card"
                     android:textAllCaps="false"
                     android:textSize="13sp"
                     android:background="@drawable/bg_button_primary"
@@ -113,7 +113,7 @@
                     android:layout_width="0dp"
                     android:layout_height="44dp"
                     android:layout_weight="1"
-                    android:text="📱 QR"
+                    android:text="@string/payment_tab_qr"
                     android:textAllCaps="false"
                     android:textSize="13sp"
                     android:background="@drawable/bg_button_secondary"
@@ -125,7 +125,7 @@
                     android:layout_width="0dp"
                     android:layout_height="44dp"
                     android:layout_weight="1"
-                    android:text="PayPal"
+                    android:text="@string/payment_method_paypal"
                     android:textAllCaps="false"
                     android:textSize="13sp"
                     android:background="@drawable/bg_button_secondary"
@@ -158,7 +158,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Número de tarjeta"
+                            android:text="@string/payment_card_number"
                             android:textColor="@color/text_secondary"
                             android:layout_marginBottom="6dp" />
 
@@ -190,7 +190,7 @@
                                     style="@style/NintecSmallText"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Vencimiento"
+                                    android:text="@string/payment_card_expiry"
                                     android:textColor="@color/text_secondary"
                                     android:layout_marginBottom="6dp" />
 
@@ -217,7 +217,7 @@
                                     style="@style/NintecSmallText"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="CVV"
+                                    android:text="@string/payment_cvv"
                                     android:textColor="@color/text_secondary"
                                     android:layout_marginBottom="6dp" />
 
@@ -238,7 +238,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Nombre del titular"
+                            android:text="@string/payment_cardholder_name"
                             android:textColor="@color/text_secondary"
                             android:layout_marginBottom="6dp"
                             android:layout_marginTop="12dp" />
@@ -282,7 +282,7 @@
                             style="@style/NintecBodyText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Escanea el código QR para pagar"
+                            android:text="@string/payment_scan_qr_desc"
                             android:textStyle="bold"
                             android:gravity="center"
                             android:layout_marginBottom="16dp" />
@@ -309,7 +309,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="NINTECLP - Cuenta Comercial"
+                            android:text="@string/payment_nintec_business_account"
                             android:textColor="@color/nintec_blue"
                             android:textStyle="bold"
                             android:layout_marginTop="12dp" />
@@ -318,7 +318,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Referencia de pago"
+                            android:text="@string/payment_reference_label"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="16dp" />
 
@@ -337,7 +337,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Banco emisor"
+                            android:text="@string/payment_issuing_bank"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="12dp" />
 
@@ -380,7 +380,7 @@
                             style="@style/NintecBodyText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ingresa tu cuenta de PayPal"
+                            android:text="@string/payment_enter_paypal_account"
                             android:textStyle="bold"
                             android:layout_marginBottom="16dp" />
 
@@ -388,7 +388,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Correo electrónico de PayPal"
+                            android:text="@string/payment_paypal_email"
                             android:textColor="@color/text_secondary"
                             android:layout_marginBottom="6dp" />
 
@@ -406,7 +406,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="ID de transacción PayPal (después de pagar)"
+                            android:text="@string/payment_paypal_tx_id"
                             android:textColor="@color/text_secondary"
                             android:layout_marginBottom="6dp"
                             android:layout_marginTop="12dp" />
@@ -425,7 +425,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Realiza el pago a ninteclp@paypal.com y luego ingresa el ID de transacción aquí."
+                            android:text="@string/payment_paypal_instructions"
                             android:textColor="@color/text_hint"
                             android:layout_marginTop="12dp" />
                     </LinearLayout>
@@ -437,7 +437,7 @@
                 style="@style/NintecBodyText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sucursal para retiro / entrega"
+                android:text="@string/payment_branch_pickup_title"
                 android:textStyle="bold"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp" />
@@ -453,7 +453,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="Central"
+                    android:text="@string/branch_central"
                     android:textSize="12sp"
                     android:layout_marginEnd="6dp" />
 
@@ -463,7 +463,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="Calacoto"
+                    android:text="@string/branch_calacoto"
                     android:textSize="12sp"
                     android:layout_marginEnd="6dp" />
 
@@ -473,7 +473,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="El Alto"
+                    android:text="@string/branch_el_alto"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -482,7 +482,7 @@
                 style="@style/NintecSmallText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="📍 Av. San Martín #123, Centro - La Paz"
+                android:text="@string/payment_branch_address_sample"
                 android:textColor="@color/nintec_blue"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="4dp" />
@@ -492,7 +492,7 @@
                 style="@style/NintecSmallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nota adicional (opcional)"
+                android:text="@string/payment_additional_note_optional"
                 android:textColor="@color/text_secondary"
                 android:layout_marginBottom="6dp"
                 android:layout_marginTop="20dp" />
@@ -517,7 +517,7 @@
         android:id="@+id/btn_payment_continue"
         style="@style/NintecPrimaryButton"
         android:layout_margin="@dimen/screen_horizontal_margin"
-        android:text="Confirmar y Pagar"
+        android:text="@string/btn_confirm_and_pay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

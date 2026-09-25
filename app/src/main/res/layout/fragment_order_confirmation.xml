@@ -72,7 +72,7 @@
                 style="@style/NintecSubtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sucursal y Entrega"
+                android:text="@string/order_branch_and_delivery"
                 android:layout_marginBottom="12dp" />
 
             <LinearLayout
@@ -87,7 +87,7 @@
                     style="@style/NintecBodyText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="📍 Sucursal Central"
+                    android:text="@string/order_branch_central_sample"
                     android:textStyle="bold" />
 
                 <TextView
@@ -95,7 +95,7 @@
                     style="@style/NintecSmallText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Av. San Martín #123, Centro - La Paz"
+                    android:text="@string/default_branch_address"
                     android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp" />
             </LinearLayout>
@@ -117,13 +117,13 @@
                     style="@style/NintecBodyText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Método: Visa" />
+                    android:text="@string/default_sample_payment_method" />
                 <TextView
                     android:id="@+id/tv_confirm_notes"
                     style="@style/NintecSmallText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="@string/empty"
                     android:textColor="@color/text_secondary"
                     android:layout_marginTop="6dp"
                     android:visibility="gone" />
@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Total a pagar: Bs 0,00" />
+                    android:text="@string/order_total_to_pay_sample" />
             </LinearLayout>
 
         </LinearLayout>

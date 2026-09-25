@@ -72,7 +72,7 @@
                             android:id="@+id/tv_detail_order_id"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="#NIN-0001"
+                            android:text="@string/default_sample_order_id"
                             android:textColor="@color/white"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -81,7 +81,7 @@
                             android:id="@+id/tv_detail_status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pendiente"
+                            android:text="@string/order_status_pending"
                             android:paddingHorizontal="10dp"
                             android:paddingVertical="4dp"
                             android:background="@drawable/bg_badge_new"
@@ -96,7 +96,7 @@
                         android:id="@+id/tv_detail_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="23/09/2026"
+                        android:text="@string/default_sample_date"
                         android:textColor="@color/white"
                         android:alpha="0.85"
                         android:textSize="13sp"
@@ -124,7 +124,7 @@
                         style="@style/NintecBodyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Estado del pedido"
+                        android:text="@string/order_status_title"
                         android:textStyle="bold"
                         android:layout_marginBottom="12dp" />
 
@@ -145,7 +145,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pedido recibido"
+                            android:text="@string/order_status_received"
                             android:layout_marginStart="12dp"
                             android:textColor="@color/text_primary" />
                     </LinearLayout>
@@ -167,7 +167,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Confirmado"
+                            android:text="@string/order_status_confirmed"
                             android:layout_marginStart="12dp"
                             android:textColor="@color/text_hint" />
                     </LinearLayout>
@@ -189,7 +189,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="En preparación"
+                            android:text="@string/order_status_in_preparation"
                             android:layout_marginStart="12dp"
                             android:textColor="@color/text_hint" />
                     </LinearLayout>
@@ -210,7 +210,7 @@
                             style="@style/NintecSmallText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Finalizado"
+                            android:text="@string/order_status_completed"
                             android:layout_marginStart="12dp"
                             android:textColor="@color/text_hint" />
                     </LinearLayout>
@@ -239,7 +239,7 @@
                         style="@style/NintecBodyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sucursal"
+                        android:text="@string/order_branch_title"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
 
@@ -280,7 +280,7 @@
                         style="@style/NintecBodyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pago"
+                        android:text="@string/order_payment_title"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
 
@@ -338,7 +338,7 @@
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Subtotal"
+                        android:text="@string/subtotal_label"
                         android:textColor="@color/text_secondary"
                         android:layout_alignParentStart="true" />
                     <TextView
@@ -360,7 +360,7 @@
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Descuento"
+                        android:text="@string/order_discount_label"
                         android:textColor="@color/success"
                         android:layout_alignParentStart="true" />
                     <TextView
@@ -395,7 +395,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="22sp"
-                        android:text="Bs 2.499,00"
+                        android:text="@string/default_sample_price_2499"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true" />
                 </RelativeLayout>
@@ -423,7 +423,7 @@
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📝 Notas"
+                        android:text="@string/order_notes_header"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary" />
 

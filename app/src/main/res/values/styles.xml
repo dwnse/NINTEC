@@ -75,6 +75,7 @@
     </style>
 
     <style name="NintecSubtitleText">
+
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textSize">@dimen/text_size_subtitle</item>
         <item name="android:textStyle">bold</item>

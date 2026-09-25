@@ -26,7 +26,7 @@
                 style="@style/NintecSubtitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre Sucursal" />
+                android:text="@string/default_branch_name_sample" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Dirección detallada aquí" />
+                    android:text="@string/default_branch_address_placeholder" />
             </LinearLayout>
 
             <LinearLayout
@@ -65,7 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="09:00 - 20:00" />
+                    android:text="@string/default_branch_schedule" />
             </LinearLayout>
 
             <Button

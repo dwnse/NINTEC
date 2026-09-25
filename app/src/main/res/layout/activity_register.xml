@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Crea tu cuenta para comenzar"
+                    android:text="@string/register_subtitle"
                     android:textColor="@color/text_secondary" />
             </LinearLayout>
 

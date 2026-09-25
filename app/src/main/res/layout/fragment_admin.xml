@@ -29,7 +29,7 @@
             style="@style/NintecSubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Panel Administrativo NINTEC"
+            android:text="@string/admin_screen_title"
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
@@ -66,14 +66,14 @@
                         style="@style/NintecSubtitleText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Consola de Gestión NINTEC"
+                        android:text="@string/admin_console_title"
                         android:textColor="@color/white" />
 
                     <TextView
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Administra el catálogo, imágenes, banners, sucursales y sincronización en tiempo real."
+                        android:text="@string/admin_console_desc"
                         android:textColor="@color/white"
                         android:alpha="0.85"
                         android:layout_marginTop="4dp" />
@@ -110,14 +110,14 @@
                         style="@style/NintecBodyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Gestionar Productos"
+                        android:text="@string/admin_manage_products"
                         android:textStyle="bold" />
 
                     <TextView
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Editar artículos, precios, stock y fotos"
+                        android:text="@string/admin_products_desc"
                         android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
@@ -159,14 +159,14 @@
                         style="@style/NintecBodyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Gestionar Categorías"
+                        android:text="@string/admin_manage_categories"
                         android:textStyle="bold" />
 
                     <TextView
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Clasificación de productos y etiquetas"
+                        android:text="@string/admin_categories_desc"
                         android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
@@ -208,14 +208,14 @@
                         style="@style/NintecBodyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Gestionar Sucursales"
+                        android:text="@string/admin_manage_branches"
                         android:textStyle="bold" />
 
                     <TextView
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ubicaciones, teléfonos y horarios"
+                        android:text="@string/admin_branches_desc"
                         android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
@@ -257,14 +257,14 @@
                         style="@style/NintecBodyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hero Banners del Inicio"
+                        android:text="@string/admin_hero_banners"
                         android:textStyle="bold" />
 
                     <TextView
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Banners promocionales de pantalla principal"
+                        android:text="@string/admin_banners_desc"
                         android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
@@ -306,14 +306,14 @@
                         style="@style/NintecBodyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ofertas Especiales y Destacados"
+                        android:text="@string/admin_special_offers"
                         android:textStyle="bold" />
 
                     <TextView
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Artículos en oferta temporal y portada"
+                        android:text="@string/admin_offers_desc"
                         android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
@@ -355,7 +355,7 @@
                         style="@style/NintecBodyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Abrir Panel Web Completo"
+                        android:text="@string/admin_open_web_panel"
                         android:textColor="@color/nintec_blue"
                         android:textStyle="bold" />
 
@@ -363,7 +363,7 @@
                         style="@style/NintecSmallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Consola en navegador (http://localhost:3000)"
+                        android:text="@string/admin_browser_console"
                         android:textColor="@color/text_secondary" />
                 </LinearLayout>
 

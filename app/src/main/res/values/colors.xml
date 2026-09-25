@@ -3,7 +3,7 @@
     <!-- Colores base e históricos para compatibilidad -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red">#1846D7</color> <!-- Mantener por compatibilidad con código existente -->
+    <color name="red">#1846D7</color>
 
     <!-- Paleta Oficial NINTECLP -->
     <color name="nintec_blue">#1846D7</color>

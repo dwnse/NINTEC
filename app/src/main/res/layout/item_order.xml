@@ -24,7 +24,7 @@
                 style="@style/NintecBodyText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pedido #NIN-0001"
+                android:text="@string/sample_order_number_title"
                 android:textStyle="bold"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true" />
@@ -34,7 +34,7 @@
                 style="@style/NintecSmallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Finalizado"
+                android:text="@string/order_status_completed"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="3dp"
                 android:background="@drawable/bg_badge_success"
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="MacBook Pro + 2 más"
+            android:text="@string/default_sample_order_summary"
             android:textColor="@color/text_secondary"
             android:ellipsize="end"
             android:maxLines="1" />
@@ -69,7 +69,7 @@
                 style="@style/NintecSmallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="23/09/2026"
+                android:text="@string/default_sample_date"
                 android:textColor="@color/text_secondary"
                 android:textSize="11sp" />
 
@@ -78,7 +78,7 @@
                 style="@style/NintecSmallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="• Central"
+                android:text="@string/order_bullet_branch_central"
                 android:textColor="@color/nintec_blue"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -90,7 +90,7 @@
                 style="@style/NintecSmallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="• QR"
+                android:text="@string/order_bullet_payment_qr"
                 android:textColor="@color/text_hint"
                 android:textSize="11sp"
                 android:layout_marginStart="8dp" />
@@ -121,7 +121,7 @@
                 style="@style/NintecPriceText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bs 2.499,00"
+                android:text="@string/default_sample_price_2499"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true" />
         </RelativeLayout>

@@ -30,7 +30,7 @@
             style="@style/NintecSubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gestionar Productos"
+            android:text="@string/admin_manage_products"
             android:layout_centerInParent="true" />
     </RelativeLayout>
 

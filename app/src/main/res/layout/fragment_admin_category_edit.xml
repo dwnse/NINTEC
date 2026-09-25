@@ -31,7 +31,7 @@
             style="@style/NintecSubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Editar Categoría"
+            android:text="@string/admin_edit_category"
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
@@ -51,7 +51,7 @@
                 style="@style/NintecSmallText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre de la Categoría" />
+                android:text="@string/admin_label_category_name" />
 
             <EditText
                 android:id="@+id/edt_category_name"
@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Slug" />
+                android:text="@string/admin_label_slug" />
 
             <EditText
                 android:id="@+id/edt_category_slug"
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Nombre del Icono" />
+                android:text="@string/admin_label_icon_name" />
 
             <EditText
                 android:id="@+id/edt_category_icon_name"
@@ -93,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Orden de clasificación" />
+                android:text="@string/admin_label_sort_order" />
 
             <EditText
                 android:id="@+id/edt_category_sort_order"
@@ -107,7 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="URL de Imagen" />
+                android:text="@string/admin_label_image_url" />
 
             <EditText
                 android:id="@+id/edt_category_image_url"
@@ -120,7 +120,7 @@
                 android:id="@+id/btn_pick_category_image"
                 style="@style/NintecSecondaryButton"
                 android:layout_marginTop="8dp"
-                android:text="Seleccionar Imagen de Galería" />
+                android:text="@string/admin_select_gallery_image" />
 
             <ImageView
                 android:id="@+id/img_category_preview"
@@ -136,7 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Está Activa"
+                android:text="@string/admin_label_is_active_cat"
                 android:checked="true" />
 
         </LinearLayout>
@@ -147,7 +147,7 @@
         style="@style/NintecPrimaryButton"
         android:layout_width="0dp"
         android:layout_margin="@dimen/screen_horizontal_margin"
-        android:text="Guardar Cambios"
+        android:text="@string/btn_save_changes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

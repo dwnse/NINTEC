@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:textColor="@color/text_primary"
-                android:text="usuario" />
+                android:text="@string/profile_default_username" />
 
             <TextView
                 android:id="@+id/tv_profile_role"
@@ -166,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
-                android:text="Panel Administrativo"
+                android:text="@string/admin_panel_title"
                 android:textStyle="bold"
                 android:textColor="@color/nintec_blue" />
 

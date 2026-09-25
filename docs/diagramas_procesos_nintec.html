@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NINTEC - Diagramas de Flujo ANSI/ISO por Procesos del Sistema</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Mermaid.js for Vector Flowcharts -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --nintec-blue: #1846D7;
+            --nintec-blue-dark: #0D2D94;
+            --nintec-blue-light: #EEF3FF;
+            --nintec-cyan: #00B4D8;
+            --nintec-emerald: #10B981;
+            --nintec-amber: #F59E0B;
+            --nintec-purple: #8B5CF6;
+            --nintec-rose: #F43F5E;
+            --bg-page: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --border-color: #E2E8F0;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-md: 12px;
+            --radius-lg: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Top Header */
+        header {
+            background: linear-gradient(135deg, #0B1938 0%, #1846D7 100%);
+            color: #FFFFFF;
+            padding: 36px 24px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        header .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 15px;
+            color: #E2E8F0;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Actions Bar / Filter Buttons */
+        .controls-bar {
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--border-color);
+            position: relative; /* Se queda arriba fijo al inicio, NO baja al hacer scroll */
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-filter {
+            background: #F1F5F9;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-filter:hover {
+            background: var(--nintec-blue-light);
+            color: var(--nintec-blue);
+            border-color: var(--nintec-blue);
+        }
+
+        .btn-filter.active {
+            background: var(--nintec-blue);
+            color: #FFFFFF;
+            border-color: var(--nintec-blue);
+        }
+
+        .btn-action {
+            background: #0F172A;
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-action:hover {
+            background: #1E293B;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 28px 20px;
+        }
+
+        /* ANSI/ISO Legend Card */
+        .legend-card {
+            background: #FFFFFF;
+            border: 2px solid #E2E8F0;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .legend-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .legend-header h3 {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--nintec-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .legend-item {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .legend-symbol-box {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Symbol SVG Shapes */
+        .shape-oval {
+            width: 40px;
+            height: 22px;
+            border: 2px solid var(--nintec-blue);
+            border-radius: 12px;
+            background: var(--nintec-blue-light);
+        }
+
+        .shape-rect {
+            width: 40px;
+            height: 24px;
+            border: 2px solid #334155;
+            border-radius: 2px;
+            background: #F1F5F9;
+        }
+
+        .shape-parallelogram {
+            width: 38px;
+            height: 22px;
+            border: 2px solid var(--nintec-emerald);
+            background: #ECFDF5;
+            transform: skewX(-20deg);
+        }
+
+        .shape-diamond {
+            width: 26px;
+            height: 26px;
+            border: 2px solid var(--nintec-amber);
+            background: #FEF3C7;
+            transform: rotate(45deg);
+        }
+
+        .shape-circle {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--nintec-purple);
+            border-radius: 50%;
+            background: #EDE9FE;
+        }
+
+        .shape-document {
+            width: 36px;
+            height: 24px;
+            border: 2px solid var(--nintec-rose);
+            background: #FFE4E6;
+            border-bottom: 2px dashed var(--nintec-rose);
+            border-radius: 2px 2px 8px 2px;
+        }
+
+        .legend-info h5 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .legend-info p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Process Section Card */
+        .process-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .process-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            padding: 22px 28px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .card-title-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .process-number {
+            width: 44px;
+            height: 44px;
+            background: var(--nintec-blue-light);
+            color: var(--nintec-blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            border: 1px solid rgba(24, 70, 215, 0.2);
+            flex-shrink: 0;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .card-header p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .system-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .tag-mobile { background: #DBEAFE; color: #1E40AF; }
+        .tag-admin { background: #D1FAE5; color: #065F46; }
+        .tag-backend { background: #EDE9FE; color: #5B21B6; }
+        .tag-payment { background: #FEF3C7; color: #92400E; }
+
+        /* Card Content */
+        .card-body {
+            padding: 28px;
+        }
+
+        /* Flowchart Container */
+        .diagram-wrapper {
+            background: #FAFBFD;
+            border: 1px solid #EDF2F7;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        .diagram-wrapper .mermaid {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Explanatory Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .detail-box {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .detail-box h4 {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .detail-box ul {
+            list-style: none;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .detail-box ul li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 6px;
+        }
+
+        .detail-box ul li::before {
+            content: "•";
+            color: var(--nintec-blue);
+            font-weight: bold;
+            font-size: 16px;
+            position: absolute;
+            left: 4px;
+            top: -2px;
+        }
+
+        .code-pill {
+            font-family: 'JetBrains Mono', monospace;
+            background: #E2E8F0;
+            color: #0F172A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+            background: #FFFFFF;
+        }
+
+        /* Print Mode */
+        @media print {
+            .controls-bar, #btn-show-controls { display: none !important; }
+            .process-card { break-inside: avoid; border: 1px solid #000; box-shadow: none; margin-bottom: 24px; }
+            body { background: #FFFFFF; }
+            header { padding: 20px; background: #0B1938; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="badge">Arquitectura de Software NINTEC</div>
+        <h1>Diagramas de Flujo y Procesos del Sistema</h1>
+        <p>Estandarizado con Simbología Oficial ANSI / ISO 5807 (Inicio/Fin, Procesos, Entrada/Salida, Decisiones, Conectores y Documentos).</p>
+    </header>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+        <div class="filter-group">
+            <button class="btn-filter active" onclick="filterProcess('all')">Todos los Procesos (7)</button>
+            <button class="btn-filter" onclick="filterProcess('proc-0')">0. Arquitectura Global</button>
+            <button class="btn-filter" onclick="filterProcess('proc-1')">1. Autenticación & RBAC</button>
+            <button class="btn-filter" onclick="filterProcess('proc-2')">2. Catálogo & Compras</button>
+            <button class="btn-filter" onclick="filterProcess('proc-3')">3. Carrito de Compras</button>
+            <button class="btn-filter" onclick="filterProcess('proc-4')">4. Checkout & Pagos</button>
+            <button class="btn-filter" onclick="filterProcess('proc-5')">5. Ciclo de Pedidos</button>
+            <button class="btn-filter" onclick="filterProcess('proc-6')">6. Sucursales & Mapa</button>
+            <button class="btn-filter" onclick="filterProcess('proc-7')">7. Panel Admin Web</button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-action" style="background: #334155;" onclick="toggleCleanCapture()" title="Oculta la barra de botones para tomar capturas 100% limpias">
+                📷 Ocultar Barra (Capturas)
+            </button>
+            <button class="btn-action" onclick="window.print()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2m-8 0v4h8v-4m-8-4h.01"/></svg>
+                Imprimir / PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating button to restore controls if hidden -->
+    <button id="btn-show-controls" onclick="toggleCleanCapture()" style="display: none; position: fixed; top: 16px; right: 16px; z-index: 9999; background: #1846D7; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+        👁️ Mostrar Barra de Controles
+    </button>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Navigation Switcher Card -->
+        <div style="background: linear-gradient(90deg, #EEF3FF 0%, #FAFBFD 100%); border: 1px solid #D8E4FF; border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px;">
+            <p style="font-size: 13px; color: #1E40AF; font-weight: 600; margin: 0;">⚡ ¿Deseas ver los <strong>Diagramas de Secuencia UML</strong> del Sistema?</p>
+            <a href="diagramas_secuencia_nintec.html" style="background: #1846D7; color: #FFFFFF; padding: 7px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                Ver Diagramas de Secuencia
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+        <!-- GUÍA DE SIMBOLOGÍA ANSI/ISO -->
+        <div class="legend-card">
+            <div class="legend-header">
+                <h3>📌 Guía de Simbología Oficial Utilizada (Norma ANSI / ISO 5807)</h3>
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">ESTÁNDAR DE INGENIERÍA DE SOFTWARE</span>
+            </div>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-symbol-box"><div class="shape-oval"></div></div>
+                    <div class="legend-info">
+                        <h5>Inicio / Fin</h5>
+                        <p>Óvalo: Punto de arranque y término de cada flujo.</p>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol-box"><div class="shape-rect"></div></div>
+                    <div class="legend-info">
+                        <h5>Proceso / Acción</h5>
+                        <p>Rectángulo: Operación interna, función o cálculo.</p>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol-box"><div class="shape-parallelogram"></div></div>
+                    <div class="legend-info">
+                        <h5>Entrada / Salida (I/O)</h5>
+                        <p>Paralelogramo: Datos ingresados por usuario o mostrados en pantalla.</p>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol-box"><div class="shape-diamond"></div></div>
+                    <div class="legend-info">
+                        <h5>Decisión</h5>
+                        <p>Rombo: Condición lógica o bifurcación (Sí / No).</p>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol-box"><div class="shape-document"></div></div>
+                    <div class="legend-info">
+                        <h5>Documento / Reporte</h5>
+                        <p>Documento: Comprobantes de pago, recibos y órdenes.</p>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol-box"><div class="shape-circle"></div></div>
+                    <div class="legend-info">
+                        <h5>Conector</h5>
+                        <p>Círculo: Enlaza ramas o etapas dentro de la misma vista.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESO 0: ARQUITECTURA GLOBAL -->
+        <div class="process-card" id="proc-0">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="process-number">0</div>
+                    <div>
+                        <h2>Arquitectura Global End-to-End del Ecosistema NINTEC</h2>
+                        <p>Estructura cliente-servidor con App Android, Consola Web React, Supabase Cloud y Pasarelas de Pago.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">Android App</span>
+                    <span class="tag tag-admin">Admin Web</span>
+                    <span class="tag tag-backend">Supabase REST</span>
+                    <span class="tag tag-payment">Gateway Pagos</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+flowchart TB
+    subgraph CLIENT_LAYER["CAPA CLIENTE"]
+        subgraph MOB["App Móvil NINTEC - Java Android SDK"]
+            M_HOME["Home y Catálogo"]
+            M_CART["CartManager Local y Cache"]
+            M_CHECKOUT["Módulo Checkout 3 Métodos"]
+            M_ORDERS["Historial de Pedidos con Filtros"]
+            M_PROFILE["Perfil y RBAC (@usuario + Rol)"]
+        end
+
+        subgraph WEB["Consola Administrativa Web - React Vite"]
+            W_DASH["Dashboard y Métricas"]
+            W_PROD["Gestión CRUD Productos"]
+            W_CAT["Gestión CRUD Categorías"]
+            W_ORD["Gestión y Cambio de Estados Pedidos"]
+            W_BAN["Gestión Hero Banners"]
+        end
+    end
+
+    subgraph BACKEND_LAYER["CAPA BACKEND Y PERSISTENCIA - Supabase Cloud"]
+        AUTH["Supabase Auth JWT y Roles"]
+        REST["PostgREST API /rest/v1"]
+        STORAGE["Supabase Storage Buckets"]
+
+        subgraph DB["PostgreSQL Database"]
+            T_USERS["users (id, username, email, role)"]
+            T_PRODS["products (sku, name, price, stock, is_featured)"]
+            T_CATS["categories (name, slug, icon_name, is_active)"]
+            T_ORDERS["orders (id, user_id, branch_id, status, total)"]
+            T_ITEMS["order_items (id, order_id, product_id, quantity, unit_price)"]
+            T_BRANCHES["branches (name, address, schedule, lat, lng)"]
+            T_BANNERS["banners (title, image_url, is_active, display_order)"]
+        end
+    end
+
+    subgraph EXTERNAL["SERVICIOS EXTERNOS"]
+        EXT_MAPS["Google Maps Intent - Geolocalización"]
+        EXT_PAY["Pasarelas y Procesadores - Tarjeta, QR, PayPal"]
+    end
+
+    %% Conexiones Móvil
+    M_HOME -->|GET /products, /categories, /banners| REST
+    M_CHECKOUT -->|POST /orders, /order_items| REST
+    M_CHECKOUT -->|Valida Pago| EXT_PAY
+    M_ORDERS -->|GET /orders?user_id=eq.uuid| REST
+    M_PROFILE -->|Autenticación| AUTH
+    M_HOME -.->|Abre Coordenadas| EXT_MAPS
+
+    %% Conexiones Web
+    WEB -->|Auth Admin| AUTH
+    WEB -->|CRUD REST APIs| REST
+    W_PROD -->|Upload Fotos| STORAGE
+    W_BAN -->|Upload Banners| STORAGE
+
+    %% Backend Internals
+    REST --> DB
+    AUTH --> T_USERS
+    REST --> T_PRODS
+    REST --> T_CATS
+    REST --> T_ORDERS
+    REST --> T_ITEMS
+    REST --> T_BRANCHES
+    REST --> T_BANNERS
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Componentes Clave</h4>
+                        <ul>
+                            <li><span class="code-pill">App Móvil</span>: MVVM con Fragments, Retrofit/OkHttp, SharedPreferences + Gson.</li>
+                            <li><span class="code-pill">Consola Web</span>: React 18, Vite, TailwindCSS, Supabase JS Client.</li>
+                            <li><span class="code-pill">Base de Datos</span>: PostgreSQL con UUID v4, RLS y triggers automáticos.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Mecanismo de Tolerancia a Fallos</h4>
+                        <ul>
+                            <li>Doble capa: Sincronización en la nube + almacenamiento local automático.</li>
+                            <li>Validación estricta de UUID en <span class="code-pill">OrderRepository</span> antes de consultas REST.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESO 1: AUTENTICACIÓN Y ROLES (RBAC) -->
+        <div class="process-card" id="proc-1">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="process-number">1</div>
+                    <div>
+                        <h2>Proceso 1: Autenticación, Registro y Control de Acceso (RBAC)</h2>
+                        <p>Diagrama estandarizado: Entradas de usuario, validaciones, token JWT y bifurcación de rol (@usuario y badge).</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">LoginActivity</span>
+                    <span class="tag tag-mobile">RegisterActivity</span>
+                    <span class="tag tag-backend">Supabase Auth</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+flowchart TD
+    START(["Inicio: Usuario abre App NINTEC"]) --> CHECK_TOKEN{"¿Existe sesión en SharedPreferences?"}
+    
+    CHECK_TOKEN -- Sí --> GET_USER["Leer token JWT y rol guardado"]
+    GET_USER --> ROLE_DISPATCH{"¿Qué rol tiene el usuario?"}
+    
+    CHECK_TOKEN -- No --> SHOW_LOGIN[/"Salida: Pantalla de Login Full-Screen estática"/]
+    
+    SHOW_LOGIN --> USER_ACTION{"¿Qué acción realiza el usuario?"}
+    
+    USER_ACTION -- "Ingresar Credenciales" --> INPUT_LOGIN[/"Entrada: Usuario escribe Email y Contraseña"/]
+    INPUT_LOGIN --> VAL_LOGIN{"¿Formato de email y contraseña válidos?"}
+    VAL_LOGIN -- No --> ERR_LOGIN[/"Salida: Mostrar alerta de formato inválido"/]
+    ERR_LOGIN --> SHOW_LOGIN
+    
+    VAL_LOGIN -- Sí --> API_LOGIN["Proceso: POST a Supabase Auth /token"]
+    API_LOGIN --> AUTH_RES{"¿Credenciales correctas?"}
+    AUTH_RES -- No --> ERR_AUTH[/"Salida: Mostrar 'Credenciales Incorrectas'"/]
+    ERR_AUTH --> SHOW_LOGIN
+    
+    AUTH_RES -- Sí --> SAVE_SESSION["Proceso: Guardar JWT y User en SharedPreferences"]
+    SAVE_SESSION --> GET_PROFILE["Proceso: Consultar registro en tabla users"]
+    GET_PROFILE --> ROLE_DISPATCH
+    
+    USER_ACTION -- "Registrarse" --> SHOW_REG[/"Salida: Pantalla de Registro Full-Screen"/]
+    SHOW_REG --> INPUT_REG[/"Entrada: Usuario escribe Nombre, Email y Contraseña"/]
+    INPUT_REG --> VAL_REG{"¿Campos completos y Contraseña de al menos 6 caracteres?"}
+    VAL_REG -- No --> ERR_REG[/"Salida: Mostrar error 'Mínimo 6 caracteres'"/]
+    ERR_REG --> SHOW_REG
+    
+    VAL_REG -- Sí --> API_SIGNUP["Proceso: POST a Supabase Auth /signup"]
+    API_SIGNUP --> DB_USER_INS["Proceso: INSERT en tabla users con role = 'cliente'"]
+    DB_USER_INS --> SAVE_SESSION
+    
+    ROLE_DISPATCH -- "cliente" --> HOME_CLIENT[/"Salida: Renderizar Home del Cliente con Catálogo y Carrito"/]
+    ROLE_DISPATCH -- "admin o super_admin" --> ADMIN_VIEW[/"Salida: Habilitar Acceso al Panel Administrativo y Enlace Web"/]
+    
+    HOME_CLIENT --> PROFILE_VIEW[/"Salida: Pantalla Perfil mostrando exclusivamente @usuario y Badge de Rol"/]
+    ADMIN_VIEW --> PROFILE_VIEW
+    
+    PROFILE_VIEW --> END_AUTH(["Fin: Sesión iniciada y autorizada"])
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Simbología ANSI Aplicada</h4>
+                        <ul>
+                            <li><span class="code-pill">Óvalos</span>: Inicio de la aplicación y Fin de sesión autorizada.</li>
+                            <li><span class="code-pill">Paralelogramos</span>: Formularios de entrada (email, password) y vistas renderizadas en pantalla.</li>
+                            <li><span class="code-pill">Rombos</span>: Comprobaciones de token, formato de contraseña y rol.</li>
+                            <li><span class="code-pill">Rectángulos</span>: Llamadas API a Supabase Auth e inserción en PostgreSQL.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Reglas de Negocio</h4>
+                        <ul>
+                            <li>Pantallas a pantalla completa estática con <span class="code-pill">overScrollMode="never"</span>.</li>
+                            <li>La tarjeta de perfil muestra exclusivamente el nombre de usuario (<span class="code-pill">@username</span>) y la etiqueta del rol (<span class="code-pill">Cliente</span>, <span class="code-pill">Administrador</span>).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESO 2: CATÁLOGO Y COMPRA DIRECTA VS CARRITO -->
+        <div class="process-card" id="proc-2">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="process-number">2</div>
+                    <div>
+                        <h2>Proceso 2: Descubrimiento de Productos, Catálogo y Doble Acción de Compra</h2>
+                        <p>Diagrama estandarizado: Búsqueda, selector de cantidad interactivo y bifurcación entre 'Añadir al Carrito' y 'Compra Directa'.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">HomeFragment</span>
+                    <span class="tag tag-mobile">CatalogFragment</span>
+                    <span class="tag tag-mobile">ProductDetailFragment</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+flowchart TD
+    START_NAV(["Inicio: Cliente en HomeFragment"]) --> DISP_HOME[/"Salida: Renderizar Hero Banners, Categorías y Ofertas"/]
+    
+    DISP_HOME --> USER_BROWSE{"¿Cómo busca el cliente?"}
+    
+    USER_BROWSE -- "Clic en Categoría" --> FILTER_CAT["Proceso: Filtrar productos por category_id"]
+    USER_BROWSE -- "Buscador de Texto" --> INPUT_QUERY[/"Entrada: Usuario escribe término en SearchView"/]
+    INPUT_QUERY --> FILTER_TEXT["Proceso: Filtrar por coincidencia de nombre o SKU"]
+    
+    FILTER_CAT --> DISP_CATALOG[/"Salida: Renderizar Catálogo con Tarjetas de Producto"/]
+    FILTER_TEXT --> DISP_CATALOG
+    
+    DISP_CATALOG --> CARD_CHOICE{"¿Qué botón presiona en la tarjeta?"}
+    CARD_CHOICE -- "Icono Carrito" --> QUICK_CART["Proceso: CartManager.addToCart con cantidad 1"]
+    QUICK_CART --> TOAST_QUICK[/"Salida: Mostrar Toast confirmando adición y animar badge superior"/]
+    TOAST_QUICK --> DISP_CATALOG
+    
+    CARD_CHOICE -- "Botón Comprar o Clic en Tarjeta" --> LOAD_DETAIL["Proceso: Cargar Producto en ProductDetailFragment"]
+    
+    LOAD_DETAIL --> DISP_DETAIL[/"Salida: Mostrar Galería, Descripción, Especificaciones y Stock"/]
+    DISP_DETAIL --> INPUT_QTY[/"Entrada: Usuario interactúa con selector (- 1 +)"/]
+    
+    INPUT_QTY --> CHECK_STOCK_LIMIT{"¿Cantidad solicitada menor o igual al stock disponible?"}
+    CHECK_STOCK_LIMIT -- No --> WARN_STOCK[/"Salida: Limitar al stock máximo disponible"/]
+    WARN_STOCK --> INPUT_QTY
+    
+    CHECK_STOCK_LIMIT -- Sí --> CALC_TOTAL["Proceso: Recalcular Total = Cantidad x Precio"]
+    CALC_TOTAL --> DISP_TOTAL[/"Salida: Actualizar tv_bottom_total_price en tiempo real"/]
+    
+    DISP_TOTAL --> ACTION_DECISION{"¿Qué botón presiona?"}
+    
+    ACTION_DECISION -- "Añadir al Carrito" --> EXEC_ADD_CART["Proceso: CartManager.addToCart con cantidad seleccionada"]
+    EXEC_ADD_CART --> ANIM_BADGE[/"Salida: Animar badge superior de carrito y mostrar Toast de éxito"/]
+    ANIM_BADGE --> CONN_STAY((1))
+    CONN_STAY --> DISP_DETAIL
+    
+    ACTION_DECISION -- "Compra Directa" --> EXEC_BUY_NOW["Proceso: CartManager.addToCart + Navegación Express"]
+    EXEC_BUY_NOW --> GOTO_PAYMENT[/"Salida: Abrir inmediatamente PaymentMethodFragment"/]
+    GOTO_PAYMENT --> END_PURCHASE(["Fin: Transición directa a Pasarela de Pago"])
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Simbología ANSI Aplicada</h4>
+                        <ul>
+                            <li><span class="code-pill">Óvalos</span>: Inicio en pantalla principal y Fin en pasarela de checkout.</li>
+                            <li><span class="code-pill">Paralelogramos</span>: Entrada de texto en buscador, selección de cantidad <span class="code-pill">(- 1 +)</span> y toasts de confirmación.</li>
+                            <li><span class="code-pill">Rombos</span>: Decisión de búsqueda, validación de stock y elección de botón.</li>
+                            <li><span class="code-pill">Círculo ((1))</span>: Conector que retorna el control a la pantalla de detalle.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Lógica de Negocio</h4>
+                        <ul>
+                            <li><span class="code-pill">Añadir al Carrito</span>: No redirige, no interrumpe la navegación. Permite seguir comprando.</li>
+                            <li><span class="code-pill">Compra Directa</span>: Convierte en 1 solo clic llevando directo a pagar.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESO 3: CARRITO DE COMPRAS -->
+        <div class="process-card" id="proc-3">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="process-number">3</div>
+                    <div>
+                        <h2>Proceso 3: Gestión del Carrito de Compras (CartManager)</h2>
+                        <p>Diagrama estandarizado: Operaciones de modificación de unidades, validación de stock y recálculo reactivo.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">CartManager</span>
+                    <span class="tag tag-mobile">CartFragment</span>
+                    <span class="tag tag-mobile">CartAdapter</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+flowchart TD
+    START_CART(["Inicio: Operación en Carrito"]) --> OP_TYPE{"¿Tipo de operación?"}
+    
+    OP_TYPE -- "Añadir Producto" --> CHECK_EXISTS{"¿El ítem ya existe en el carrito?"}
+    CHECK_EXISTS -- No --> CREATE_ITEM["Proceso: Crear nuevo CartItem con cantidad"]
+    CHECK_EXISTS -- Sí --> CHECK_STOCK{"¿Cantidad total menor o igual al stock disponible?"}
+    
+    CHECK_STOCK -- No --> ALERT_MAX[/"Salida: Mostrar alerta 'Stock máximo disponible alcanzado'"/]
+    ALERT_MAX --> CONN_RECALC((C))
+    
+    CHECK_STOCK -- Sí --> SUM_QTY["Proceso: Incrementar cantidad en el CartItem"]
+    SUM_QTY --> CONN_RECALC
+    CREATE_ITEM --> CONN_RECALC
+    
+    OP_TYPE -- "Modificar Cantidad" --> INPUT_MOD[/"Entrada: Usuario presiona botones (+ o -) en item_cart"/]
+    INPUT_MOD --> VAL_ZERO{"¿Nueva cantidad mayor a 0?"}
+    VAL_ZERO -- Sí --> UPDATE_UNITS["Proceso: item.setQuantity con nuevo valor"]
+    VAL_ZERO -- No --> REMOVE_ITEM["Proceso: Eliminar CartItem de la lista"]
+    UPDATE_UNITS --> CONN_RECALC
+    REMOVE_ITEM --> CONN_RECALC
+    
+    OP_TYPE -- "Eliminar Producto" --> REMOVE_DIRECT["Proceso: cartItems.remove con confirmación"]
+    REMOVE_DIRECT --> CONN_RECALC
+    
+    CONN_RECALC --> RECALC_MATH["Proceso: 1. Subtotal = Suma precio x cantidad<br/>2. Calcular descuentos aplicables<br/>3. Total General en Bs"]
+    RECALC_MATH --> SAVE_CACHE["Proceso: Serializar con Gson y persistir en SharedPreferences"]
+    
+    SAVE_CACHE --> CHECK_EMPTY{"¿Carrito tiene 0 productos?"}
+    CHECK_EMPTY -- Sí --> SHOW_EMPTY[/"Salida: Renderizar vista de 'Tu carrito está vacío' con botón de catálogo"/]
+    SHOW_EMPTY --> END_CART(["Fin: Carrito actualizado"])
+    
+    CHECK_EMPTY -- No --> DISP_CART_VIEW[/"Salida: Renderizar lista de productos y botón 'Proceder Pedido'"/]
+    DISP_CART_VIEW --> USER_CHECKOUT{"¿Usuario presiona 'Proceder Pedido'?"}
+    USER_CHECKOUT -- Sí --> OPEN_CHECKOUT[/"Salida: Transición a PaymentMethodFragment"/]
+    USER_CHECKOUT -- No --> END_CART
+    OPEN_CHECKOUT --> END_CART
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Simbología ANSI Aplicada</h4>
+                        <ul>
+                            <li><span class="code-pill">Óvalos</span>: Inicio de la operación y Fin de actualización.</li>
+                            <li><span class="code-pill">Paralelogramos</span>: Entrada de botones <span class="code-pill">(+)</span> / <span class="code-pill">(-)</span> y salidas visuales (pantalla de carrito vacío, listado).</li>
+                            <li><span class="code-pill">Rombos</span>: Comprobaciones de existencia previa, disponibilidad de stock y vaciado.</li>
+                            <li><span class="code-pill">Círculo ((C))</span>: Conector que unifica todas las operaciones hacia el cálculo matemático único.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Persistencia Segura</h4>
+                        <ul>
+                            <li>El estado del carrito se mantiene en memoria y se guarda automáticamente en caché local ante cierres inesperados.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESO 4: CHECKOUT Y MÉTODOS DE PAGO -->
+        <div class="process-card" id="proc-4">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="process-number">4</div>
+                    <div>
+                        <h2>Proceso 4: Checkout, Selección de Método de Pago y Creación de Pedido</h2>
+                        <p>Diagrama estandarizado: Formularios de pago, comprobante digital de pedido y persistencia en Supabase.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-payment">PaymentMethodFragment</span>
+                    <span class="tag tag-mobile">OrderRepository</span>
+                    <span class="tag tag-backend">orders & order_items</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+flowchart TD
+    START_CHECKOUT(["Inicio: Entrada a PaymentMethodFragment"]) --> DISP_TOTAL[/"Salida: Mostrar Total a Pagar en Bs"/]
+    
+    DISP_TOTAL --> PAY_METHOD{"¿Qué método de pago elige?"}
+    
+    PAY_METHOD -- "Tarjeta de Crédito o Débito" --> FORM_CARD[/"Entrada: Usuario ingresa Número de Tarjeta, Vencimiento, CVV y Titular"/]
+    FORM_CARD --> VAL_CARD{"¿Todos los campos de tarjeta válidos?"}
+    VAL_CARD -- No --> ERR_CARD[/"Salida: Marcar campos requeridos con error"/]
+    ERR_CARD --> FORM_CARD
+    VAL_CARD -- Sí --> CONN_PAY((P))
+    
+    PAY_METHOD -- "Código QR" --> DISP_QR[/"Salida: Mostrar Código QR Oficial NINTEC y Cuenta Comercial"/]
+    DISP_QR --> FORM_QR[/"Entrada: Usuario escribe Código Referencia de Pago y Banco Emisor"/]
+    FORM_QR --> VAL_QR{"¿Referencia ingresada?"}
+    VAL_QR -- No --> ERR_QR[/"Salida: Requerir código de referencia"/]
+    ERR_QR --> FORM_QR
+    VAL_QR -- Sí --> CONN_PAY
+    
+    PAY_METHOD -- "PayPal" --> DISP_PP[/"Salida: Mostrar Instrucciones a ninteclp@paypal.com"/]
+    DISP_PP --> FORM_PP[/"Entrada: Usuario ingresa Correo PayPal y ID de Transacción"/]
+    FORM_PP --> VAL_PP{"¿ID de transacción ingresado?"}
+    VAL_PP -- No --> ERR_PP[/"Salida: Requerir ID de transacción"/]
+    ERR_PP --> FORM_PP
+    VAL_PP -- Sí --> CONN_PAY
+    
+    CONN_PAY --> SELECT_BRANCH[/"Entrada: Usuario selecciona Sucursal física de retiro: Central, Calacoto o El Alto"/]
+    SELECT_BRANCH --> INPUT_NOTES[/"Entrada: Usuario escribe Notas Adicionales opcionales"/]
+    
+    INPUT_NOTES --> BTN_CONFIRM{"¿Presiona 'Confirmar y Pagar'?"}
+    BTN_CONFIRM -- Sí --> ORDER_BUILD["Proceso: OrderRepository genera objeto Order con items y UUID"]
+    
+    ORDER_BUILD --> VAL_UUID{"¿El user_id es un UUID válido de Supabase?"}
+    
+    VAL_UUID -- Sí --> POST_SUPABASE["Proceso: HTTP POST a /rest/v1/orders y /rest/v1/order_items"]
+    POST_SUPABASE --> HTTP_RES{"¿Respuesta 201 Created?"}
+    HTTP_RES -- Sí --> SAVE_LOCAL_COPY["Proceso: Guardar copia sincronizada en SharedPreferences"]
+    HTTP_RES -- No --> SAVE_OFFLINE_CACHE["Proceso: Guardar orden en Caché Local Dual Offline"]
+    
+    VAL_UUID -- No --> SAVE_OFFLINE_CACHE
+    
+    SAVE_LOCAL_COPY --> FLUSH_CART["Proceso: CartManager.clearCart para vaciar carrito"]
+    SAVE_OFFLINE_CACHE --> FLUSH_CART
+    
+    FLUSH_CART --> DOC_RECEIPT>"📄 Comprobante Digital de Pedido No. NIN-XXXX"]
+    DOC_RECEIPT --> DISP_CONFIRM[/"Salida: Renderizar OrderConfirmationFragment con detalles del pedido"/]
+    
+    DISP_CONFIRM --> END_ORDER(["Fin: Pedido creado exitosamente en estado 'Pendiente'"])
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Simbología ANSI Aplicada</h4>
+                        <ul>
+                            <li><span class="code-pill">Óvalos</span>: Inicio del checkout y Fin con pedido registrado.</li>
+                            <li><span class="code-pill">Paralelogramos</span>: Formularios de tarjeta, referencia bancaria QR, ID de PayPal, sucursales y notas.</li>
+                            <li><span class="code-pill">Rombos</span>: Selección de método, validaciones de campos y comprobación de UUID.</li>
+                            <li><span class="code-pill">Símbolo de Documento</span>: <span class="code-pill">Comprobante Digital de Pedido No. NIN-XXXX</span> generado al finalizar.</li>
+                            <li><span class="code-pill">Círculo ((P))</span>: Conector que une los 3 métodos de pago validados.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Tolerancia a Fallos</h4>
+                        <ul>
+                            <li>Validación de UUID evita el error 400 de PostgreSQL y activa la caché local si el usuario no tiene UUID remoto.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESO 5: CICLO DE VIDA DE PEDIDOS Y SEGUIMIENTO -->
+        <div class="process-card" id="proc-5">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="process-number">5</div>
+                    <div>
+                        <h2>Proceso 5: Ciclo de Vida del Pedido, Filtros y Seguimiento</h2>
+                        <p>Diagrama estandarizado: Fases de preparación, documentos de despacho, factura y filtros en tiempo real.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">OrderHistoryFragment</span>
+                    <span class="tag tag-mobile">OrderDetailFragment</span>
+                    <span class="tag tag-admin">Admin OrdersView</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+flowchart TD
+    START_LIFECYCLE(["Inicio: Pedido recién creado por el cliente"]) --> DOC_NEW_ORDER>"📄 Orden de Compra No. NIN-XXXX generada"]
+    
+    DOC_NEW_ORDER --> STATE_PENDING["Proceso: Estado 1 - Pendiente / pending en base de datos"]
+    
+    STATE_PENDING --> ADMIN_CHECK{"¿Admin valida comprobante de pago QR, Tarjeta o PayPal?"}
+    
+    ADMIN_CHECK -- "Pago Rechazado o Inválido" --> STATE_CANCELLED["Proceso: Estado Cancelado / cancelled"]
+    STATE_CANCELLED --> NOTIFY_CANCEL[/"Salida: Notificar motivo de cancelación al cliente en app"/]
+    NOTIFY_CANCEL --> END_CANCEL(["Fin: Pedido Cancelado"])
+    
+    ADMIN_CHECK -- "Pago Verificado" --> STATE_CONFIRMED["Proceso: Estado 2 - Confirmado / confirmed"]
+    STATE_CONFIRMED --> NOTIFY_CONFIRM[/"Salida: Actualizar timeline a 'Confirmado' en App Móvil"/]
+    
+    NOTIFY_CONFIRM --> DOC_PACKING_SLIP>"📄 Hoja de Despacho y Empaque de Almacén"]
+    DOC_PACKING_SLIP --> STATE_PREP["Proceso: Estado 3 - En preparación / in_preparation en sucursal"]
+    
+    STATE_PREP --> BRANCH_DISPATCH{"¿Cliente retira en sucursal o recibe por delivery?"}
+    
+    BRANCH_DISPATCH -- "Entrega Realizada" --> STATE_COMPLETED["Proceso: Estado 4 - Finalizado / completed"]
+    STATE_COMPLETED --> DOC_INVOICE>"📄 Factura Comercial y Recibo de Entrega Final"]
+    
+    DOC_INVOICE --> NOTIFY_FINAL[/"Salida: Mostrar estado 'Finalizado' y archivar en historial"/]
+    NOTIFY_FINAL --> END_SUCCESS(["Fin: Ciclo de vida del pedido completado con éxito"])
+                    </pre>
+                </div>
+                <div class="diagram-wrapper" style="margin-top: 20px;">
+                    <pre class="mermaid">
+flowchart TD
+    START_HISTORY(["Inicio: Cliente abre Historial de Pedidos"]) --> LOAD_DATA["Proceso: OrderRepository.getUserOrders"]
+    
+    LOAD_DATA --> DISP_ORDERS[/"Salida: Renderizar lista de tarjetas de pedidos con filtros"/]
+    
+    DISP_ORDERS --> FILTER_SELECTION{"¿Usuario aplica filtros?"}
+    FILTER_SELECTION -- "Filtro Estado" --> APPLY_ST_FILTER[/"Entrada: Clic en Todos, Pendientes, Finalizados o Cancelados"/]
+    FILTER_SELECTION -- "Filtro Sucursal" --> APPLY_BR_FILTER[/"Entrada: Clic en Central, Calacoto o El Alto"/]
+    
+    APPLY_ST_FILTER --> FILTER_EXEC["Proceso: Filtrado en memoria de la lista"]
+    APPLY_BR_FILTER --> FILTER_EXEC
+    
+    FILTER_EXEC --> DISP_FILTERED[/"Salida: Actualizar RecyclerView y contador dinámico de pedidos"/]
+    
+    DISP_FILTERED --> CLICK_ORDER{"¿Usuario hace clic en un pedido?"}
+    CLICK_ORDER -- Sí --> LOAD_DETAIL["Proceso: Obtener detalle y productos asociados"]
+    
+    LOAD_DETAIL --> DISP_ORDER_DETAIL[/"Salida: Renderizar OrderDetailFragment con Timeline de 4 estados, lista de productos y desglose financiero"/]
+    
+    CLICK_ORDER -- No --> END_HIST(["Fin: Consulta de historial"])
+    DISP_ORDER_DETAIL --> END_HIST
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Simbología ANSI Aplicada</h4>
+                        <ul>
+                            <li><span class="code-pill">Óvalos</span>: Puntos de inicio y fin del ciclo de vida.</li>
+                            <li><span class="code-pill">Símbolos de Documento</span>: <span class="code-pill">Orden de Compra</span>, <span class="code-pill">Hoja de Despacho</span> y <span class="code-pill">Factura Comercial</span>.</li>
+                            <li><span class="code-pill">Paralelogramos</span>: Entradas de filtros seleccionados por el cliente y vistas de seguimiento.</li>
+                            <li><span class="code-pill">Rombos</span>: Validación administrativa de pagos, verificación de entrega física y selección de filtros.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Sincronización Multicanal</h4>
+                        <ul>
+                            <li>Cuando el administrador actualiza el estado en la web, la app móvil refleja el cambio automáticamente en el timeline visual de 4 pasos.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESO 6: SUCURSALES Y MAPA DINÁMICO -->
+        <div class="process-card" id="proc-6">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="process-number">6</div>
+                    <div>
+                        <h2>Proceso 6: Consulta de Sucursales y Navegación con Mapa Dinámico</h2>
+                        <p>Diagrama estandarizado: Permisos de ubicación en tiempo de ejecución, consulta de puntos de venta y apertura de mapas.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">BranchesFragment</span>
+                    <span class="tag tag-mobile">LocationPermission</span>
+                    <span class="tag tag-backend">branches</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+flowchart TD
+    START_BRANCHES(["Inicio: Cliente abre pantalla Sucursales"]) --> CHECK_PERM{"¿Permiso ACCESS_FINE_LOCATION concedido?"}
+    
+    CHECK_PERM -- No --> REQ_DIALOG[/"Salida: Diálogo del sistema Android solicitando permiso de ubicación"/]
+    REQ_DIALOG --> USER_RESPONSE{"¿Usuario concede el permiso?"}
+    USER_RESPONSE -- Sí --> GET_GPS["Proceso: FusedLocationProviderClient obtiene coordenadas GPS del cliente"]
+    USER_RESPONSE -- No --> SET_DEFAULT_GPS["Proceso: Asignar coordenadas predeterminadas de La Paz Centro"]
+    
+    CHECK_PERM -- Sí --> GET_GPS
+    
+    GET_GPS --> CONN_LOC((L))
+    SET_DEFAULT_GPS --> CONN_LOC
+    
+    CONN_LOC --> FETCH_BRANCHES["Proceso: Consultar sucursales activas en Supabase tabla branches"]
+    FETCH_BRANCHES --> DISP_BRANCH_LIST[/"Salida: Renderizar tarjetas de sucursales con dirección, horarios y teléfonos"/]
+    
+    DISP_BRANCH_LIST --> USER_CHOICE{"¿Qué acción realiza el cliente?"}
+    
+    USER_CHOICE -- "Clic en Teléfono" --> INTENT_CALL["Proceso: Crear Intent ACTION_DIAL con número telefónico"]
+    INTENT_CALL --> OPEN_DIALER[/"Salida: Abrir app de Teléfono con número marcado"/]
+    OPEN_DIALER --> END_BRANCHES(["Fin: Acción completada"])
+    
+    USER_CHOICE -- "Clic en Ver en mapa" --> BUILD_GEO["Proceso: Construir URI nativa geo con etiqueta de sucursal"]
+    BUILD_GEO --> CHECK_MAPS_APP{"¿Aplicación Google Maps instalada en el dispositivo?"}
+    
+    CHECK_MAPS_APP -- Sí --> LAUNCH_MAPS_APP[/"Salida: Abrir Google Maps con trazado de ruta hacia la sucursal"/]
+    CHECK_MAPS_APP -- No --> LAUNCH_BROWSER[/"Salida: Abrir ubicación de la sucursal en el Navegador Web"/]
+    
+    LAUNCH_MAPS_APP --> END_BRANCHES
+    LAUNCH_BROWSER --> END_BRANCHES
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Simbología ANSI Aplicada</h4>
+                        <ul>
+                            <li><span class="code-pill">Óvalos</span>: Inicio al abrir sucursales y Fin de la navegación.</li>
+                            <li><span class="code-pill">Paralelogramos</span>: Diálogo de permiso del sistema, lista de tarjetas y apertura de Google Maps / Marcador telefónico.</li>
+                            <li><span class="code-pill">Rombos</span>: Comprobación de permiso, decisión del usuario y existencia de Google Maps instalado.</li>
+                            <li><span class="code-pill">Círculo ((L))</span>: Conector que unifica las coordenadas reales y por defecto.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Robustez</h4>
+                        <ul>
+                            <li>La aplicación nunca se cuelga si se rechaza el permiso de ubicación; continúa operando con las coordenadas de la sede central.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESO 7: PANEL ADMINISTRATIVO WEB -->
+        <div class="process-card" id="proc-7">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="process-number">7</div>
+                    <div>
+                        <h2>Proceso 7: Panel Administrativo Web y Gestión Centralizada (CRUD)</h2>
+                        <p>Diagrama estandarizado: Autenticación de administradores, gestión de catálogo con imágenes en Storage y actualización de pedidos.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-admin">Admin Web</span>
+                    <span class="tag tag-backend">Supabase Storage</span>
+                    <span class="tag tag-backend">CRUD REST</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+flowchart TD
+    START_ADMIN(["Inicio: Administrador ingresa a Consola Web"]) --> INPUT_ADMIN_CREDS[/"Entrada: Admin escribe correo y contraseña en login"/]
+    
+    INPUT_ADMIN_CREDS --> AUTH_ADMIN["Proceso: Supabase Auth valida credenciales"]
+    AUTH_ADMIN --> CHECK_ADMIN_ROLE{"¿Usuario tiene rol admin o super_admin?"}
+    
+    CHECK_ADMIN_ROLE -- No --> DENY_ACCESS[/"Salida: Mostrar pantalla 'Acceso Denegado por Políticas RLS'"/]
+    DENY_ACCESS --> END_DENIED(["Fin: Acceso bloqueado"])
+    
+    CHECK_ADMIN_ROLE -- Sí --> DISP_DASHBOARD[/"Salida: Renderizar Dashboard con KPIs de ventas, productos y pedidos"/]
+    
+    DISP_DASHBOARD --> SELECT_ADMIN_VIEW{"¿Qué módulo administra?"}
+    
+    %% GESTIÓN PRODUCTOS
+    SELECT_ADMIN_VIEW -- "Productos" --> DISP_PRODUCTS[/"Salida: Vista de tabla de productos con buscador y stock"/]
+    DISP_PRODUCTS --> PROD_ACTION{"¿Acción en productos?"}
+    PROD_ACTION -- "Nuevo o Editar" --> FORM_PROD[/"Entrada: Admin llena Nombre, SKU, Precio, Stock y Categoría"/]
+    FORM_PROD --> CHECK_NEW_IMG{"¿Selecciona nuevo archivo de imagen?"}
+    
+    CHECK_NEW_IMG -- Sí --> UPLOAD_STORAGE["Proceso: Subir binario a Supabase Storage bucket 'product-images'"]
+    UPLOAD_STORAGE --> GET_PUBLIC_URL["Proceso: Generar Public CDN URL de la imagen"]
+    GET_PUBLIC_URL --> CONN_SAVE_PROD((S))
+    CHECK_NEW_IMG -- No --> CONN_SAVE_PROD
+    
+    CONN_SAVE_PROD --> DB_SAVE_PROD["Proceso: INSERT o UPDATE en tabla products con datos y URL"]
+    DB_SAVE_PROD --> DOC_CATALOG_SYNC>"📄 Catálogo General Actualizado"]
+    DOC_CATALOG_SYNC --> REFRESH_CATALOG[/"Salida: Reflejo instantáneo en Catálogo de la App Móvil Android"/]
+    REFRESH_CATALOG --> END_ADMIN(["Fin: Operación Administrativa Completada"])
+    
+    %% GESTIÓN PEDIDOS
+    SELECT_ADMIN_VIEW -- "Pedidos" --> DISP_ORDERS_ADMIN[/"Salida: Vista Kanban o Tabla de pedidos de clientes"/]
+    DISP_ORDERS_ADMIN --> SELECT_ORDER_STATUS[/"Entrada: Admin cambia estado a Confirmado, En Preparación o Finalizado"/]
+    SELECT_ORDER_STATUS --> DB_UPDATE_ORDER["Proceso: HTTP PATCH /rest/v1/orders actualizando columna status"]
+    DB_UPDATE_ORDER --> SYNC_MOBILE_APP[/"Salida: Notificación y actualización inmediata en el celular del cliente"/]
+    SYNC_MOBILE_APP --> END_ADMIN
+    
+    %% GESTIÓN BANNERS
+    SELECT_ADMIN_VIEW -- "Banners" --> FORM_BANNER[/"Entrada: Admin sube foto de banner e ingresa título y orden"/]
+    FORM_BANNER --> UPLOAD_BANNER_STORAGE["Proceso: Upload a bucket 'banners' + INSERT en tabla banners"]
+    UPLOAD_BANNER_STORAGE --> SYNC_HOME_BANNER[/"Salida: Banner publicado en carrusel de HomeFragment"/]
+    SYNC_HOME_BANNER --> END_ADMIN
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Simbología ANSI Aplicada</h4>
+                        <ul>
+                            <li><span class="code-pill">Óvalos</span>: Inicio de sesión administrativa y Fin de operaciones.</li>
+                            <li><span class="code-pill">Paralelogramos</span>: Entrada de credenciales, formularios de productos, selección de estados de pedidos y vistas de dashboard.</li>
+                            <li><span class="code-pill">Rombos</span>: Verificación de rol con políticas RLS, decisión de módulo y carga de imagen.</li>
+                            <li><span class="code-pill">Símbolo de Documento</span>: <span class="code-pill">Catálogo General Actualizado</span> sincronizado con la nube.</li>
+                            <li><span class="code-pill">Círculo ((S))</span>: Conector que unifica el flujo con o sin imagen hacia el guardado en base de datos.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Almacenamiento y CDN</h4>
+                        <ul>
+                            <li>Los buckets <span class="code-pill">product-images</span> y <span class="code-pill">banners</span> gestionan los binarios, y PostgreSQL guarda exclusivamente las URLs CDN optimizadas.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>NINTEC E-Commerce & Systems Platform</strong> • Documentación Técnica Oficial de Procesos y Diagramas de Flujo ANSI/ISO</p>
+        <p style="margin-top: 6px; font-size: 12px; color: #94A3B8;">Diseñado y estandarizado con símbolos oficiales para capturas de pantalla, manuales técnicos y sustentación de arquitectura.</p>
+    </footer>
+
+    <!-- Interactive Script -->
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#EEF3FF',
+                primaryTextColor: '#0F172A',
+                primaryBorderColor: '#1846D7',
+                lineColor: '#1846D7',
+                secondaryColor: '#FAFBFD',
+                tertiaryColor: '#FFFFFF',
+                fontFamily: 'Plus Jakarta Sans',
+                fontSize: '13px'
+            },
+            flowchart: {
+                curve: 'basis',
+                nodeSpacing: 45,
+                rankSpacing: 45
+            }
+        });
+
+        // Filter Process Function
+        function filterProcess(procId) {
+            const cards = document.querySelectorAll('.process-card');
+            const buttons = document.querySelectorAll('.btn-filter');
+
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (procId === 'all') {
+                cards.forEach(card => card.style.display = 'block');
+            } else {
+                cards.forEach(card => {
+                    if (card.id === procId) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // Toggle Clean Capture Mode
+        function toggleCleanCapture() {
+            const bar = document.querySelector('.controls-bar');
+            const showBtn = document.getElementById('btn-show-controls');
+            if (bar.style.display === 'none') {
+                bar.style.display = 'flex';
+                showBtn.style.display = 'none';
+            } else {
+                bar.style.display = 'none';
+                showBtn.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

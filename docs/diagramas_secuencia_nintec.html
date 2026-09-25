@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NINTEC - Diagramas de Secuencia UML de Todo el Sistema</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Mermaid.js for Vector Sequence Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --nintec-blue: #1846D7;
+            --nintec-blue-dark: #0D2D94;
+            --nintec-blue-light: #EEF3FF;
+            --nintec-cyan: #00B4D8;
+            --nintec-emerald: #10B981;
+            --nintec-amber: #F59E0B;
+            --nintec-purple: #8B5CF6;
+            --nintec-rose: #F43F5E;
+            --bg-page: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --border-color: #E2E8F0;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-md: 12px;
+            --radius-lg: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Top Header */
+        header {
+            background: linear-gradient(135deg, #0B1938 0%, #1846D7 100%);
+            color: #FFFFFF;
+            padding: 36px 24px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        header .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 15px;
+            color: #E2E8F0;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Actions Bar / Filter Buttons */
+        .controls-bar {
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--border-color);
+            position: relative; /* Se queda arriba fijo al inicio, NO baja al hacer scroll */
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-filter {
+            background: #F1F5F9;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-filter:hover {
+            background: var(--nintec-blue-light);
+            color: var(--nintec-blue);
+            border-color: var(--nintec-blue);
+        }
+
+        .btn-filter.active {
+            background: var(--nintec-blue);
+            color: #FFFFFF;
+            border-color: var(--nintec-blue);
+        }
+
+        .btn-action {
+            background: #0F172A;
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background: #1E293B;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 28px 20px;
+        }
+
+        /* Banner Switcher to Flowcharts */
+        .switcher-card {
+            background: linear-gradient(90deg, #EEF3FF 0%, #FAFBFD 100%);
+            border: 1px solid #D8E4FF;
+            border-radius: var(--radius-md);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .switcher-card p {
+            font-size: 13px;
+            color: #1E40AF;
+            font-weight: 600;
+        }
+
+        .btn-link-flow {
+            background: var(--nintec-blue);
+            color: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-link-flow:hover {
+            opacity: 0.9;
+        }
+
+        /* Sequence Section Card */
+        .seq-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .seq-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            padding: 22px 28px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .card-title-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .seq-number {
+            width: 44px;
+            height: 44px;
+            background: var(--nintec-blue-light);
+            color: var(--nintec-blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            border: 1px solid rgba(24, 70, 215, 0.2);
+            flex-shrink: 0;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .card-header p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .system-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .tag-mobile { background: #DBEAFE; color: #1E40AF; }
+        .tag-admin { background: #D1FAE5; color: #065F46; }
+        .tag-backend { background: #EDE9FE; color: #5B21B6; }
+        .tag-payment { background: #FEF3C7; color: #92400E; }
+
+        /* Card Content */
+        .card-body {
+            padding: 28px;
+        }
+
+        /* Sequence Wrapper */
+        .diagram-wrapper {
+            background: #FFFFFF;
+            border: 1px solid #EDF2F7;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        .diagram-wrapper .mermaid {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Explanatory Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .detail-box {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .detail-box h4 {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .detail-box ul {
+            list-style: none;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .detail-box ul li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 6px;
+        }
+
+        .detail-box ul li::before {
+            content: "•";
+            color: var(--nintec-blue);
+            font-weight: bold;
+            font-size: 16px;
+            position: absolute;
+            left: 4px;
+            top: -2px;
+        }
+
+        .code-pill {
+            font-family: 'JetBrains Mono', monospace;
+            background: #E2E8F0;
+            color: #0F172A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+            background: #FFFFFF;
+        }
+
+        /* Print Mode */
+        @media print {
+            .controls-bar, #btn-show-controls, .switcher-card { display: none !important; }
+            .seq-card { break-inside: avoid; border: 1px solid #000; box-shadow: none; margin-bottom: 24px; }
+            body { background: #FFFFFF; }
+            header { padding: 20px; background: #0B1938; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="badge">Arquitectura de Software NINTEC • Diagramas UML</div>
+        <h1>Diagramas de Secuencia de Todo el Sistema</h1>
+        <p>Interacciones cronológicas y pasaje de mensajes entre Actores, Interfaz Android, Lógica de Negocio, Supabase PostgREST y Consola Web.</p>
+    </header>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+        <div class="filter-group">
+            <button class="btn-filter active" onclick="filterSeq('all')">Todos los Diagramas (8)</button>
+            <button class="btn-filter" onclick="filterSeq('seq-troncal')">Troncal: Compra & Despacho</button>
+            <button class="btn-filter" onclick="filterSeq('seq-auth')">1. Autenticación & RBAC</button>
+            <button class="btn-filter" onclick="filterSeq('seq-catalog')">2. Catálogo & Búsqueda</button>
+            <button class="btn-filter" onclick="filterSeq('seq-cart')">3. Carrito (CartManager)</button>
+            <button class="btn-filter" onclick="filterSeq('seq-checkout')">4. Checkout & Pagos</button>
+            <button class="btn-filter" onclick="filterSeq('seq-orders')">5. Ciclo de Vida Pedidos</button>
+            <button class="btn-filter" onclick="filterSeq('seq-branch')">6. Sucursales & GPS</button>
+            <button class="btn-filter" onclick="filterSeq('seq-admin')">7. Panel Admin & Storage</button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-action" style="background: #334155;" onclick="toggleCleanCapture()" title="Oculta la barra de botones para tomar capturas 100% limpias">
+                📷 Ocultar Barra (Capturas)
+            </button>
+            <button class="btn-action" onclick="window.print()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2m-8 0v4h8v-4m-8-4h.01"/></svg>
+                Imprimir / PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating button to restore controls if hidden -->
+    <button id="btn-show-controls" onclick="toggleCleanCapture()" style="display: none; position: fixed; top: 16px; right: 16px; z-index: 9999; background: #1846D7; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+        👁️ Mostrar Barra de Controles
+    </button>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Navigation Switcher Card -->
+        <div class="switcher-card">
+            <p>🔄 ¿Deseas ver los <strong>Diagramas de Flujo por Procesos (ANSI/ISO)</strong>?</p>
+            <a href="diagramas_procesos_nintec.html" class="btn-link-flow">
+                Ver Diagramas de Flujo
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+        <!-- DIAGRAMA TRONCAL: COMPRA Y DESPACHO END-TO-END -->
+        <div class="seq-card" id="seq-troncal">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="seq-number">★</div>
+                    <div>
+                        <h2>Diagrama Troncal: Flujo Completo End-to-End de Compra y Despacho</h2>
+                        <p>Interacción completa desde la selección de producto en Android hasta la confirmación y entrega gestionada por el Administrador en la Web.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">App Android</span>
+                    <span class="tag tag-payment">Checkout 3 Métodos</span>
+                    <span class="tag tag-backend">Supabase REST</span>
+                    <span class="tag tag-admin">Admin Web</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor C as Cliente (Android)
+    participant UI as ProductDetailFragment
+    participant CM as CartManager (Singleton)
+    participant PAY as PaymentMethodFragment
+    participant REPO as OrderRepository
+    participant SUPA as Supabase PostgREST
+    participant DB as PostgreSQL (orders, items)
+    participant WEB as Consola Web (OrdersView)
+    actor ADM as Administrador (Web)
+
+    %% 1. Selección y Compra Directa
+    C->>UI: Ajusta cantidad (- 1 +) y presiona "Compra Directa"
+    UI->>CM: addToCart(product, quantity)
+    CM-->>UI: Stock validado y cantidad agregada
+    UI->>PAY: Navegación inmediata a PaymentMethodFragment
+    
+    %% 2. Checkout
+    C->>PAY: Selecciona Método de Pago (Tarjeta / QR / PayPal) y Sucursal
+    C->>PAY: Presiona "Confirmar y Pagar"
+    PAY->>REPO: createOrder(orderData, items)
+    
+    %% 3. Validación y Persistencia
+    REPO->>REPO: Validar formato UUID del usuario autenticado
+    alt UUID Válido (Usuario Registrado en Supabase)
+        REPO->>SUPA: POST /rest/v1/orders (user_id, total, branch_id, status='pending')
+        SUPA->>DB: INSERT INTO orders
+        DB-->>SUPA: 201 Created (order_id UUID)
+        REPO->>SUPA: POST /rest/v1/order_items (order_id, product_id, qty, unit_price)
+        SUPA->>DB: INSERT INTO order_items
+        DB-->>SUPA: 201 Created
+        REPO-->>PAY: Confirmación de orden registrada en la nube + Cache Local
+    else Usuario Offline o Mock
+        REPO->>REPO: Guardar orden en SharedPreferences con ID local generado
+        REPO-->>PAY: Confirmación de orden respaldada en Cache Local Dual
+    end
+
+    PAY->>CM: clearCart()
+    PAY-->>C: Renderiza OrderConfirmationFragment con Comprobante Digital
+
+    %% 4. Consola Administrativa
+    Note over ADM,WEB: Recepción y Despacho en Consola Web
+    WEB->>SUPA: GET /orders?status=eq.pending
+    SUPA-->>WEB: Lista de nuevos pedidos entrantes
+    ADM->>WEB: Revisa comprobante y cambia estado a "confirmed"
+    WEB->>SUPA: PATCH /orders?id=eq.uuid (status='confirmed')
+    SUPA->>DB: UPDATE orders SET status = 'confirmed'
+
+    %% 5. Notificación y Seguimiento en Cliente
+    Note over C,UI: Seguimiento en Tiempo Real en App Móvil
+    C->>UI: Abre Historial de Pedidos (OrderDetailFragment)
+    UI->>REPO: getUserOrders(userId)
+    REPO->>SUPA: GET /orders?user_id=eq.uuid
+    SUPA-->>REPO: Retorna pedido con status = 'confirmed'
+    REPO-->>UI: Actualiza Timeline visual de 4 pasos a "Confirmado"
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Mensajes y Llamadas Clave</h4>
+                        <ul>
+                            <li><span class="code-pill">addToCart(p, q)</span>: Ejecución síncrona en memoria con validación de stock.</li>
+                            <li><span class="code-pill">POST /orders</span> y <span class="code-pill">POST /order_items</span>: Persistencia relacional atómica en Supabase.</li>
+                            <li><span class="code-pill">PATCH /orders</span>: Actualización reactiva de estado por el administrador.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Tolerancia a Fallos</h4>
+                        <ul>
+                            <li>Manejo de rama alternativa (<span class="code-pill">alt</span>) para usuarios con identificador local evitando errores HTTP 400.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 1: AUTENTICACIÓN Y CONTROL DE ACCESO (RBAC) -->
+        <div class="seq-card" id="seq-auth">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="seq-number">1</div>
+                    <div>
+                        <h2>Diagrama de Secuencia 1: Autenticación, Registro y Control de Acceso (RBAC)</h2>
+                        <p>Ciclo de vida del Login en pantalla completa estática, validaciones locales, autenticación JWT y asignación de rol.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">LoginActivity</span>
+                    <span class="tag tag-mobile">SessionManager</span>
+                    <span class="tag tag-backend">Supabase Auth</span>
+                    <span class="tag tag-backend">Tabla users</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor U as Usuario
+    participant UI as LoginActivity (Full-Screen)
+    participant SM as SessionManager (SharedPreferences)
+    participant AUTH as Supabase Auth API (/token)
+    participant DB as PostgreSQL (Tabla users)
+    participant HOME as MainActivity (HomeFragment)
+
+    U->>UI: Abre la aplicación
+    UI->>SM: isLoggedIn()
+    alt Ya existe sesión activa
+        SM-->>UI: Retorna true + Token JWT + Rol guardado
+        UI->>HOME: Redirige directamente al Home
+    else No existe sesión
+        SM-->>UI: Retorna false
+        UI-->>U: Renderiza pantalla de Login estática (sin scroll rebotante)
+        
+        U->>UI: Escribe Email y Contraseña, pulsa "Ingresar"
+        UI->>UI: Validar campos no vacíos y formato email
+        
+        alt Campos inválidos
+            UI-->>U: Muestra mensaje de error en TextInputLayout
+        else Campos válidos
+            UI->>AUTH: POST /auth/v1/token?grant_type=password
+            alt Credenciales Incorrectas (HTTP 400)
+                AUTH-->>UI: Error: Invalid login credentials
+                UI-->>U: Muestra Toast "Credenciales incorrectas"
+            else Credenciales Válidas (HTTP 200)
+                AUTH-->>UI: Retorna access_token JWT + user_id UUID
+                UI->>DB: GET /rest/v1/users?id=eq.user_id
+                DB-->>UI: Retorna { id, username, email, role: 'cliente' | 'admin' }
+                UI->>SM: saveUserSession(token, user_id, username, role)
+                SM-->>UI: Sesión almacenada exitosamente
+                UI->>HOME: Inicia MainActivity
+                HOME-->>U: Muestra Perfil con @username y Badge de Rol
+            end
+        end
+    end
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Participantes del Proceso</h4>
+                        <ul>
+                            <li><span class="code-pill">LoginActivity</span>: Vista nativa a pantalla completa estática con <span class="code-pill">overScrollMode="never"</span>.</li>
+                            <li><span class="code-pill">SessionManager</span>: Persistencia de claves de sesión en almacenamiento privado seguro.</li>
+                            <li><span class="code-pill">Supabase Auth</span>: Emisión de JSON Web Tokens (JWT) firmados.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Control de Roles (RBAC)</h4>
+                        <ul>
+                            <li>El rol obtenido de la tabla <span class="code-pill">users</span> determina el acceso al menú administrativo y el color del badge en el perfil.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 2: CATÁLOGO, BÚSQUEDA Y FALLBACK OFFLINE -->
+        <div class="seq-card" id="seq-catalog">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="seq-number">2</div>
+                    <div>
+                        <h2>Diagrama de Secuencia 2: Catálogo, Búsqueda Reactiva y Sincronización</h2>
+                        <p>Carga de categorías y banners, búsqueda por texto en tiempo real, filtrado de stock y fallback offline con Gson.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">HomeFragment</span>
+                    <span class="tag tag-mobile">CatalogFragment</span>
+                    <span class="tag tag-mobile">ProductRepository</span>
+                    <span class="tag tag-backend">Cache / Supabase REST</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant HOME as HomeFragment
+    participant CAT as CatalogFragment
+    participant REPO as ProductRepository
+    participant CACHE as SharedPreferences (Cache Gson)
+    participant API as Supabase REST (/products, /categories)
+
+    C->>HOME: Abre pestaña de Inicio
+    HOME->>REPO: getFeaturedProducts() y getHeroBanners()
+    REPO->>API: GET /rest/v1/banners?active=eq.true
+    alt Conexión Exitosa
+        API-->>REPO: Lista de banners y productos destacados (JSON)
+        REPO->>CACHE: saveBannersCache(json) y saveProductsCache(json)
+        REPO-->>HOME: Carga carrusel y ofertas
+    else Falla de Red / Sin Conexión
+        REPO->>CACHE: getCachedProducts()
+        CACHE-->>REPO: Retorna datos previamente almacenados
+        REPO-->>HOME: Renderiza productos en modo offline
+    end
+
+    C->>HOME: Toca chip de categoría "Laptops"
+    HOME->>CAT: Navega a CatalogFragment(categoryId)
+    CAT->>REPO: getProductsByCategory(categoryId)
+    REPO-->>CAT: Retorna productos filtrados con stock y precios
+    CAT-->>C: Renderiza lista en RecyclerView
+
+    C->>CAT: Escribe "ASUS" en el SearchView
+    CAT->>CAT: Aplica filtro reactivo en adapter (filterList)
+    CAT-->>C: Actualiza tarjetas mostrando solo coincidencias
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Mecanismo de Resiliencia</h4>
+                        <ul>
+                            <li>Arquitectura <span class="code-pill">Cache-First con Network-Sync</span>: Primero responde la memoria y luego actualiza en segundo plano.</li>
+                            <li>La búsqueda local en el adapter no genera peticiones innecesarias al servidor, garantizando 60 FPS de fluidez.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Filtros Interactivos</h4>
+                        <ul>
+                            <li>Soporte de chips horizontales de categorías con selección única y botón de limpieza de filtros.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 3: CARRITO DE COMPRAS CARTMANAGER -->
+        <div class="seq-card" id="seq-cart">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="seq-number">3</div>
+                    <div>
+                        <h2>Diagrama de Secuencia 3: Gestión del Carrito de Compras (CartManager Singleton)</h2>
+                        <p>Adición rápida, incremento/decremento, control estricto de límite de stock y recálculo matemático de totales.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">CartManager</span>
+                    <span class="tag tag-mobile">CartFragment</span>
+                    <span class="tag tag-mobile">ProductDetailFragment</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant PROD as ProductDetailFragment
+    participant CM as CartManager (Singleton)
+    participant PREF as SharedPreferences (Cache Local)
+    participant CART_UI as CartFragment (Mi Carrito)
+
+    C->>PROD: Presiona botón "Añadir al Carrito" (cantidad seleccionada = 2)
+    PROD->>CM: addToCart(product, 2)
+    
+    CM->>CM: verifyStockLimit(product.id, currentQty + 2, stockQuantity)
+    alt Cantidad supera stock disponible
+        CM-->>PROD: Retorna false (Stock insuficiente)
+        PROD-->>C: Muestra Toast "Stock máximo disponible alcanzado"
+    else Stock suficiente
+        CM->>CM: actualiza lista interna de CartItems
+        CM->>CM: recalculateTotals() -> subtotal, discount, total
+        CM->>PREF: persistCartToDisk(Gson.toJson(cartItems))
+        CM-->>PROD: Retorna true
+        PROD-->>C: Ejecuta animación de badge superior y Toast de confirmación
+        Note over PROD,C: El cliente permanece en la misma pantalla sin redirección
+    end
+
+    C->>CART_UI: Abre pestaña "Mi Carrito"
+    CART_UI->>CM: getCartItems() y getTotalPrice()
+    CM-->>CART_UI: Retorna lista y total calculado en Bs
+    CART_UI-->>C: Muestra lista de ítems, selector (- 1 +) y total a pagar
+
+    C->>CART_UI: Presiona botón (-) en un producto con cantidad 1
+    CART_UI->>CM: updateQuantity(productId, 0)
+    CM->>CM: Elimina el ítem de la lista
+    CM->>CM: recalculateTotals()
+    CM->>PREF: persistCartToDisk()
+    CM-->>CART_UI: Notifica lista actualizada
+    CART_UI-->>C: Muestra empty state "Tu carrito está vacío" si no quedan productos
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Manejo de Estado en Memoria</h4>
+                        <ul>
+                            <li><span class="code-pill">CartManager</span> actúa como única fuente de la verdad (Single Source of Truth) para el carrito.</li>
+                            <li>La barra inferior y el badge superior se actualizan reactivamente al disparar eventos.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Persistencia en Disco</h4>
+                        <ul>
+                            <li>Cualquier cambio se serializa a JSON de forma asíncrona para que no se pierdan compras al apagar el celular.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 4: CHECKOUT Y MÉTODOS DE PAGO -->
+        <div class="seq-card" id="seq-checkout">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="seq-number">4</div>
+                    <div>
+                        <h2>Diagrama de Secuencia 4: Checkout Multi-Método y Persistencia Dual</h2>
+                        <p>Validación de formularios de Tarjeta, QR y PayPal, asignación de sucursal física, validación de UUID e inserción en Supabase.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-payment">PaymentMethodFragment</span>
+                    <span class="tag tag-mobile">OrderRepository</span>
+                    <span class="tag tag-backend">orders & order_items</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant UI as PaymentMethodFragment
+    participant REPO as OrderRepository
+    participant SUPA as Supabase REST (/orders, /order_items)
+    participant CM as CartManager
+    participant CONF as OrderConfirmationFragment
+
+    C->>UI: Selecciona método de pago
+    alt Tarjeta de Crédito / Débito
+        C->>UI: Ingresa número de tarjeta, vencimiento (MM/AA), CVV y titular
+        UI->>UI: Validar número de 16 dígitos y CVV
+    else Código QR
+        UI-->>C: Muestra imagen oficial QR y cuenta comercial NINTEC
+        C->>UI: Ingresa código de referencia de pago y banco emisor
+    else PayPal
+        UI-->>C: Muestra instrucciones de pago a ninteclp@paypal.com
+        C->>UI: Ingresa correo PayPal y código de transacción
+    end
+
+    C->>UI: Selecciona Sucursal (Central / Calacoto / El Alto) y notas
+    C->>UI: Pulsa botón "Confirmar y Pagar"
+    
+    UI->>REPO: createOrder(userId, items, total, branch, paymentMethod, paymentRef)
+    
+    REPO->>REPO: isValidUuid(userId)
+    alt UUID de Supabase Válido
+        REPO->>SUPA: POST /orders { user_id, branch_id, total, status: 'pending', payment_method }
+        SUPA-->>REPO: 201 Created con order_id
+        loop Para cada ítem del carrito
+            REPO->>SUPA: POST /order_items { order_id, product_id, quantity, unit_price }
+            SUPA-->>REPO: 201 Created
+        end
+        REPO->>REPO: Guardar respaldo sincronizado en SharedPreferences
+    else Usuario Offline o ID Local
+        REPO->>REPO: Generar ID local No. NIN-XXXX y almacenar en SharedPreferences
+    end
+
+    REPO-->>UI: Pedido generado con éxito
+    UI->>CM: clearCart()
+    UI->>CONF: Navega a OrderConfirmationFragment(order)
+    CONF-->>C: Muestra Comprobante Digital con sucursal y total pagado
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Mapeo de Pasarelas</h4>
+                        <ul>
+                            <li><span class="code-pill">Tarjeta</span>: Validación de máscara numérica, expiración y CVV.</li>
+                            <li><span class="code-pill">QR</span>: Verificación de código de comprobante bancario.</li>
+                            <li><span class="code-pill">PayPal</span>: Conciliación de ID de transacción digital.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Protección de Integridad Referencial</h4>
+                        <ul>
+                            <li>La validación estricta de UUID en <span class="code-pill">OrderRepository</span> evita que peticiones locales queden bloqueadas con error HTTP 400.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 5: CICLO DE VIDA DE PEDIDOS Y SEGUIMIENTO -->
+        <div class="seq-card" id="seq-orders">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="seq-number">5</div>
+                    <div>
+                        <h2>Diagrama de Secuencia 5: Ciclo de Vida del Pedido y Sincronización</h2>
+                        <p>Interacción de 4 fases (Pendiente ➔ Confirmado ➔ En Preparación ➔ Finalizado) entre el Administrador y la App del Cliente.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-admin">Admin Web</span>
+                    <span class="tag tag-backend">Supabase PostgreSQL</span>
+                    <span class="tag tag-mobile">OrderHistoryFragment</span>
+                    <span class="tag tag-mobile">OrderDetailFragment</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor C as Cliente (App Android)
+    participant APP as OrderDetailFragment
+    participant REPO as OrderRepository
+    participant DB as PostgreSQL (orders)
+    participant WEB as OrdersView (Consola Web)
+    actor ADM as Administrador (Web)
+
+    Note over C,DB: Fase 1: Pedido en Estado Pendiente
+    DB-->>WEB: Pedido aparece en tabla con badge amarillo "pending"
+    
+    Note over ADM,DB: Fase 2: Validación Administrativa de Pago
+    ADM->>WEB: Revisa comprobante QR / Tarjeta / PayPal
+    ADM->>WEB: Selecciona nuevo estado: "Confirmado"
+    WEB->>DB: PATCH /rest/v1/orders?id=eq.uuid { status: 'confirmed' }
+    DB-->>WEB: 200 OK (Estado confirmado)
+
+    Note over C,APP: Sincronización en la App del Cliente
+    C->>APP: Abre detalle del pedido
+    APP->>REPO: getOrderById(orderId)
+    REPO->>DB: GET /rest/v1/orders?id=eq.uuid
+    DB-->>REPO: Retorna status = 'confirmed'
+    REPO-->>APP: Actualiza interfaz
+    APP-->>C: Timeline avanza a "Confirmado" con indicador verde
+
+    Note over ADM,DB: Fase 3: Despacho en Sucursal
+    ADM->>WEB: Sucursal empaqueta productos y cambia a "En preparación"
+    WEB->>DB: PATCH /rest/v1/orders?id=eq.uuid { status: 'in_preparation' }
+    DB-->>WEB: 200 OK
+
+    Note over ADM,DB: Fase 4: Entrega y Finalización
+    ADM->>WEB: Cliente retira en sucursal o recibe delivery -> cambia a "Finalizado"
+    WEB->>DB: PATCH /rest/v1/orders?id=eq.uuid { status: 'completed' }
+    DB-->>WEB: 200 OK
+
+    C->>APP: Recarga historial
+    APP->>REPO: getUserOrders(userId)
+    REPO->>DB: GET /rest/v1/orders?user_id=eq.uuid
+    DB-->>REPO: Lista de pedidos con status = 'completed'
+    REPO-->>APP: Renderiza tarjeta con badge azul "Finalizado"
+    APP-->>C: Muestra Factura y Resumen Completo
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Transición de Estados Oficial</h4>
+                        <ul>
+                            <li><span class="code-pill">pending</span> (Pendiente): Registro inicial en base de datos.</li>
+                            <li><span class="code-pill">confirmed</span> (Confirmado): Pago verificado por el administrador.</li>
+                            <li><span class="code-pill">in_preparation</span> (En preparación): Almacén empaqueta artículos.</li>
+                            <li><span class="code-pill">completed</span> (Finalizado): Entrega efectuada satisfactoriamente.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Filtros en el Cliente</h4>
+                        <ul>
+                            <li>La app móvil permite filtrar en tiempo real por cualquiera de estos 4 estados y por sucursal física.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 6: SUCURSALES Y GPS -->
+        <div class="seq-card" id="seq-branch">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="seq-number">6</div>
+                    <div>
+                        <h2>Diagrama de Secuencia 6: Consulta de Sucursales y Navegación GPS Dinámica</h2>
+                        <p>Solicitud de permisos de ubicación en tiempo de ejecución, obtención de coordenadas GPS y apertura de Google Maps.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-mobile">BranchesFragment</span>
+                    <span class="tag tag-mobile">Location Services</span>
+                    <span class="tag tag-mobile">Google Maps Intent</span>
+                    <span class="tag tag-backend">branches</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant UI as BranchesFragment
+    participant PERM as ActivityResultContracts.RequestPermission
+    participant GPS as FusedLocationProviderClient
+    participant REPO as BranchRepository
+    participant API as Supabase REST (/branches)
+    participant EXT as Google Maps App (Intent)
+
+    C->>UI: Abre pantalla "Sucursales"
+    UI->>UI: checkSelfPermission(ACCESS_FINE_LOCATION)
+    alt Permiso No Otorgado
+        UI->>PERM: launch(ACCESS_FINE_LOCATION)
+        PERM-->>C: Muestra diálogo nativo de permisos del sistema Android
+        alt Usuario Acepta
+            C->>PERM: Conceder permiso
+            PERM-->>UI: Permission Granted
+            UI->>GPS: getLastLocation()
+            GPS-->>UI: Retorna Location(lat, lng del cliente)
+        else Usuario Rechaza
+            C->>PERM: Denegar permiso
+            PERM-->>UI: Permission Denied
+            UI->>UI: Usar ubicación por defecto (Centro de La Paz)
+        end
+    else Permiso Ya Otorgado
+        UI->>GPS: getLastLocation()
+        GPS-->>UI: Retorna Location(lat, lng)
+    end
+
+    UI->>REPO: getBranches()
+    REPO->>API: GET /rest/v1/branches?active=eq.true
+    API-->>REPO: Retorna sucursales (Central, Calacoto, El Alto con horarios y teléfonos)
+    REPO-->>UI: Lista de sucursales
+    UI-->>C: Muestra tarjetas con distancia y botón "Ver en mapa"
+
+    C->>UI: Toca botón "Ver en mapa" de Sucursal Central
+    UI->>UI: Intent(ACTION_VIEW, Uri.parse("geo:lat,lng?q=Sucursal+Central"))
+    alt Google Maps Instalado
+        UI->>EXT: startActivity(mapIntent)
+        EXT-->>C: Abre Google Maps con trazado de ruta en tiempo real
+    else Sin App de Mapas
+        UI->>UI: Fallback a URL web de Google Maps en navegador
+        UI-->>C: Abre mapa interactivo en navegador
+    end
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Manejo Moderno de Permisos</h4>
+                        <ul>
+                            <li>Implementación basada en <span class="code-pill">ActivityResultContracts.RequestPermission()</span> conforme a las guías de Android 14+.</li>
+                            <li>La app no se bloquea ante la denegación del GPS; continúa operando con las coordenadas de la sede central.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Integración Nativa</h4>
+                        <ul>
+                            <li>Lanzamiento mediante Intent explícito con fallback seguro a navegador en caso de no contar con visor de mapas.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 7: PANEL ADMIN WEB CRUD Y STORAGE -->
+        <div class="seq-card" id="seq-admin">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="seq-number">7</div>
+                    <div>
+                        <h2>Diagrama de Secuencia 7: Panel Administrativo Web, CRUD y Supabase Storage</h2>
+                        <p>Gestión de catálogo, subida de imágenes a bucket product-images y propagación en tiempo real al catálogo móvil.</p>
+                    </div>
+                </div>
+                <div class="system-tags">
+                    <span class="tag tag-admin">Admin Web (React)</span>
+                    <span class="tag tag-backend">Supabase Storage</span>
+                    <span class="tag tag-backend">PostgreSQL</span>
+                    <span class="tag tag-mobile">App Android</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="diagram-wrapper">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor ADM as Administrador
+    participant WEB as ProductsView.jsx (Consola Web)
+    participant SUPA_JS as Supabase JS Client
+    participant STORAGE as Supabase Storage (Bucket product-images)
+    participant DB as PostgreSQL (Tabla products)
+    participant MOB as App Móvil (Catálogo Cliente)
+
+    ADM->>WEB: Hace clic en "Nuevo Producto"
+    WEB-->>ADM: Despliega modal con formulario de producto
+    ADM->>WEB: Llena datos (Nombre, SKU, Precio, Stock, Categoría) y adjunta foto PNG
+    
+    ADM->>WEB: Presiona "Guardar Producto"
+    WEB->>SUPA_JS: uploadImage(file, 'product-images/prod_sku.png')
+    SUPA_JS->>STORAGE: PUT /storage/v1/object/product-images/prod_sku.png
+    STORAGE-->>SUPA_JS: 200 OK (Imagen almacenada en bucket)
+    
+    SUPA_JS->>STORAGE: getPublicUrl('product-images/prod_sku.png')
+    STORAGE-->>SUPA_JS: Retorna https://.../product-images/prod_sku.png
+    
+    WEB->>SUPA_JS: insertProduct(productData + imageUrl)
+    SUPA_JS->>DB: INSERT INTO products (name, sku, price, stock, category_id, image_url)
+    DB-->>SUPA_JS: 201 Created (Retorna nuevo producto con UUID)
+    SUPA_JS-->>WEB: Éxito en la creación
+    WEB-->>ADM: Muestra Toast verde "Producto guardado con éxito" y recarga tabla
+
+    Note over MOB,DB: Sincronización Inmediata con Clientes
+    MOB->>DB: GET /rest/v1/products?active=eq.true
+    DB-->>MOB: Retorna nuevo producto con URL de imagen en CDN
+    MOB-->>MOB: Glide descarga la foto y renderiza la tarjeta en el Catálogo
+                    </pre>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <h4>Manejo de Archivos Binarios</h4>
+                        <ul>
+                            <li>Las fotos se cargan directamente en el bucket <span class="code-pill">product-images</span> con políticas de acceso público.</li>
+                            <li>La base de datos almacena exclusivamente la URL CDN generada, optimizando el rendimiento de las consultas SQL.</li>
+                        </ul>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Sincronización Multicanal</h4>
+                        <ul>
+                            <li>Cualquier producto creado o editado en la consola web queda disponible de inmediato para todos los clientes en la app móvil.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>NINTEC E-Commerce & Systems Platform</strong> • Documentación Técnica Oficial de Diagramas de Secuencia UML</p>
+        <p style="margin-top: 6px; font-size: 12px; color: #94A3B8;">Diseñado y validado para auditoría de arquitectura, manuales técnicos y sustentación del proyecto.</p>
+    </footer>
+
+    <!-- Interactive Script -->
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#EEF3FF',
+                primaryTextColor: '#0F172A',
+                primaryBorderColor: '#1846D7',
+                lineColor: '#1846D7',
+                secondaryColor: '#FAFBFD',
+                tertiaryColor: '#FFFFFF',
+                fontFamily: 'Plus Jakarta Sans',
+                fontSize: '13px',
+                actorBkg: '#1846D7',
+                actorTextColor: '#FFFFFF',
+                actorBorder: '#0D2D94',
+                signalColor: '#1846D7',
+                signalTextColor: '#0F172A',
+                labelBoxBkgColor: '#EEF3FF',
+                labelBoxBorderColor: '#1846D7',
+                labelTextColor: '#1846D7',
+                loopTextColor: '#0F172A',
+                noteBkgColor: '#FEF3C7',
+                noteBorderColor: '#F59E0B',
+                noteTextColor: '#92400E'
+            },
+            sequence: {
+                diagramMarginX: 20,
+                diagramMarginY: 20,
+                actorMargin: 50,
+                width: 150,
+                height: 55,
+                boxMargin: 10,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageMargin: 35,
+                mirrorActors: true,
+                bottomMarginAdj: 1
+            }
+        });
+
+        // Filter Sequence Function
+        function filterSeq(seqId) {
+            const cards = document.querySelectorAll('.seq-card');
+            const buttons = document.querySelectorAll('.btn-filter');
+
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (seqId === 'all') {
+                cards.forEach(card => card.style.display = 'block');
+            } else {
+                cards.forEach(card => {
+                    if (card.id === seqId) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // Toggle Clean Capture Mode
+        function toggleCleanCapture() {
+            const bar = document.querySelector('.controls-bar');
+            const showBtn = document.getElementById('btn-show-controls');
+            if (bar.style.display === 'none') {
+                bar.style.display = 'flex';
+                showBtn.style.display = 'none';
+            } else {
+                bar.style.display = 'none';
+                showBtn.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

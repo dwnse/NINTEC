@@ -74,7 +74,7 @@
                 android:background="@drawable/bg_button_primary"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Todos"
+                android:text="@string/order_filter_all"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -87,7 +87,7 @@
                 android:background="@drawable/bg_button_secondary"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Pendientes"
+                android:text="@string/order_filter_pending"
                 android:textColor="@color/text_primary"
                 android:textSize="12sp"
                 android:layout_marginEnd="8dp" />
@@ -99,7 +99,7 @@
                 android:background="@drawable/bg_button_secondary"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Finalizados"
+                android:text="@string/order_filter_finalized"
                 android:textColor="@color/text_primary"
                 android:textSize="12sp"
                 android:layout_marginEnd="8dp" />
@@ -111,7 +111,7 @@
                 android:background="@drawable/bg_button_secondary"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Cancelados"
+                android:text="@string/order_status_cancelled"
                 android:textColor="@color/text_primary"
                 android:textSize="12sp"
                 android:layout_marginEnd="8dp" />
@@ -131,7 +131,7 @@
                 android:background="@drawable/bg_button_secondary"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Central"
+                android:text="@string/branch_central"
                 android:textColor="@color/text_primary"
                 android:textSize="12sp"
                 android:layout_marginEnd="8dp" />
@@ -143,7 +143,7 @@
                 android:background="@drawable/bg_button_secondary"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Calacoto"
+                android:text="@string/branch_calacoto"
                 android:textColor="@color/text_primary"
                 android:textSize="12sp"
                 android:layout_marginEnd="8dp" />
@@ -155,7 +155,7 @@
                 android:background="@drawable/bg_button_secondary"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="El Alto"
+                android:text="@string/branch_el_alto"
                 android:textColor="@color/text_primary"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -169,7 +169,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/screen_horizontal_margin"
         android:layout_marginTop="10dp"
-        android:text="0 pedidos"
+        android:text="@string/order_history_count_zero"
         android:textColor="@color/text_secondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scroll_filters" />
@@ -215,7 +215,7 @@
             style="@style/NintecSmallText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tus pedidos aparecerán aquí"
+            android:text="@string/order_history_empty_subtitle"
             android:textColor="@color/text_secondary"
             android:layout_marginTop="6dp" />
 

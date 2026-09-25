@@ -31,7 +31,7 @@
             style="@style/NintecSubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Editar Producto"
+            android:text="@string/admin_edit_product"
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
@@ -51,7 +51,7 @@
                 style="@style/NintecSmallText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre del Producto" />
+                android:text="@string/admin_label_product_name" />
 
             <EditText
                 android:id="@+id/edt_product_name"
@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Slug" />
+                android:text="@string/admin_label_slug" />
 
             <EditText
                 android:id="@+id/edt_product_slug"
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Descripción" />
+                android:text="@string/label_description" />
 
             <EditText
                 android:id="@+id/edt_product_description"
@@ -108,7 +108,7 @@
                         style="@style/NintecSmallText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Precio" />
+                        android:text="@string/admin_label_price" />
 
                     <EditText
                         android:id="@+id/edt_product_price"
@@ -129,7 +129,7 @@
                         style="@style/NintecSmallText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Precio Anterior" />
+                        android:text="@string/admin_label_original_price" />
 
                     <EditText
                         android:id="@+id/edt_product_old_price"
@@ -157,7 +157,7 @@
                         style="@style/NintecSmallText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="SKU" />
+                        android:text="@string/admin_label_sku" />
 
                     <EditText
                         android:id="@+id/edt_product_sku"
@@ -178,7 +178,7 @@
                         style="@style/NintecSmallText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Marca" />
+                        android:text="@string/admin_label_brand" />
 
                     <EditText
                         android:id="@+id/edt_product_brand"
@@ -194,7 +194,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="ID de Categoría" />
+                android:text="@string/admin_label_category_id" />
 
             <EditText
                 android:id="@+id/edt_product_category_id"
@@ -208,7 +208,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="URL de Imagen" />
+                android:text="@string/admin_label_image_url" />
 
             <EditText
                 android:id="@+id/edt_product_image_url"
@@ -221,7 +221,7 @@
                 android:id="@+id/btn_pick_product_image"
                 style="@style/NintecSecondaryButton"
                 android:layout_marginTop="8dp"
-                android:text="Seleccionar Imagen de Galería" />
+                android:text="@string/admin_select_gallery_image" />
 
             <ImageView
                 android:id="@+id/img_product_preview"
@@ -237,21 +237,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Es Nuevo" />
+                android:text="@string/admin_label_is_new" />
 
             <CheckBox
                 android:id="@+id/cb_product_is_featured"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Es Destacado" />
+                android:text="@string/admin_label_is_featured" />
 
             <CheckBox
                 android:id="@+id/cb_product_is_active"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Está Activo"
+                android:text="@string/admin_label_is_active_prod"
                 android:checked="true" />
 
         </LinearLayout>
@@ -262,7 +262,7 @@
         style="@style/NintecPrimaryButton"
         android:layout_width="0dp"
         android:layout_margin="@dimen/screen_horizontal_margin"
-        android:text="Guardar Cambios"
+        android:text="@string/btn_save_changes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
